@@ -2526,10 +2526,15 @@ public class MainActivity extends Activity {
         FrameLayout.LayoutParams actorLp = new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
         actorLp.bottomMargin = dp(10);
         stage.addView(actor, actorLp);
+        // Tap: a hop. Double tap: a spin.
+        final long[] lastTap = {0};
         preview.setOnClickListener(v -> {
-            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            long now = SystemClock.uptimeMillis();
+            boolean dbl = now - lastTap[0] < 320;
+            lastTap[0] = dbl ? 0 : now;
+            v.performHapticFeedback(dbl ? HapticFeedbackConstants.LONG_PRESS : HapticFeedbackConstants.VIRTUAL_KEY);
             preview.jump();
-            preview.startIdle(Buddy.BuddyView.SPIN);
+            if (dbl) preview.startIdle(Buddy.BuddyView.SPIN);
         });
 
         // "Surprise me": random colour + random unlocked accessory.
@@ -2611,7 +2616,12 @@ public class MainActivity extends Activity {
         final List<Buddy.BuddyView> minis = new ArrayList<>();
         LinearLayout.LayoutParams olp = new LinearLayout.LayoutParams(-1, -2);
         olp.topMargin = dp(10);
-        body.addView(optionsRow(stage, actor, preview, minis), olp);
+        // Resume roaming after an entrance demo (the demo cancels the walk in progress).
+        final Runnable resumeStroll = () -> {
+            actor.removeCallbacks(stroll[0]);
+            actor.postDelayed(stroll[0], 1200);
+        };
+        body.addView(optionsRow(new int[]{2}, stage, actor, preview, minis, resumeStroll), olp);
 
         // ---- Colours.
         body.addView(sectionLabel(s(R.string.colour_header)));
@@ -2620,6 +2630,11 @@ public class MainActivity extends Activity {
         sw.setHorizontalScrollBarEnabled(false);
         sw.addView(swatches);
         body.addView(sw);
+
+        // ---- Size, speed and chattiness: three small tiles, further from the stage.
+        LinearLayout.LayoutParams plp = new LinearLayout.LayoutParams(-1, -2);
+        plp.topMargin = dp(16);
+        body.addView(optionsRow(new int[]{0, 1, 3}, stage, actor, preview, minis, resumeStroll), plp);
 
         // ---- Accessory collection.
         final int best = BuddyStyle.bestStreak(this);
@@ -2802,8 +2817,8 @@ public class MainActivity extends Activity {
 
     /** Plays an entrance style on the Personalize stage: out, then back in that way. */
     private void demoEntrance(final int style, final FrameLayout stage, final LinearLayout actor,
-                              final Buddy.BuddyView preview) {
-        playOut(style, stage, actor, preview, () -> playIn(style, stage, actor, preview, null));
+                              final Buddy.BuddyView preview, final Runnable then) {
+        playOut(style, stage, actor, preview, () -> playIn(style, stage, actor, preview, then));
     }
 
     private void stagePivots(Buddy.BuddyView preview) {
@@ -3376,38 +3391,58 @@ public class MainActivity extends Activity {
      * Size, walking speed, entrance and chattiness as four tiles in one row. Each shows a little scene
      * of its current value; tapping cycles to the next value and plays it on the stage above.
      */
-    private View optionsRow(final FrameLayout stage, final LinearLayout actor, final Buddy.BuddyView preview,
-                            final List<Buddy.BuddyView> minis) {
+    /**
+     * Tiles for the given options (0 size, 1 speed, 2 entrance, 3 chattiness). A single option gets one wide
+     * tile (picture left, text right); several share a row. {@code afterDemo} runs once the stage demo ends.
+     */
+    private View optionsRow(final int[] opts, final FrameLayout stage, final LinearLayout actor,
+                            final Buddy.BuddyView preview, final List<Buddy.BuddyView> minis,
+                            final Runnable afterDemo) {
         LinearLayout row = new LinearLayout(this);
+        final boolean wide = opts.length == 1;
         String[] heads = {s(R.string.opt_size), s(R.string.opt_speed), s(R.string.opt_entrance), s(R.string.opt_chat)};
         final String[][] names = {BuddyStyle.sizeNames(this), BuddyStyle.speedNames(this),
                 BuddyStyle.entranceNames(this), BuddyStyle.chatNames(this)};
         final String[] keys = {"buddy_size", "buddy_speed", "buddy_entrance", "buddy_chat"};
         final int[] cur = {BuddyStyle.sizeIndex(this), BuddyStyle.speedIndex(this),
                 BuddyStyle.entranceIndex(this), BuddyStyle.chatIndex(this)};
-        for (int k = 0; k < 4; k++) {
-            final int opt = k;
+        for (int n = 0; n < opts.length; n++) {
+            final int k = opts[n], opt = k;
             LinearLayout tile = new LinearLayout(this);
-            tile.setOrientation(LinearLayout.VERTICAL);
-            tile.setGravity(Gravity.CENTER_HORIZONTAL);
-            tile.setPadding(dp(4), dp(6), dp(4), dp(8));
+            tile.setOrientation(wide ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
+            tile.setGravity(wide ? Gravity.CENTER_VERTICAL : Gravity.CENTER_HORIZONTAL);
+            tile.setPadding(wide ? dp(8) : dp(4), dp(6), wide ? dp(14) : dp(4), dp(8));
             tile.setBackground(rounded(CARD, 18, BORDER));
             tile.setForeground(ripple(18));
             final FrameLayout art = new FrameLayout(this);
             art.addView(optionArt(opt, cur[opt], minis), new FrameLayout.LayoutParams(-1, -1));
-            tile.addView(art, new LinearLayout.LayoutParams(-1, dp(52)));
-            // Full-width, centred, fixed-height labels that shrink to fit instead of being cut off.
+            tile.addView(art, wide ? new LinearLayout.LayoutParams(dp(84), dp(52))
+                    : new LinearLayout.LayoutParams(-1, dp(52)));
+            // Fixed-height labels that shrink to fit instead of being cut off; centred in the small tiles.
             // (No letter spacing: it adds a gap after the last letter, which pushes the text off-centre.)
+            LinearLayout texts = new LinearLayout(this);
+            texts.setOrientation(LinearLayout.VERTICAL);
             TextView h = text(heads[k], 10, MUTED);
             h.setTypeface(MEDIUM);
             fitCentered(h, 8, 10);
             LinearLayout.LayoutParams hlp = new LinearLayout.LayoutParams(-1, dp(14));
             hlp.topMargin = dp(4);
-            tile.addView(h, hlp);
-            final TextView value = text(names[k][cur[k]], 13, TEXT);
+            texts.addView(h, hlp);
+            final TextView value = text(names[k][cur[k]], wide ? 15 : 13, TEXT);
             value.setTypeface(MEDIUM);
-            fitCentered(value, 9, 13);
-            tile.addView(value, new LinearLayout.LayoutParams(-1, dp(18)));
+            fitCentered(value, 9, wide ? 15 : 13);
+            texts.addView(value, new LinearLayout.LayoutParams(-1, dp(wide ? 20 : 18)));
+            if (wide) {
+                h.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+                value.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+                LinearLayout.LayoutParams tlp = new LinearLayout.LayoutParams(0, -2, 1);
+                tlp.leftMargin = dp(10);
+                tile.addView(texts, tlp);
+                // "Tap to change" cue.
+                tile.addView(iconView(R.drawable.ic_chevron, MUTED), new LinearLayout.LayoutParams(dp(20), dp(20)));
+            } else {
+                tile.addView(texts, new LinearLayout.LayoutParams(-1, -2));
+            }
             tile.setContentDescription(heads[k] + ": " + names[k][cur[k]]);
             tile.setOnClickListener(v -> {
                 cur[opt] = (cur[opt] + 1) % names[opt].length;
@@ -3421,13 +3456,13 @@ public class MainActivity extends Activity {
                     applyPreviewStyle(preview);
                     preview.jump();
                 } else if (opt == 2) {
-                    demoEntrance(cur[opt], stage, actor, preview);
+                    demoEntrance(cur[opt], stage, actor, preview, afterDemo);
                 } else {
                     preview.jump();
                 }
             });
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, -1, 1);
-            if (k > 0) lp.leftMargin = dp(6);
+            if (n > 0) lp.leftMargin = dp(6);
             row.addView(tile, lp);
         }
         return row;
