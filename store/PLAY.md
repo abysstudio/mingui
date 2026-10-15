@@ -9,7 +9,7 @@ variant: no root code). Upload `mingui.aab` built with `./build.sh play aab` (si
 |---|---|---|
 | App icon | `icon-512.png` | 512×512 PNG |
 | Feature graphic | `feature-graphic.png` | 1024×500 |
-| Phone screenshots (per language) | `en/`, `es/`, `ca/` `01_…`–`08_…png` | 1080×1920, 8 each |
+| Phone screenshots (per language) | `en/`, `es/`, `ca/` `01_…`–`07_…png` | 1080×1920, 7 each. The first three show in search results, so they lead with the two search terms (habit tracker, app blocker) |
 | Promo video | `promo/mingui-promo-{en,es,ca}.mp4` | **Play only takes a YouTube URL**: upload there (unlisted is fine) and paste the link |
 
 The promo videos are rendered from `../promo/promo.html` (see `../promo/render.py`) and kept out of git; they're attached to the GitHub release.
@@ -21,116 +21,125 @@ The promo videos are rendered from `../promo/promo.html` (see `../promo/render.p
 **App name** (30 max): `Mingui: Habits & App Blocker`
 
 **Short description** (80 max):
-`Finish today's habits first. Then your distracting apps unlock. 100% offline.`
+`Habit tracker & app blocker: finish your daily routine, then your apps unlock.`
 
 **Full description:**
 
 ```
-Mingui is a daily habit checklist with a little buddy, and it keeps your most distracting apps locked until today's routine is done.
+Mingui is a habit tracker and app blocker in one: a daily routine checklist with a little buddy that keeps your most distracting apps locked until today's habits are done. Build a morning routine that sticks and cut your screen time without the willpower battle.
 
-FINISH FIRST, SCROLL LATER
-Pick the apps that eat your mornings. Open one too early and your checklist covers it. Tick off your habits and they unlock straight away.
+FINISH YOUR HABITS FIRST, SCROLL LATER
+Pick the apps that eat your mornings: social media, videos, games. Open one too early and your habit checklist covers it. Tick off your daily habits and the blocked apps unlock straight away.
 
-A CHECKLIST THAT STICKS
+A HABIT TRACKER THAT STICKS
 • Timers for habits you want to really do, not just tick
 • Weekday schedules, rest days and partial credit
-• Streak freezes, so one bad day doesn't wreck your streak
+• Streak freezes, so one bad day doesn't break your habit streak
 • Forgot to tick something? Fix yesterday
-• Edits that would make today easier start tomorrow, so the routine stays honest
+• Honest edits: changes that would make today's routine easier start tomorrow
+
+AN APP BLOCKER THAT'S FAIR
+• Block any app until your routine is done; work apps can stay allowed
+• Optional focus lock pulls you back to your checklist, with three 5-minute breaks a day
+• "Pause for today" is always there as an emergency exit
 
 A BUDDY ON YOUR SCREEN
 Your buddy walks around your phone, cheers you on and levels up with you. Unlock colours, hats and entrances as your streak grows.
 
-STREAKS & STATS
-A 12-week heatmap, your best streak and the habits that need some love.
-
-FOCUS LOCK (OPTIONAL)
-Pulls you back to the checklist if you wander off, with three 5-minute breaks a day. "Pause for today" is always there as an emergency exit.
+HABIT STREAKS & STATS
+A 12-week habit heatmap, your best streak and the habits that need some love.
 
 100% OFFLINE, NO ACCOUNTS
 Mingui doesn't have Android's internet permission, so it can't send anything anywhere. No accounts, ads, analytics or trackers. Your habits stay on your phone.
 
-Also: a home-screen widget, backups to a file you keep, and English, Spanish and Catalan.
+ALSO INCLUDED
+A home-screen widget, backups to a file you keep, and English, Spanish and Catalan. Open source (GPL-3.0): github.com/abysstudio/mingui
 
-Open source (GPL-3.0): github.com/abysstudio/mingui
+Install Mingui, add three habits for tomorrow morning and get your mornings back.
 ```
 
 ### Español (es-ES)
 
-**Nombre**: `Mingui: Hábitos y bloqueo`
+**Nombre**: `Mingui: Hábitos, bloquea apps`
 
 **Descripción breve**:
-`Primero tus hábitos de hoy. Luego tus apps se desbloquean. 100 % sin conexión.`
+`Hábitos diarios y bloqueo de apps: acaba tu rutina y tus apps se desbloquean.`
 
 **Descripción completa:**
 
 ```
-Mingui es una lista de hábitos diarios con una pequeña mascota, y mantiene bloqueadas las apps que más te distraen hasta que terminas la rutina de hoy.
+Mingui es un registro de hábitos y un bloqueador de apps en uno: una lista de hábitos diarios con una pequeña mascota que mantiene bloqueadas las apps que más te distraen hasta que terminas la rutina de hoy. Crea una rutina de mañana que funcione y reduce tu tiempo de pantalla sin pelearte con tu fuerza de voluntad.
 
-PRIMERO TERMINA, LUEGO SCROLLEA
-Elige las apps que te roban la mañana. Si abres una demasiado pronto, tu lista la tapa. Marca tus hábitos y se desbloquean al momento.
+PRIMERO TUS HÁBITOS, LUEGO EL SCROLL
+Elige las apps que te roban la mañana: redes sociales, vídeos, juegos. Si abres una demasiado pronto, tu lista de hábitos la tapa. Marca tus hábitos diarios y las apps bloqueadas se abren al momento.
 
-UNA LISTA QUE FUNCIONA
+UN REGISTRO DE HÁBITOS QUE FUNCIONA
 • Temporizadores para los hábitos que quieres hacer de verdad
 • Días de la semana, días de descanso y crédito parcial
-• Congeladores de racha, para que un mal día no la rompa
+• Congeladores de racha, para que un mal día no rompa tu racha
 • ¿Olvidaste marcar algo? Corrige el día de ayer
-• Los cambios que harían más fácil el día de hoy empiezan mañana, para que la rutina sea honesta
+• Cambios honestos: lo que haría más fácil la rutina de hoy empieza mañana
+
+UN BLOQUEADOR DE APPS JUSTO
+• Bloquea cualquier app hasta que acabes tu rutina; las apps de trabajo pueden quedar permitidas
+• El modo concentración opcional te devuelve a la lista, con tres descansos de 5 minutos al día
+• «Pausar por hoy» siempre está ahí como salida de emergencia
 
 UNA MASCOTA EN TU PANTALLA
 Tu mascota pasea por el móvil, te anima y sube de nivel contigo. Desbloquea colores, gorros y entradas a medida que crece tu racha.
 
-RACHAS Y ESTADÍSTICAS
+RACHAS Y ESTADÍSTICAS DE HÁBITOS
 Un mapa de 12 semanas, tu mejor racha y los hábitos que necesitan un empujón.
-
-BLOQUEO DE CONCENTRACIÓN (OPCIONAL)
-Te devuelve a la lista si te despistas, con tres descansos de 5 minutos al día. «Pausar por hoy» siempre está ahí como salida de emergencia.
 
 100 % SIN CONEXIÓN, SIN CUENTAS
 Mingui no tiene el permiso de internet de Android, así que no puede enviar nada a ningún sitio. Sin cuentas, anuncios, analíticas ni rastreadores. Tus hábitos se quedan en tu móvil.
 
-Además: widget para la pantalla de inicio, copias de seguridad en un archivo tuyo, y en español, catalán e inglés.
+Y ADEMÁS
+Widget para la pantalla de inicio, copias de seguridad en un archivo tuyo, y en español, catalán e inglés. Código abierto (GPL-3.0): github.com/abysstudio/mingui
 
-Código abierto (GPL-3.0): github.com/abysstudio/mingui
+Instala Mingui, añade tres hábitos para mañana por la mañana y recupera tus mañanas.
 ```
 
 ### Català (ca)
 
-**Nom**: `Mingui: Hàbits i bloqueig`
+**Nom**: `Mingui: Hàbits, bloqueja apps`
 
 **Descripció breu**:
-`Primer els hàbits d'avui. Després les apps es desbloquegen. 100% sense connexió.`
+`Hàbits diaris i bloqueig d'apps: acaba la rutina i les apps es desbloquegen.`
 
 **Descripció completa:**
 
 ```
-Mingui és una llista d'hàbits diaris amb una petita mascota, i manté bloquejades les apps que més et distreuen fins que acabes la rutina d'avui.
+Mingui és un registre d'hàbits i un bloquejador d'apps alhora: una llista d'hàbits diaris amb una petita mascota que manté bloquejades les apps que més et distreuen fins que acabes la rutina d'avui. Crea una rutina de matí que funcioni i redueix el temps de pantalla sense barallar-te amb la força de voluntat.
 
-PRIMER ACABA, DESPRÉS SCROLL
-Tria les apps que et roben el matí. Si n'obres una massa aviat, la llista la tapa. Marca els hàbits i es desbloquegen a l'instant.
+PRIMER ELS HÀBITS, DESPRÉS L'SCROLL
+Tria les apps que et roben el matí: xarxes socials, vídeos, jocs. Si n'obres una massa aviat, la llista d'hàbits la tapa. Marca els hàbits diaris i les apps bloquejades s'obren a l'instant.
 
-UNA LLISTA QUE FUNCIONA
+UN REGISTRE D'HÀBITS QUE FUNCIONA
 • Temporitzadors per als hàbits que vols fer de debò
 • Dies de la setmana, dies de descans i crèdit parcial
-• Congeladors de ratxa, perquè un mal dia no la trenqui
+• Congeladors de ratxa, perquè un mal dia no trenqui la ratxa
 • T'has oblidat de marcar alguna cosa? Corregeix ahir
-• Els canvis que farien més fàcil el dia d'avui comencen demà, perquè la rutina sigui honesta
+• Canvis honestos: el que faria més fàcil la rutina d'avui comença demà
+
+UN BLOQUEJADOR D'APPS JUST
+• Bloqueja qualsevol app fins que acabis la rutina; les apps de feina poden quedar permeses
+• El mode concentració opcional et torna a la llista, amb tres descansos de 5 minuts al dia
+• «Pausa per avui» sempre hi és com a sortida d'emergència
 
 UNA MASCOTA A LA PANTALLA
 La mascota passeja pel mòbil, t'anima i puja de nivell amb tu. Desbloqueja colors, barrets i entrades a mesura que creix la ratxa.
 
-RATXES I ESTADÍSTIQUES
+RATXES I ESTADÍSTIQUES D'HÀBITS
 Un mapa de 12 setmanes, la teva millor ratxa i els hàbits que necessiten una empenta.
-
-BLOQUEIG DE CONCENTRACIÓ (OPCIONAL)
-Et torna a la llista si et despistes, amb tres descansos de 5 minuts al dia. «Pausa per avui» sempre hi és com a sortida d'emergència.
 
 100 % SENSE CONNEXIÓ, SENSE COMPTES
 Mingui no té el permís d'internet d'Android, així que no pot enviar res enlloc. Sense comptes, anuncis, analítiques ni rastrejadors. Els teus hàbits es queden al mòbil.
 
-A més: giny per a la pantalla d'inici, còpies de seguretat en un fitxer teu, i en català, castellà i anglès.
+I A MÉS
+Giny per a la pantalla d'inici, còpies de seguretat en un fitxer teu, i en català, castellà i anglès. Codi obert (GPL-3.0): github.com/abysstudio/mingui
 
-Codi obert (GPL-3.0): github.com/abysstudio/mingui
+Instal·la Mingui, afegeix tres hàbits per a demà al matí i recupera els teus matins.
 ```
 
 **Category:** Productivity · **Tags:** Habit tracker, Productivity, Self-improvement · **Contact email:** required, use the studio address · **Website:** https://abysstudio.github.io/mingui/
@@ -154,6 +163,17 @@ Codi obert (GPL-3.0): github.com/abysstudio/mingui
 • Les apps bloquejades es tapen més ràpid
 </ca>
 ```
+
+## Search optimisation (ASO)
+
+Google Play indexes the title, short description, full description and release notes, then ranks by quality signals (installs, retention, ratings, Android vitals).
+
+- **Target terms:** habit tracker, app blocker, daily habits, daily routine, morning routine, screen time, focus. ES: hábitos diarios, registro de hábitos, bloqueador de apps, rutina, tiempo de pantalla. CA: hàbits diaris, bloquejador d'apps, rutina, temps de pantalla.
+- **Title** = brand + the two main terms. **Short description** opens with them. **Full description** puts them in the first two sentences and repeats each 3–5 times naturally, ending with a call to action.
+- **Screenshots:** captions carry the terms (Habit tracker / App blocker / Habit streaks). No third-party apps or logos.
+- **Video:** the promo is 25 s and shows the app from the first second. Its first frame replaces screenshot 1 in the listing, so check the YouTube thumbnail before linking it.
+- **After launch:** run a Store listing experiment on the icon first, then screenshot 1. Reply to every review (reviewers are notified and often update their rating). Keep crash rate < 1 % and ANR < 0.5 % in Android vitals. Change one field at a time, every 4–6 weeks.
+- **Web:** the website (abysstudio.github.io/mingui) and the GitHub README link to the Play listing once it's live; links from the web count toward ranking.
 
 ## App content (Policy → App content)
 
@@ -211,5 +231,5 @@ No account or login. To see app blocking:
 
 ## Review risks to keep an eye on
 
-- **Other brands in screenshots/video.** Screenshot 2 and the promo show "YouTube" as the example of a blocked app. Describing which apps you can block is normally fine, but Google's metadata policy dislikes third-party brand names in listings; if a reviewer objects, swap the example for a generic one. The listing text above avoids brand names on purpose.
+- **Other brands in the video.** The screenshots no longer name or show any third-party app, but the promo video still shows "YouTube" as the example of a blocked app. Describing which apps you can block is normally fine, but Google's metadata policy dislikes third-party brand names in listings; if a reviewer objects, swap the example for a generic one. The listing text above avoids brand names on purpose.
 - **Overlay over other apps.** It's only shown over apps the user chose to block, and there's always an exit (Pause for today), which is what reviewers check for in "app blocker" apps.
