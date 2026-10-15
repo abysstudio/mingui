@@ -12,3 +12,6 @@ signing/
 # Rendered promo videos: attached to GitHub releases, not committed (see promo/).
 store/**/*.mp4
 store/**/*.gif
+
+# Internal notes and TODOs, kept local.
+internal/
