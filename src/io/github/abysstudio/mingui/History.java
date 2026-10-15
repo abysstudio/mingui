@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * Per-day log: "day_yyyy-MM-dd" -> {items, done, completedAt, breaks, breakTimes, leaves}. Today's entry is
+ * Per-day log: "day_yyyy-MM-dd" -> {items, done, completedAt, breaks, breakTimes, leaves, quick, quickUndone}. Today's entry is
  * rewritten on every change, so each past day holds its end-of-day state. Days with no entry after tracking
  * began count as missed.
  */
@@ -32,6 +32,10 @@ final class History {
         final List<Long> breakTimes = new ArrayList<>();
         /** Times you left the checklist while focus lock was on. */
         final List<Long> leaves = new ArrayList<>();
+        /** Times a speed-run check-in was shown (several habits ticked within seconds). */
+        final List<Long> quick = new ArrayList<>();
+        /** One entry per habit the user unticked in a check-in ("didn't really do it"). */
+        final List<Long> quickUndone = new ArrayList<>();
         long completedAt;
         int breaks;
         /** Nothing was scheduled that day. */
@@ -101,7 +105,7 @@ final class History {
         write(c, null, 0);
     }
 
-    /** Append an event time ("leaves" or "breakTimes") to today's entry. */
+    /** Append an event time ("leaves", "breakTimes", "quick" or "quickUndone") to today's entry. */
     static void addEvent(Context c, String kind, long time) {
         write(c, kind, time);
     }
@@ -132,11 +136,16 @@ final class History {
             }
             JSONArray breakTimes = times(old == null ? null : old.breakTimes);
             JSONArray leaves = times(old == null ? null : old.leaves);
+            JSONArray quick = times(old == null ? null : old.quick);
+            JSONArray quickUndone = times(old == null ? null : old.quickUndone);
             if ("breakTimes".equals(eventKind)) breakTimes.put(eventTime);
             if ("leaves".equals(eventKind)) leaves.put(eventTime);
+            if ("quick".equals(eventKind)) quick.put(eventTime);
+            if ("quickUndone".equals(eventKind)) quickUndone.put(eventTime);
             o.put("items", its).put("done", done).put("completedAt", completedAt)
                     .put("breaks", Routine.MAX_BREAKS - Routine.breaksLeft(c))
                     .put("breakTimes", breakTimes).put("leaves", leaves)
+                    .put("quick", quick).put("quickUndone", quickUndone)
                     .put("rest", rest).put("frozen", old != null && old.frozen).put("times", times);
         } catch (JSONException e) {
             return;
@@ -174,6 +183,9 @@ final class History {
                 JSONArray bt = o.optJSONArray("breakTimes"), lv = o.optJSONArray("leaves");
                 if (bt != null) for (int i = 0; i < bt.length(); i++) d.breakTimes.add(bt.getLong(i));
                 if (lv != null) for (int i = 0; i < lv.length(); i++) d.leaves.add(lv.getLong(i));
+                JSONArray qk = o.optJSONArray("quick"), qu = o.optJSONArray("quickUndone");
+                if (qk != null) for (int i = 0; i < qk.length(); i++) d.quick.add(qk.getLong(i));
+                if (qu != null) for (int i = 0; i < qu.length(); i++) d.quickUndone.add(qu.getLong(i));
                 out.put(date, d);
             } catch (JSONException ignored) {
                 // Skip a corrupt entry rather than losing all stats.

@@ -412,9 +412,9 @@
     <string name="good_morning_cue">Bon dia! %1$s</string>
     <string name="locked_until_done_toast">Bloquejada fins que acabis la rutina</string>
     <string name="channel_watcher">Vigilant de desbloqueig</string>
-    <string name="notif_hanging_out">%1$s volta per aquí</string>
+    <string name="notif_hanging_out">%1$s fa la migdiada</string>
     <string name="notif_not_done">Rutina encara sense acabar</string>
-    <string name="notif_buddy_on">La teva mascota és a la pantalla. Desactiva-la a Configuració.</string>
+    <string name="notif_buddy_on">Rutina feta. La mascota dorm i surt si fas scroll molta estona.</string>
     <string name="notif_blocked">Les apps bloquejades continuen així fins que l\'acabis.</string>
     <string name="cue_say">%1$s: %2$s?</string>
     <string-array name="day_letters">
@@ -615,4 +615,20 @@
     <string name="opt_entrance">ENTRADA</string>
     <string name="opt_chat">XERRADA</string>
     <string name="rename_buddy">Canvia el nom de la teva mascota</string>
+    <string name="checkin_q">Quina rapidesa!</string>
+    <string name="checkin_body">%1$s només vol comprovar-ho: de debò has fet tot això? Desmarca el que t\'hagis saltat. Sense càstig, i amb la meitat dels hàbits mantens la ratxa.</string>
+    <string name="checkin_all">Sí, ho he fet tot</string>
+    <string name="checkin_save">Desa</string>
+    <string name="checkin_thanks">Gràcies per ser sincer. Això també compta.</string>
+    <string-array name="say_nap">
+        <item>Hora de la migdiada 💤</item>
+        <item>Gaudeix! Vaig a dormir</item>
+        <item>Desperta\'m demà</item>
+    </string-array>
+    <string-array name="say_scrolling">
+        <item>%1$d min de scroll…</item>
+        <item>Encara? Estira\'t!</item>
+        <item>Una petita pausa?</item>
+        <item>%2$s s\'avorria dormint</item>
+    </string-array>
 </resources>

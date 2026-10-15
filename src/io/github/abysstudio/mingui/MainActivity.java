@@ -586,7 +586,10 @@ public class MainActivity extends Activity {
             if (now) {
                 Sounds.tick(this);
                 showVote(v, item);
+                // Timed habits prove themselves; a burst of untimed ticks gets a gentle check-in.
+                if (minutes == 0) noteQuickTick(item);
             } else {
+                forgetQuickTick(item);
                 Sounds.untick(this);
                 showUndo(item, () -> {
                     Routine.setChecked(this, item, true);
@@ -1078,6 +1081,8 @@ public class MainActivity extends Activity {
             cta.setBackground(rounded(CARD, 28, BORDER));
         }
 
+        // While a speed-run check-in is open, the celebration waits: it runs when the sheet closes.
+        if (checkinOpen) return;
         if (animate && done && !wasDone && !rest) {
             Sounds.celebrate(this);
             celebrate();
@@ -2131,6 +2136,135 @@ public class MainActivity extends Activity {
                             .setDuration(450).withEndAction(() -> snackHost.removeView(pop)).start())
                     .start();
         });
+    }
+
+    // ---------------------------------------------------------------- speed-run check-in
+
+    /** This many untimed habits ticked within {@link #SPEEDRUN_MS} counts as a speed-run. */
+    private static final int SPEEDRUN_N = 3;
+    private static final long SPEEDRUN_MS = 45_000;
+    /** Recent untimed ticks: {time, habit}. */
+    private final List<Object[]> quickTicks = new ArrayList<>();
+    private boolean checkinOpen;
+
+    private void noteQuickTick(String item) {
+        long now = System.currentTimeMillis();
+        quickTicks.add(new Object[]{now, item});
+        quickTicks.removeIf(q -> now - (Long) q[0] > SPEEDRUN_MS);
+        if (quickTicks.size() < SPEEDRUN_N || checkinOpen) return;
+        // At most once a day: it's a mirror, not a nag (many people tick after doing everything).
+        SharedPreferences p = Routine.prefs(this);
+        if (Routine.today().equals(p.getString("checkin_day", ""))) return;
+        p.edit().putString("checkin_day", Routine.today()).apply();
+        final List<String> burst = new ArrayList<>();
+        for (Object[] q : quickTicks) burst.add((String) q[1]);
+        quickTicks.clear();
+        checkinOpen = true;
+        // After the "+XP" pop has had its moment.
+        snackHost.postDelayed(() -> showCheckin(burst), 450);
+    }
+
+    private void forgetQuickTick(String item) {
+        quickTicks.removeIf(q -> item.equals(q[1]));
+    }
+
+    /**
+     * "That was quick!": lists the habits just ticked in a burst, all still ticked, and lets the user
+     * untick the ones they didn't really do. No penalty and no blocking: closing the sheet keeps everything.
+     */
+    private void showCheckin(List<String> burst) {
+        burst.retainAll(Routine.checked(this));
+        if (isFinishing() || burst.size() < 2) {
+            checkinOpen = false;
+            refreshSummary(true);
+            return;
+        }
+        History.addEvent(this, "quick", System.currentTimeMillis());
+        final Set<String> keep = new HashSet<>(burst);
+        final int[] undone = {0};
+        final Dialog d = new Dialog(this);
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        LinearLayout sheet = new LinearLayout(this);
+        sheet.setOrientation(LinearLayout.VERTICAL);
+        sheet.setPadding(dp(20), dp(10), dp(20), dp(20));
+        sheet.setBackground(sheetBackground());
+        sheet.addView(sheetHandle());
+        LinearLayout head = new LinearLayout(this);
+        head.setGravity(Gravity.CENTER_VERTICAL);
+        Buddy.BuddyView buddy = new Buddy.BuddyView(this);
+        buddy.selfAnimate = true;
+        buddy.mood = 0.6f;
+        buddy.setScale(0.6f);
+        buddy.color = BuddyStyle.COLORS[BuddyStyle.colorIndex(this)];
+        buddy.accessory = BuddyStyle.accessoryDef(this);
+        buddy.level = Levels.level(Levels.xp(this));
+        buddy.startIdle(Buddy.BuddyView.LOOK);
+        buddy.setClickable(false);
+        head.addView(buddy, new LinearLayout.LayoutParams(dp(64), dp(60)));
+        TextView t = text(s(R.string.checkin_q), 22, TEXT);
+        t.setTypeface(Typeface.DEFAULT_BOLD);
+        t.setPadding(dp(10), 0, 0, 0);
+        head.addView(t, new LinearLayout.LayoutParams(0, -2, 1));
+        sheet.addView(head);
+        TextView b = text(s(R.string.checkin_body, BuddyStyle.name(this)), 15, MUTED);
+        b.setPadding(0, dp(8), 0, dp(14));
+        sheet.addView(b);
+        final TextView go = text(s(R.string.checkin_all), 16, Color.WHITE);
+        for (final String item : burst) {
+            LinearLayout row = new LinearLayout(this);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setPadding(dp(14), dp(12), dp(14), dp(12));
+            final ImageView box = new ImageView(this);
+            final TextView label = text(item, 15, TEXT);
+            label.setPadding(dp(12), 0, 0, 0);
+            row.addView(box, new LinearLayout.LayoutParams(dp(22), dp(22)));
+            row.addView(label, new LinearLayout.LayoutParams(0, -2, 1));
+            final Runnable paint = () -> {
+                boolean on = keep.contains(item);
+                box.setImageDrawable(on ? tinted(R.drawable.ic_check, GOOD, 22) : null);
+                box.setBackground(on ? null : rounded(Color.TRANSPARENT, 11, MUTED));
+                row.setBackground(rounded(on ? CARD_DONE : CARD, 16, on ? withAlpha(GOOD, 0x40) : BORDER));
+                label.setTextColor(on ? TEXT : MUTED);
+                go.setText(s(keep.size() == burst.size() ? R.string.checkin_all : R.string.checkin_save));
+            };
+            row.setOnClickListener(v -> {
+                if (!keep.remove(item)) keep.add(item);
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                paint.run();
+            });
+            row.setForeground(ripple(16));
+            paint.run();
+            LinearLayout.LayoutParams rlp = new LinearLayout.LayoutParams(-1, -2);
+            rlp.bottomMargin = dp(8);
+            sheet.addView(row, rlp);
+        }
+        go.setTypeface(MEDIUM);
+        go.setGravity(Gravity.CENTER);
+        go.setBackground(gradientPill(26));
+        go.setOnClickListener(v -> {
+            long now = System.currentTimeMillis();
+            for (String item : burst) {
+                if (keep.contains(item)) continue;
+                Routine.setChecked(this, item, false);
+                History.addEvent(this, "quickUndone", now);
+                undone[0]++;
+            }
+            d.dismiss();
+        });
+        LinearLayout.LayoutParams glp = new LinearLayout.LayoutParams(-1, dp(52));
+        glp.topMargin = dp(8);
+        sheet.addView(go, glp);
+        d.setOnDismissListener(x -> {
+            checkinOpen = false;
+            if (isFinishing()) return;
+            if (undone[0] > 0) {
+                Toast.makeText(this, s(R.string.checkin_thanks), Toast.LENGTH_LONG).show();
+                build();
+            } else {
+                refreshSummary(true);
+            }
+        });
+        showSheet(d, sheet);
     }
 
     // ---------------------------------------------------------------- undo, freezes, levels

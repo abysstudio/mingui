@@ -180,7 +180,77 @@ final class Buddy {
 
     private boolean isAway() {
         return MainActivity.visible
-                || Routine.prefs(c).getLong("buddy_hidden_until", 0) > System.currentTimeMillis();
+                || Routine.prefs(c).getLong("buddy_hidden_until", 0) > System.currentTimeMillis()
+                || napping(SystemClock.uptimeMillis());
+    }
+
+    // ---- after the routine: the buddy naps, and comes back out if you keep scrolling.
+
+    /** Phone use (screen on, outside Mingui and allowed apps) after the routine before the buddy steps in. */
+    static final long SCROLL_WARN_MS = 10 * 60_000;
+    /** How long it roams around after a scroll warning before napping again. */
+    static final long ROAM_MS = 3 * 60_000;
+    /** Screen off this long ends a scrolling session. */
+    private static final long SESSION_GAP_MS = 2 * 60_000;
+    /** Uptime when the buddy goes to nap; -1 while the routine isn't done. */
+    private long napAt = -1;
+    private long roamUntil, useMs, offMs, lastUseTick, lastDoneCheck, lastAppCheck;
+    private boolean exemptApp, warnPending, saidNight;
+
+    private boolean napping(long now) {
+        return napAt >= 0 && now >= napAt && now >= roamUntil;
+    }
+
+    /** Re-reads "done today" every few seconds, also while the buddy is away. */
+    private void checkDone(long now) {
+        if (now - lastDoneCheck < 3000) return;
+        lastDoneCheck = now;
+        boolean dn = Routine.isDoneToday(c);
+        if (!dn) {
+            // Not done (or a new day began): back to normal, out on screen.
+            napAt = -1;
+            roamUntil = useMs = 0;
+            saidNight = false;
+        } else if (napAt < 0) {
+            // Finished while the buddy was out: celebrate, say good night, then nap.
+            // Already done when we started (or finished inside the app): straight to the nap.
+            boolean onScreen = root != null && root.getVisibility() == View.VISIBLE && !leaving;
+            napAt = onScreen ? now + 9000 : now;
+            saidNight = !onScreen;
+        }
+    }
+
+    /** Counts phone use after the routine; enough of it sends the buddy out with a gentle warning. */
+    private void trackUse(long now, boolean screenOn) {
+        long dt = lastUseTick == 0 ? 0 : Math.min(now - lastUseTick, 5000);
+        lastUseTick = now;
+        if (napAt < 0 || now < napAt) {
+            useMs = 0;
+            return;
+        }
+        if (!screenOn) {
+            offMs += dt;
+            if (offMs > SESSION_GAP_MS) useMs = 0;
+            return;
+        }
+        offMs = 0;
+        if (MainActivity.visible || now < roamUntil) return;
+        if (now - lastAppCheck > 5000) {
+            lastAppCheck = now;
+            // Allowed work apps, essentials and calls aren't scrolling.
+            String fg = Apps.foreground(c);
+            int mode = c.getSystemService(android.media.AudioManager.class).getMode();
+            exemptApp = (fg != null && (Routine.allowedApps(c).contains(fg) || Apps.essentials(c).contains(fg)))
+                    || mode == android.media.AudioManager.MODE_IN_CALL
+                    || mode == android.media.AudioManager.MODE_IN_COMMUNICATION;
+        }
+        if (exemptApp) return;
+        useMs += dt;
+        if (useMs >= SCROLL_WARN_MS) {
+            useMs = 0;
+            roamUntil = now + ROAM_MS;
+            warnPending = true;
+        }
     }
 
     private PortalView portal;
@@ -641,6 +711,8 @@ final class Buddy {
         if (root == null) return;
         long now = SystemClock.uptimeMillis();
         boolean screenOn = c.getSystemService(PowerManager.class).isInteractive();
+        checkDone(now);
+        trackUse(now, screenOn);
         if (!screenOn) {
             // Nothing to animate with the screen off; check back in a bit.
             handler.postDelayed(frame, 1000);
@@ -650,7 +722,8 @@ final class Buddy {
         if (isAway()) {
             if (root.getVisibility() == View.VISIBLE && !leaving) leave();
             // Cheap check; polled often so the buddy is back the moment you leave the app.
-            handler.postDelayed(frame, 150);
+            // Napping after the routine only needs to count phone use, so once a second is plenty.
+            handler.postDelayed(frame, napping(now) && !MainActivity.visible ? 1000 : 150);
             return;
         }
         if (root.getVisibility() != View.VISIBLE || leaving) enter();
@@ -671,6 +744,20 @@ final class Buddy {
             lastStateCheck = now;
             applyStyle();
             checkState();
+        }
+        if (warnPending) {
+            // Out of its nap because you've been scrolling a while.
+            warnPending = false;
+            body.jump();
+            body.startIdle(BuddyView.LOOK);
+            idleUntil = now + 2500;
+            say(pickRes(R.array.say_scrolling, SCROLL_WARN_MS / 60_000, BuddyStyle.name(c)), 6000);
+            nextChatter = now + 60_000;
+        } else if (!saidNight && napAt >= 0 && now >= napAt - 4500) {
+            saidNight = true;
+            body.startIdle(BuddyView.WAVE);
+            idleUntil = now + 3000;
+            say(pickRes(R.array.say_nap, 0, BuddyStyle.name(c)), 4000);
         }
 
         int[] size = screen();
@@ -804,7 +891,9 @@ final class Buddy {
         int streak = Routine.streak(c);
         String name = BuddyStyle.name(c);
         String msg;
-        if (done) {
+        if (done && SystemClock.uptimeMillis() < roamUntil) {
+            msg = pickRes(R.array.say_scrolling, SCROLL_WARN_MS / 60_000, name);
+        } else if (done) {
             msg = streak > 1 ? pickRes(R.array.say_done_streak, streak, name) : pickRes(R.array.say_done_new, streak, name);
         } else if (mood <= 0) {
             msg = pickRes(R.array.say_nudge, left, name);

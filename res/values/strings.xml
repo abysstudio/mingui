@@ -412,9 +412,9 @@
     <string name="good_morning_cue">Good morning! %1$s</string>
     <string name="locked_until_done_toast">Locked until your routine is done</string>
     <string name="channel_watcher">Unlock watcher</string>
-    <string name="notif_hanging_out">%1$s is hanging out</string>
+    <string name="notif_hanging_out">%1$s is napping</string>
     <string name="notif_not_done">Routine not done yet</string>
-    <string name="notif_buddy_on">Your buddy is on screen. Turn it off in Settings.</string>
+    <string name="notif_buddy_on">Routine done. Your buddy naps, and comes out if you scroll for a long time.</string>
     <string name="notif_blocked">Blocked apps stay locked until it\'s finished.</string>
     <string name="cue_say">%1$s: %2$s?</string>
     <string-array name="day_letters">
@@ -615,4 +615,20 @@
     <string name="opt_entrance">ENTRANCE</string>
     <string name="opt_chat">CHAT</string>
     <string name="rename_buddy">Rename your buddy</string>
+    <string name="checkin_q">That was quick!</string>
+    <string name="checkin_body">%1$s just wants to check: did you really do all of these? Untick any you skipped. No penalty, and half your habits still keeps your streak.</string>
+    <string name="checkin_all">Yes, I did them all</string>
+    <string name="checkin_save">Save</string>
+    <string name="checkin_thanks">Thanks for being honest. That still counts for something.</string>
+    <string-array name="say_nap">
+        <item>Time for my nap 💤</item>
+        <item>Enjoy! I\'ll be napping</item>
+        <item>Wake me tomorrow</item>
+    </string-array>
+    <string-array name="say_scrolling">
+        <item>%1$d min of scrolling…</item>
+        <item>Still scrolling? Stretch!</item>
+        <item>Maybe a little break?</item>
+        <item>%2$s got bored napping</item>
+    </string-array>
 </resources>

@@ -412,9 +412,9 @@
     <string name="good_morning_cue">¡Buenos días! %1$s</string>
     <string name="locked_until_done_toast">Bloqueada hasta que termines tu rutina</string>
     <string name="channel_watcher">Vigilante de desbloqueo</string>
-    <string name="notif_hanging_out">%1$s anda por aquí</string>
+    <string name="notif_hanging_out">%1$s está echando la siesta</string>
     <string name="notif_not_done">Rutina aún sin terminar</string>
-    <string name="notif_buddy_on">Tu mascota está en pantalla. Desactívala en Ajustes.</string>
+    <string name="notif_buddy_on">Rutina hecha. Tu mascota duerme y sale si haces scroll mucho rato.</string>
     <string name="notif_blocked">Las apps bloqueadas siguen así hasta que la termines.</string>
     <string name="cue_say">%1$s: ¿%2$s?</string>
     <string-array name="day_letters">
@@ -615,4 +615,20 @@
     <string name="opt_entrance">ENTRADA</string>
     <string name="opt_chat">CHARLA</string>
     <string name="rename_buddy">Cambiar el nombre de tu mascota</string>
+    <string name="checkin_q">¡Qué rápido!</string>
+    <string name="checkin_body">%1$s solo quiere comprobar: ¿de verdad has hecho todo esto? Desmarca lo que te hayas saltado. Sin castigo, y con la mitad de tus hábitos mantienes la racha.</string>
+    <string name="checkin_all">Sí, lo he hecho todo</string>
+    <string name="checkin_save">Guardar</string>
+    <string name="checkin_thanks">Gracias por ser sincero. Eso también cuenta.</string>
+    <string-array name="say_nap">
+        <item>Hora de la siesta 💤</item>
+        <item>¡Disfruta! Voy a dormir</item>
+        <item>Despiértame mañana</item>
+    </string-array>
+    <string-array name="say_scrolling">
+        <item>%1$d min de scroll…</item>
+        <item>¿Sigues? ¡Estírate!</item>
+        <item>¿Un pequeño descanso?</item>
+        <item>%2$s se aburría durmiendo</item>
+    </string-array>
 </resources>
