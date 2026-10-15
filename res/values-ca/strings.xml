@@ -605,4 +605,17 @@
     <string name="fix_day">Corregeix aquest dia</string>
     <string name="fix_day_hint">Vas fer un hàbit però et vas oblidar de marcar-lo? Toca ahir o abans-d\'ahir per corregir-ho.</string>
     <string name="fix_day_sub">Marca el que vas fer de debò. La ratxa i les estadístiques s\'actualitzen a l\'instant.</string>
+    <string name="crash_title">Mingui s\'ha tancat</string>
+    <string name="crash_body">Ho sentim! Això és el que ha fallat. Es queda al teu telèfon tret que el comparteixis. Enviar-lo al desenvolupador ajuda a arreglar-ho.</string>
+    <string name="crash_share">Comparteix l\'informe</string>
+    <string name="crash_continue">Continua</string>
+    <string name="entrance_header">ENTRADA</string>
+    <string name="entrance_hint">Com apareix i se\'n va la teva mascota quan obres o tanques Mingui. Toca\'n un per veure\'l.</string>
+    <string-array name="entrance_names">
+        <item>Portal</item>
+        <item>Pop</item>
+        <item>Caminant</item>
+        <item>Fos</item>
+        <item>Cap</item>
+    </string-array>
 </resources>

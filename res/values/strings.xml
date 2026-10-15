@@ -605,4 +605,17 @@
     <string name="fix_day">Fix this day</string>
     <string name="fix_day_hint">Did a habit but forgot to tick it? Tap yesterday or the day before to fix it.</string>
     <string name="fix_day_sub">Tick what you actually did. Your streak and stats update right away.</string>
+    <string name="crash_title">Mingui crashed</string>
+    <string name="crash_body">Sorry! Here\'s what went wrong. It stays on your phone unless you share it. Sending it to the developer helps fix it.</string>
+    <string name="crash_share">Share report</string>
+    <string name="crash_continue">Continue</string>
+    <string name="entrance_header">ENTRANCE</string>
+    <string name="entrance_hint">How your buddy comes and goes when you open or close Mingui. Tap one to see it.</string>
+    <string-array name="entrance_names">
+        <item>Portal</item>
+        <item>Pop</item>
+        <item>Walk in</item>
+        <item>Fade</item>
+        <item>None</item>
+    </string-array>
 </resources>

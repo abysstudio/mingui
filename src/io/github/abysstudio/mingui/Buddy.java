@@ -230,6 +230,11 @@ final class Buddy {
      * Picks up from wherever an interrupted leave got to.
      */
     private void enter() {
+        int style = BuddyStyle.entranceIndex(c);
+        if (style != BuddyStyle.ENTRANCE_PORTAL) {
+            simpleEnter(style);
+            return;
+        }
         leaving = false;
         boolean wasGone = root.getVisibility() != View.VISIBLE;
         root.setVisibility(View.VISIBLE);
@@ -277,6 +282,11 @@ final class Buddy {
 
     /** Leaves through a portal: crouches, the hole opens, it spins down into it and the portal winks shut. */
     private void leave() {
+        int style = BuddyStyle.entranceIndex(c);
+        if (style != BuddyStyle.ENTRANCE_PORTAL) {
+            simpleLeave(style);
+            return;
+        }
         leaving = true;
         removeCloudNow();
         portalMode(true);
@@ -318,6 +328,117 @@ final class Buddy {
             body.setScaleY(1f);
             portalMode(false);
         });
+    }
+
+    /** Resets everything an entrance/exit animation may have changed. */
+    private void restPose() {
+        body.setTranslationX(0);
+        body.setTranslationY(0);
+        body.setRotationY(0);
+        body.setAlpha(1f);
+        body.setScaleX(1f);
+        body.setScaleY(1f);
+        body.walking = false;
+    }
+
+    /** The non-portal entrances: pop, walk in from the nearest edge, fade, or none. */
+    private void simpleEnter(int style) {
+        leaving = false;
+        boolean wasGone = root.getVisibility() != View.VISIBLE;
+        root.setVisibility(View.VISIBLE);
+        portalMode(false);
+        body.setPivotX(bw() / 2f);
+        body.setPivotY(bh());
+        if (!wasGone && anim != null) {
+            // Interrupted a leave: just settle back.
+            runAnim(200, a -> {}, this::restPose);
+            return;
+        }
+        final android.view.animation.Interpolator over = new android.view.animation.OvershootInterpolator(2.2f);
+        switch (style) {
+            case BuddyStyle.ENTRANCE_POP:
+                body.setScaleX(0f);
+                body.setScaleY(0f);
+                runAnim(480, a -> {
+                    float k = over.getInterpolation((float) a.getAnimatedValue() / 480f);
+                    body.setScaleX(k);
+                    body.setScaleY(k);
+                }, () -> {
+                    restPose();
+                    body.startIdle(BuddyView.WAVE);
+                });
+                break;
+            case BuddyStyle.ENTRANCE_WALK: {
+                // Start just off the nearest edge and let the normal walking loop bring it back to where it was.
+                int[] size = screen();
+                float home = x;
+                boolean fromLeft = home < size[0] / 2f;
+                x = fromLeft ? -bw() : size[0];
+                lp.x = (int) x;
+                update(root, lp);
+                targetX = Math.max(0, Math.min(size[0] - bw(), home));
+                idleUntil = 0;
+                restPose();
+                break;
+            }
+            case BuddyStyle.ENTRANCE_FADE:
+                body.setAlpha(0f);
+                runAnim(420, a -> body.setAlpha((float) a.getAnimatedValue() / 420f), this::restPose);
+                break;
+            default:
+                restPose();
+                break;
+        }
+        idleUntil = Math.max(idleUntil, style == BuddyStyle.ENTRANCE_WALK ? 0 : SystemClock.uptimeMillis() + 1500);
+    }
+
+    private void simpleLeave(int style) {
+        leaving = true;
+        removeCloudNow();
+        final Runnable gone = () -> {
+            if (!leaving || root == null) return;
+            leaving = false;
+            root.setVisibility(View.GONE);
+            restPose();
+        };
+        final android.view.animation.Interpolator antic = new android.view.animation.AnticipateInterpolator(2f);
+        switch (style) {
+            case BuddyStyle.ENTRANCE_POP:
+                runAnim(260, a -> {
+                    float k = 1 - antic.getInterpolation((float) a.getAnimatedValue() / 260f);
+                    body.setScaleX(k);
+                    body.setScaleY(k);
+                }, gone);
+                break;
+            case BuddyStyle.ENTRANCE_WALK: {
+                // Hurry off the nearest edge.
+                final int[] size = screen();
+                final float from = x;
+                final boolean toLeft = from < size[0] / 2f;
+                final float to = toLeft ? -bw() : size[0];
+                body.facing = toLeft ? -1 : 1;
+                body.walking = true;
+                final float home = from;
+                runAnim((long) (Math.abs(to - from) / (dp(200)) * 1000) + 150, a -> {
+                    float k = (float) a.getAnimatedValue() / a.getDuration();
+                    lp.x = (int) (from + (to - from) * k);
+                    update(root, lp);
+                    body.invalidate();
+                }, () -> {
+                    x = home; // come back from this spot next time
+                    lp.x = (int) home;
+                    update(root, lp);
+                    gone.run();
+                });
+                break;
+            }
+            case BuddyStyle.ENTRANCE_FADE:
+                runAnim(260, a -> body.setAlpha(1 - (float) a.getAnimatedValue() / 260f), gone);
+                break;
+            default:
+                gone.run();
+                break;
+        }
     }
 
     /** Re-checks right away (e.g. the checklist just closed) instead of waiting for the next poll. */

@@ -605,4 +605,17 @@
     <string name="fix_day">Corregir este día</string>
     <string name="fix_day_hint">¿Hiciste un hábito pero olvidaste marcarlo? Toca ayer o anteayer para corregirlo.</string>
     <string name="fix_day_sub">Marca lo que hiciste de verdad. Tu racha y tus estadísticas se actualizan al momento.</string>
+    <string name="crash_title">Mingui se ha cerrado</string>
+    <string name="crash_body">¡Lo sentimos! Esto es lo que falló. Se queda en tu teléfono a menos que lo compartas. Enviarlo al desarrollador ayuda a arreglarlo.</string>
+    <string name="crash_share">Compartir informe</string>
+    <string name="crash_continue">Continuar</string>
+    <string name="entrance_header">ENTRADA</string>
+    <string name="entrance_hint">Cómo aparece y se va tu mascota al abrir o cerrar Mingui. Toca uno para verlo.</string>
+    <string-array name="entrance_names">
+        <item>Portal</item>
+        <item>Pop</item>
+        <item>Caminando</item>
+        <item>Fundido</item>
+        <item>Ninguna</item>
+    </string-array>
 </resources>

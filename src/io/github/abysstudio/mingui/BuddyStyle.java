@@ -104,6 +104,18 @@ final class BuddyStyle {
         return clamp(prefs(c).getInt("buddy_speed", 1), SPEEDS.length);
     }
 
+    /** How the buddy appears and leaves (e.g. when you open or close the checklist). */
+    static final int ENTRANCE_PORTAL = 0, ENTRANCE_POP = 1, ENTRANCE_WALK = 2, ENTRANCE_FADE = 3,
+            ENTRANCE_NONE = 4, ENTRANCES = 5;
+
+    static int entranceIndex(Context c) {
+        return clamp(prefs(c).getInt("buddy_entrance", ENTRANCE_PORTAL), ENTRANCES);
+    }
+
+    static String[] entranceNames(Context c) {
+        return c.getResources().getStringArray(R.array.entrance_names);
+    }
+
     /** 0 quiet (only reacts to your progress), 1 normal, 2 chatty. */
     static int chatIndex(Context c) {
         return clamp(prefs(c).getInt("buddy_chat", 1), CHAT_LEVELS);
