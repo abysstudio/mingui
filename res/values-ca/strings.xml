@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_desc">La teva mascota i els hàbits d\'avui. Toca un hàbit per marcar-lo.</string>
+    <string name="settings">Configuració</string>
+    <string name="todays_routine">RUTINA D\'AVUI</string>
+    <string name="rest_day_body">Avui no hi ha res programat. Gaudeix del descans: la teva ratxa està a salvo.</string>
+    <string name="not_today">Avui no: %1$s</string>
+    <string name="list_sep">", "</string>
+    <string name="work_apps">APPS DE FEINA</string>
+    <string name="n_min">%1$d min</string>
+    <string name="timer_tap_start">"Temporitzador de %1$d min  ·  toca per començar"</string>
+    <string name="timer_left">"Queden %1$d:%2$02d  ·  mantén premut per reiniciar"</string>
+    <string name="times_up">"Temps complert  ·  toca per marcar"</string>
+    <string name="timer_reset">Temporitzador reiniciat</string>
+    <string name="up_next_badge">SEGÜENT</string>
+    <string name="finish_setup">Acaba la configuració</string>
+    <string name="recommended">Recomanat</string>
+    <string name="setup_required_body">Necessaris per a les funcions que has activat. Tot funciona només en aquest telèfon.</string>
+    <string name="setup_optional_body">Opcionals: fan que la teva mascota i els recordatoris funcionin millor.</string>
+    <string name="usage_access">Accés a dades d\'ús</string>
+    <string name="usage_access_sub">Detecta quan obres una app que has triat bloquejar</string>
+    <string name="usage_access_disclosure">Per bloquejar les apps que triïs, l\'app necessita saber quina app està oberta en aquest moment. Només ho compara amb les teves llistes d\'apps bloquejades i permeses, i mai no ho desa ni ho comparteix.\n\nL\'app no té accés a internet, així que això no pot sortir del teu telèfon.\n\nA la pantalla següent, activa l\'accés d\'ús per a aquesta app. Tornaràs aquí automàticament.</string>
+    <string name="overlay">Mostra sobre altres apps</string>
+    <string name="overlay_sub">Mostra la llista sobre les apps bloquejades, i la teva mascota</string>
+    <string name="overlay_disclosure">"Això permet a l\'app:\n\n  - mostrar la teva llista damunt d\'una app que hagis decidit bloquejar,\n  - tornar a mostrar la llista quan el mode concentració està activat (només si l\'actives),\n  - mostrar la teva mascota passejant per la pantalla (la pots desactivar quan vulguis).\n\nNo es mostra mai sobre apps que no hagis triat i no imita mai pantalles del sistema."</string>
+    <string name="notifications">Notificacions</string>
+    <string name="notifications_sub">Estat amb un botó de Pausa, i els avisos que programis</string>
+    <string name="battery">Bateria: sense restriccions</string>
+    <string name="battery_sub">Evita que Android tanqui l\'app en segon pla</string>
+    <string name="allow">Permet</string>
+    <string name="not_now">Ara no</string>
+    <string name="continue_">Continua</string>
+    <string name="edit_routine_q">Vols editar la rutina ara?</string>
+    <string name="edit_routine_body">Encara no has acabat la rutina d\'avui. Si la canvies ara (traient hàbits, escurçant temporitzadors o canviant dies), s\'aplica de seguida i pot desbloquejar les teves apps abans d\'hora.\n\nSegur que la vols editar?</string>
+    <string name="yes_edit">Sí, edita-la</string>
+    <string name="focus_q">Vols activar el mode concentració?</string>
+    <string name="focus_body">"Mentre no acabis la rutina d\'avui, si surts de la llista hi tornaràs, i les barres del sistema s\'amaguen en aquesta pantalla.\n\nSempre tens el control:\n  - La configuració, les trucades, les emergències i desinstal·lar no es bloquegen mai\n  - Les apps que permetis per a la feina continuen obertes\n  - %1$d descansos de cinc minuts al dia\n  - \"Pausa per avui\" ho desactiva tot fins demà\n\nPots tornar a desactivar el mode concentració quan acabis la rutina d\'avui."</string>
+    <string name="paused_banner">En pausa per avui. El bloqueig i el mode concentració estan desactivats fins demà.</string>
+    <string name="resume">Reprèn</string>
+    <string name="paused_for_today">En pausa per avui</string>
+    <string name="pause_for_today">Pausa per avui</string>
+    <string name="pause_q">Vols fer pausa per avui?</string>
+    <string name="paused_body">El bloqueig i el mode concentració estan desactivats fins demà. Els teus hàbits continuen comptant.</string>
+    <string name="pause_body">Desactiva el bloqueig d\'apps, el mode concentració i els avisos en desbloquejar fins demà. Fes-la servir quan de debò necessitis el mòbil. Queda registrada a les estadístiques i pots reprendre quan vulguis.</string>
+    <string name="resume_now">Reprèn ara</string>
+    <string name="hold_to_pause">Mantén premut per fer pausa fins demà</string>
+    <string name="paused_toast">En pausa fins demà</string>
+    <string name="keep_going">Continua</string>
+    <string name="root_needed">Cal accés root</string>
+    <string name="root_needed_body">%1$s amaga apps fent servir root. Permet-ho a Magisk / KernelSU i torna-ho a provar.</string>
+    <string name="try_again">Torna-ho a provar</string>
+    <string name="still_no_root">Encara no hi ha accés root</string>
+    <string name="on_break_until">En descans fins a les %1$s</string>
+    <string name="hero_rest">Dia de descans</string>
+    <string name="hero_done">Tot fet</string>
+    <string name="hero_start">Som-hi!</string>
+    <string name="hero_one_more">Només en falta un</string>
+    <string name="hero_halfway">Més de la meitat</string>
+    <string name="hero_nice_start">Bon començament</string>
+    <string name="showed_up_as">Avui has estat %1$s</string>
+    <string name="apps_unlocked_today">Les teves apps estan desbloquejades per avui</string>
+    <string name="day_streak">Ratxa de %1$d dies</string>
+    <string name="best_suffix">"  ·  rècord"</string>
+    <string name="start_streak">Comença una ratxa</string>
+    <string name="lv">Nv. %1$d</string>
+    <plurals name="breaks_left">
+        <item quantity="one">"Necessites el mòbil?  ·  Et queda %1$d descans avui"</item>
+        <item quantity="other">"Necessites el mòbil?  ·  Et queden %1$d descansos avui"</item>
+    </plurals>
+    <plurals name="habits_left_unlock">
+        <item quantity="one">Falta %1$d hàbit per desbloquejar</item>
+        <item quantity="other">Falten %1$d hàbits per desbloquejar</item>
+    </plurals>
+    <string name="restricted">Permet la configuració restringida</string>
+    <string name="restricted_sub">Cal primer a Android 13+ si no s\'ha instal·lat des de Play</string>
+    <string name="restricted_disclosure">Android bloqueja alguns permisos de les apps instal·lades fora de Play Store fins que els permets.\n\n1. A la pantalla següent (Informació de l\'app), toca ⋮ a dalt a la dreta.\n2. Toca \"Permet la configuració restringida\" i confirma.\n3. Torna aquí i toca Permet a Accés a dades d\'ús.\n\nNo veus ⋮ ni l\'opció? Toca primer un cop Permet a Accés a dades d\'ús (Android mostrarà un missatge de \"Configuració restringida\") i després repeteix aquest pas.</string>
+    <string name="open_app">Obre %1$s</string>
+    <string name="all_apps_unlocked">Totes les apps desbloquejades</string>
+    <string name="couldnt_open">No s\'ha pogut obrir %1$s</string>
+    <string name="couldnt_unhide">No s\'ha pogut mostrar %1$s (sense root)</string>
+    <string name="done">Fet</string>
+    <string name="routine_header">RUTINA</string>
+    <string name="edit_habits">Edita els hàbits</string>
+    <string name="asks_first">" demana confirmació fins que acabis la rutina d\'avui"</string>
+    <plurals name="more_to_unlock">
+        <item quantity="one">Falta %1$d per desbloquejar</item>
+        <item quantity="other">Falten %1$d per desbloquejar</item>
+    </plurals>
+    <plurals name="n_habits">
+        <item quantity="one">%1$d hàbit</item>
+        <item quantity="other">%1$d hàbits</item>
+    </plurals>
+    <string name="your_stats">Les teves estadístiques</string>
+    <string name="your_stats_sub">Ratxes, historial i com va cada hàbit</string>
+    <string name="allowed_during_focus">PERMESES EN MODE CONCENTRACIÓ</string>
+    <string name="manage">Gestiona</string>
+    <string name="no_work_apps">Encara no hi ha apps de feina. Les apps permeses es poden obrir des de la llista sense que et torni a portar-hi.</string>
+    <string name="blocked_apps_header">APPS BLOQUEJADES</string>
+    <string name="no_blocked_apps">Encara no hi ha apps bloquejades. Toca Gestiona per triar-ne.</string>
+    <string name="finish_to_unlock_app">Acaba la rutina per desbloquejar %1$s</string>
+    <string name="staying_on_track">MANTENIR EL RUMB</string>
+    <string name="focus_lock">Mode concentració</string>
+    <string name="focus_lock_sub">Et manté a la llista fins que l\'acabis.</string>
+    <string name="emergency_exit">Sortida d\'emergència: desactiva el bloqueig i el mode concentració fins demà</string>
+    <string name="open_on_unlock">Obre en desbloquejar</string>
+    <string name="open_on_unlock_sub">Mostra aquesta llista cada cop que desbloquegis el mòbil fins que acabis la rutina d\'avui.</string>
+    <string name="sounds">Sons</string>
+    <string name="show_buddy">Mostra la mascota</string>
+    <string name="snooze_name">Fes dormir %1$s</string>
+    <string name="back_at">Torna a les %1$s</string>
+    <string name="is_back">%1$s ha tornat!</string>
+    <string name="back_in_hour">%1$s tornarà d\'aquí a una hora. Toca de nou per desfer.</string>
+    <string name="tracking_starts_today">El seguiment comença avui</string>
+    <string name="tracking_since">Seguiment des del %1$s</string>
+    <string name="overview">RESUM</string>
+    <string name="current_streak">Ratxa actual</string>
+    <string name="best_streak">Millor ratxa</string>
+    <string name="last_7_days">Últims 7 dies</string>
+    <string name="last_30_days">Últims 30 dies</string>
+    <string name="milestones">FITES</string>
+    <string name="last_12_weeks">ÚLTIMES 12 SETMANES</string>
+    <string name="tap_day">Toca un dia per veure\'n els detalls</string>
+    <string name="who_becoming">QUI T\'ESTÀS CONVERTINT</string>
+    <string name="who_becoming_intro">Cada cop que fas un hàbit, és un vot per la persona que vols ser.</string>
+    <string name="habits_weakest">"HÀBITS  ·  ÚLTIMS 30 DIES  ·  ELS MÉS FLUIXOS PRIMER"</string>
+    <string name="timing_header">"HORARIS  ·  ÚLTIMS 30 DIES"</string>
+    <string name="average_finish">Hora mitjana d\'acabar</string>
+    <string name="weak_moments">"MOMENTS FEBLES  ·  ÚLTIMS 30 DIES"</string>
+    <string name="peak_hour">Hora punta</string>
+    <string name="exit_by_hour">Intents de sortida per hora del dia. Toca una barra per veure\'n els detalls.</string>
+    <string name="day_not_tracked">"%1$s  ·  encara sense seguiment"</string>
+    <string name="day_missed">"%1$s  ·  no fet"</string>
+    <string name="day_frozen">"%1$s  ·  cobert per un protector de ratxa"</string>
+    <string name="day_rest">"%1$s  ·  dia de descans"</string>
+    <string name="day_habits">"%1$s  ·  %2$d de %3$d hàbits"</string>
+    <string name="day_finished">"  ·  acabat a les %1$s"</string>
+    <plurals name="breaks_taken">
+        <item quantity="one">Descans fet</item>
+        <item quantity="other">Descansos fets</item>
+    </plurals>
+    <plurals name="exit_attempts">
+        <item quantity="one">Intent de sortida</item>
+        <item quantity="other">Intents de sortida</item>
+    </plurals>
+    <plurals name="hour_attempts">
+        <item quantity="one">"%2$02d:00-%3$02d:00  ·  %1$d intent"</item>
+        <item quantity="other">"%2$02d:00-%3$02d:00  ·  %1$d intents"</item>
+    </plurals>
+    <plurals name="n_days">
+        <item quantity="one">%1$d dia</item>
+        <item quantity="other">%1$d dies</item>
+    </plurals>
+    <plurals name="done_of_days">
+        <item quantity="one">%1$d complet de %2$d dia</item>
+        <item quantity="other">%1$d complets de %2$d dies</item>
+    </plurals>
+    <plurals name="done_partial_of_days">
+        <item quantity="one">%1$d complet + %3$d parcial de %2$d dia</item>
+        <item quantity="other">%1$d complets + %3$d parcials de %2$d dies</item>
+    </plurals>
+    <plurals name="day_breaks">
+        <item quantity="one">"  ·  %1$d descans"</item>
+        <item quantity="other">"  ·  %1$d descansos"</item>
+    </plurals>
+    <string name="days_this_month">"  ·  %1$d de %2$d dies aquest mes"</string>
+    <string name="more_to_strength">%1$d més per a «%2$s»</string>
+    <string name="x_of_y_days">%1$d de %2$d dies</string>
+    <string name="and_last">%1$s i %2$s</string>
+    <plurals name="n_votes">
+        <item quantity="one">%1$d vot</item>
+        <item quantity="other">%1$d vots</item>
+    </plurals>
+    <string-array name="heat_labels">
+        <item>No fet</item>
+        <item>Començat</item>
+        <item>Parcial</item>
+        <item>Fet</item>
+        <item>Protegit</item>
+    </string-array>
+    <string-array name="strengths">
+        <item>Emergent</item>
+        <item>Creixent</item>
+        <item>Sòlida</item>
+        <item>Essencial</item>
+    </string-array>
+    <string-array name="color_names">
+        <item>Ànim</item>
+        <item>Violeta</item>
+        <item>Menta</item>
+        <item>Capvespre</item>
+        <item>Oceà</item>
+        <item>Xiclet</item>
+        <item>Sol</item>
+    </string-array>
+    <string-array name="size_names">
+        <item>Petita</item>
+        <item>Mitjana</item>
+        <item>Gran</item>
+    </string-array>
+    <string-array name="speed_names">
+        <item>Tranquil·la</item>
+        <item>Normal</item>
+        <item>Enèrgica</item>
+    </string-array>
+    <string-array name="chat_names">
+        <item>Callada</item>
+        <item>Normal</item>
+        <item>Xerraire</item>
+    </string-array>
+    <string-array name="evolution_names">
+        <item>Brot</item>
+        <item>Brillantor</item>
+        <item>Ales</item>
+    </string-array>
+    <string name="xp_plus">+%1$d XP</string>
+    <string name="vote_plus">+1 %1$s</string>
+    <string name="unticked">Desmarcat: %1$s</string>
+    <string name="undo">DESFÉS</string>
+    <string name="level_reached">%1$s ha arribat al nivell %2$d!</string>
+    <string name="evolved">%1$s ha evolucionat: %2$s!</string>
+    <string name="level_stronger">Cada hàbit que completes fa més forta %1$s.</string>
+    <string name="ms_3">3 dies seguits!</string>
+    <string name="ms_7">Una setmana sencera!</string>
+    <string name="ms_14">Dues setmanes amb força</string>
+    <string name="ms_21">21 dies. Això ja és un hàbit.</string>
+    <string name="ms_30">Un mes sencer!</string>
+    <string name="ms_50">50 dies. Imparable.</string>
+    <string name="ms_100">100 dies!</string>
+    <string name="ms_365">Un any sencer!</string>
+    <string name="ms_other">Ratxa de %1$d dies!</string>
+    <string name="ms_best">I és la teva millor ratxa de sempre.</string>
+    <string name="ms_keep">Fita desbloquejada. Que no es trenqui la cadena.</string>
+    <string name="new_best">Nou rècord personal!</string>
+    <string name="new_best_sub">%1$d dies seguits. Mai no havies arribat tan lluny.</string>
+    <string name="welcome_back">Que bé que tornis!</string>
+    <string name="welcome_back_sub">Fallar un dia passa. El que compta és no fallar-ne dos.</string>
+    <string name="streak_counting">Ratxa de %1$d dies i pujant.</string>
+    <string name="day_one">Primer dia de la teva propera ratxa.</string>
+    <string name="earlier_than_usual">%1$s abans del normal</string>
+    <string name="habit_run">%1$s: %2$d dies seguits</string>
+    <string name="today_showed_up">Avui has estat %1$s</string>
+    <string name="earned_freeze">Has guanyat un protector de ratxa (en tens %1$d)</string>
+    <string name="level_extra">%1$s ha arribat al nivell %2$d</string>
+    <string name="level_extra_evo">%1$s ha arribat al nivell %2$d i ha evolucionat: %3$s</string>
+    <string name="new_for">Nou per a %1$s: %2$s</string>
+    <string name="no_breaks_today">Avui sense descansos ni intents de sortida</string>
+    <string name="dur_h">%1$d h</string>
+    <string name="dur_h_min">%1$d h %2$d min</string>
+    <string name="keep_it_up">Continua així!</string>
+    <plurals name="freeze_covered">
+        <item quantity="one">Un protector de ratxa va cobrir ahir. La teva ratxa està a salvo!</item>
+        <item quantity="other">Els protectors de ratxa van cobrir %1$d dies. La teva ratxa està a salvo!</item>
+    </plurals>
+    <string-array name="done_titles">
+        <item>Rutina completada</item>
+        <item>Tot fet. Bona feina!</item>
+        <item>Dia guanyat</item>
+        <item>Avui has complert</item>
+        <item>Fet. El teu jo del futur t\'ho agraeix.</item>
+    </string-array>
+    <string name="surprise_me">Sorprèn-me</string>
+    <string name="name_header">NOM</string>
+    <string name="colour_header">COLOR</string>
+    <string name="collection">COL·LECCIÓ</string>
+    <string name="n_unlocked">%1$d / %2$d desbloquejats</string>
+    <string name="size_header">MIDA</string>
+    <string name="speed_header">VELOCITAT EN CAMINAR</string>
+    <string name="chat_header">XERRAMECA</string>
+    <string name="reset_position">Restableix la posició</string>
+    <string name="reset_position_toast">Tornarà a la part de baix de la pantalla (la propera vegada que aparegui)</string>
+    <string name="level_caps">NIVELL %1$d</string>
+    <string name="xp_progress">%1$d / %2$d XP</string>
+    <string name="xp_how">%1$d XP per hàbit, +%2$d per acabar el dia. Els dies parcials també compten.</string>
+    <string name="level_n">Nivell %1$d</string>
+    <string name="personalize">Personalitza</string>
+    <plurals name="days_word">
+        <item quantity="one">dia</item>
+        <item quantity="other">dies</item>
+    </plurals>
+    <string-array name="moods">
+        <item>Trista</item>
+        <item>Normal</item>
+        <item>Contenta</item>
+    </string-array>
+    <string name="equipped">Posat</string>
+    <string name="default_">Per defecte</string>
+    <string name="n_day_reward">Premi de %1$d dies</string>
+    <string name="next_badge">SEGÜENT</string>
+    <string name="mystery_accessory">Accessori misteriós: es desbloqueja amb una ratxa de %1$d dies</string>
+    <string name="hi_name">Hola, %1$s!</string>
+    <string name="lets_go">Som-hi!</string>
+    <string name="next">Següent</string>
+    <string name="pick_one_habit">Tria almenys un hàbit</string>
+    <string name="onboard_done_toast">Pots editar els hàbits i triar quines apps bloquejar quan vulguis a Configuració</string>
+    <plurals name="days_to_go">
+        <item quantity="one">Falta %1$d dia</item>
+        <item quantity="other">Falten %1$d dies</item>
+    </plurals>
+    <string-array name="starter_habits">
+        <item>Fer el llit</item>
+        <item>Beure aigua</item>
+        <item>Fer exercici 20 min</item>
+        <item>Llegir 10 pàgines</item>
+        <item>Meditar 5 min</item>
+        <item>Escriure el diari</item>
+        <item>Caminar 15 min</item>
+        <item>Estiraments 10 min</item>
+        <item>Sense mòbil la primera hora</item>
+        <item>Planificar el dia</item>
+    </string-array>
+    <string name="meet_buddy">Coneix la teva mascota</string>
+    <string name="meet_buddy_sub">Passejarà per la teva pantalla i estarà més contenta cada cop que completis un hàbit.</string>
+    <string name="give_name">Posa-li un nom</string>
+    <string name="how_it_works">Com funciona</string>
+    <string name="how_1">Marca els teus hàbits diaris</string>
+    <string name="how_1_sub">Els hàbits amb temporitzador fan que els facis de debò.</string>
+    <string name="how_2">Les distraccions queden bloquejades fins que acabis</string>
+    <string name="how_2_sub">Tria quines apps bloquejar, com YouTube. Tornen tan bon punt acabes.</string>
+    <string name="how_3">Les ratxes desbloquegen premis</string>
+    <string name="how_3_sub">Accessoris per a %1$s i protectors que salven la teva ratxa els dies dolents.</string>
+    <string name="how_4">%1$s puja de nivell amb tu</string>
+    <string name="how_4_sub">Cada hàbit dona XP, fins i tot els dies parcials. A %1$s li surt un brot, després una brillantor i després ales.</string>
+    <string name="quick_setup">Configuració ràpida</string>
+    <string name="quick_setup_sub">Android necessita el teu permís per a un parell de coses. Toca Permet, activa l\'interruptor i torna.</string>
+    <string name="all_set">Tot a punt!</string>
+    <string name="quick_setup_root">Aquesta versió fa servir root per amagar del tot les apps bloquejades. Toca a sota i aprova %1$s al teu gestor de root (Magisk, KernelSU, WildKSU...).</string>
+    <string name="grant_root">Concedeix accés root</string>
+    <string name="waiting_root">Esperant el teu gestor de root...</string>
+    <string name="root_granted">Accés root concedit. Tot a punt!</string>
+    <string name="no_root_yet">Encara no hi ha root. Als gestors basats en KernelSU, activa %1$s a Superusuari i torna a tocar.</string>
+    <string name="first_habits">Els teus primers hàbits</string>
+    <string name="first_habits_sub">Comença de mica en mica: amb dos o tres n\'hi ha prou. Després pots canviar-los el nom, afegir temporitzadors i triar dies.</string>
+    <string name="your_data">LES TEVES DADES</string>
+    <string name="language">Idioma</string>
+    <string name="language_sub">English, Español o Català</string>
+    <string name="export_backup">Exporta una còpia de seguretat</string>
+    <string name="export_backup_sub">Desa hàbits, historial, ratxes i la teva mascota en un fitxer</string>
+    <string name="restore_backup">Restaura una còpia de seguretat</string>
+    <string name="restore_backup_sub">Substitueix tot el que hi ha aquí per una còpia de seguretat</string>
+    <string name="backup_saved">Còpia de seguretat desada</string>
+    <string name="backup_restored">Còpia de seguretat restaurada</string>
+    <string name="didnt_work">No ha funcionat: %1$s</string>
+    <string name="smart_prompts">AVISOS INTEL·LIGENTS</string>
+    <string name="cooldown">Pausa entre avisos</string>
+    <string name="cooldown_sub">No tornar a obrir en desbloquejar durant aquest temps</string>
+    <string name="off">No</string>
+    <string name="on">Sí</string>
+    <string name="daily_limit">Límit diari</string>
+    <string name="daily_limit_sub">Màxim d\'avisos en desbloquejar per dia</string>
+    <string name="no_limit">Sense límit</string>
+    <string name="per_day">%1$d / dia</string>
+    <string name="firmer_after">Més ferm a partir de</string>
+    <string name="firmer_after_sub">Ignora la pausa i el límit si en portes menys de la meitat</string>
+    <string name="weak_hour">Avís en hora feble</string>
+    <string name="weak_hour_sub">Apareix 15 min abans de la teva hora habitual amb més intents de sortida</string>
+    <string name="prompts_foot">La pausa i el límit s\'apliquen amb el mode concentració desactivat; si està activat, cada desbloqueig obre la llista.</string>
+    <string name="scheduled_nudges">Avisos programats</string>
+    <string name="scheduled_nudges_sub">Obre la llista a aquestes hores si la rutina no està feta</string>
+    <string name="add">Afegeix</string>
+    <string name="take_break_q">Vols fer un descans?</string>
+    <string name="no_breaks_left">No et queden descansos</string>
+    <string name="break_body">Tens %1$d minuts per fer servir el mòbil i després torna aquesta pantalla. Et queden %2$d de %3$d descansos avui.</string>
+    <string name="breaks_used_body">Ja has fet servir els %1$d descansos d\'avui. Acaba la rutina per recuperar el mòbil.</string>
+    <string name="hold_break">Mantén premut per començar el descans</string>
+    <string name="ok">D\'acord</string>
+    <string name="allowed_apps">Apps permeses</string>
+    <string name="blocked_apps">Apps bloquejades</string>
+    <string name="allowed_done_sub">Les apps marcades es poden fer servir en mode concentració, per a la feina i el que és essencial.</string>
+    <string name="allowed_locked_sub">Ara pots treure apps. Afegir-ne una demana confirmació fins que acabis la rutina d\'avui.</string>
+    <string name="blocked_done_sub_root">Les apps marcades s\'amaguen cada dia fins que acabes la rutina.</string>
+    <string name="blocked_done_sub">Les apps marcades es bloquegen cada dia fins que acabes la rutina.</string>
+    <string name="blocked_locked_sub">Ara pots afegir apps. Treure\'n una demana confirmació fins que acabis la rutina d\'avui.</string>
+    <string name="search_apps">Cerca apps</string>
+    <string name="loading_apps">Carregant apps…</string>
+    <string name="cancel">Cancel·la</string>
+    <string name="save">Desa</string>
+    <string name="locked_until_done">" bloquejada fins que acabis la rutina"</string>
+    <string name="build_routine">Crea la teva rutina</string>
+    <string name="your_habits">Els teus hàbits</string>
+    <string name="editor_sub">Toca un hàbit per editar-lo. Mantén premuda la nansa per reordenar.</string>
+    <string name="add_habit">Afegeix un hàbit</string>
+    <string name="add_one_habit">Afegeix almenys un hàbit</string>
+    <string-array name="order_modes">
+        <item>Ordre intel·ligent</item>
+        <item>El meu ordre</item>
+    </string-array>
+    <string name="cue_after">Després de %1$s</string>
+    <string name="cue_after_vowel">Després d\'%1$s</string>
+    <string name="cue_at">A les %1$s</string>
+    <string name="id_learner">una persona que aprèn</string>
+    <string name="id_reader">una persona lectora</string>
+    <string name="id_runner">una persona corredora</string>
+    <string name="id_athlete">una persona esportista</string>
+    <string name="id_mover">algú que es mou</string>
+    <string name="id_body">algú que cuida el seu cos</string>
+    <string name="id_selfcare">algú que es cuida</string>
+    <string name="id_calm">una persona tranquil·la</string>
+    <string name="id_writer">una persona que escriu</string>
+    <string name="id_organised">una persona endreçada</string>
+    <string name="id_planner">algú que planifica</string>
+    <string name="id_rests">algú que descansa bé</string>
+    <string name="id_phone">algú que controla el mòbil</string>
+    <string name="id_eater">algú que menja sa</string>
+    <string name="id_languages">algú que aprèn idiomes</string>
+    <string name="id_musician">algú que fa música</string>
+    <string name="id_builder">una persona creadora</string>
+    <string name="id_artist">una persona artista</string>
+    <string name="id_grateful">una persona agraïda</string>
+    <string name="id_money">algú que gestiona bé els diners</string>
+    <string name="id_people">algú que hi és per als altres</string>
+    <string name="id_default">algú que compleix el que es promet</string>
+    <string-array name="anchors">
+        <item>despertar-me</item>
+        <item>prendre el cafè</item>
+        <item>esmorzar</item>
+        <item>rentar-me les dents</item>
+        <item>dinar</item>
+        <item>sortir de la feina</item>
+        <item>arribar a casa</item>
+        <item>sopar</item>
+        <item>preparar-me per dormir</item>
+    </string-array>
+    <string name="good_morning_cue">Bon dia! %1$s</string>
+    <string name="locked_until_done_toast">Bloquejada fins que acabis la rutina</string>
+    <string name="channel_watcher">Vigilant de desbloqueig</string>
+    <string name="notif_hanging_out">%1$s volta per aquí</string>
+    <string name="notif_not_done">Rutina encara sense acabar</string>
+    <string name="notif_buddy_on">La teva mascota és a la pantalla. Desactiva-la a Configuració.</string>
+    <string name="notif_blocked">Les apps bloquejades continuen així fins que l\'acabis.</string>
+    <string name="cue_say">%1$s: %2$s?</string>
+    <string-array name="day_letters">
+        <item>dl</item>
+        <item>dt</item>
+        <item>dc</item>
+        <item>dj</item>
+        <item>dv</item>
+        <item>ds</item>
+        <item>dg</item>
+    </string-array>
+    <string-array name="day_short">
+        <item>dl.</item>
+        <item>dt.</item>
+        <item>dc.</item>
+        <item>dj.</item>
+        <item>dv.</item>
+        <item>ds.</item>
+        <item>dg.</item>
+    </string-array>
+    <string-array name="day_presets">
+        <item>Cada dia</item>
+        <item>Entre setmana</item>
+        <item>Caps de setmana</item>
+    </string-array>
+    <string name="new_habit">Nou hàbit</string>
+    <string name="edit_habit">Edita l\'hàbit</string>
+    <string name="habit_hint">p. ex. Llegir 10 pàgines</string>
+    <string name="timer_header">TEMPORITZADOR</string>
+    <string name="timer_note">Un hàbit amb temporitzador només es pot marcar quan s\'acaba el temps.</string>
+    <string name="days_header">DIES</string>
+    <string name="when_header">QUAN</string>
+    <string name="who_header">QUI ET FA SER</string>
+    <string name="delete_habit">Elimina l\'hàbit</string>
+    <string name="do_it">fer-ho</string>
+    <string name="add_cue">Afegeix un senyal: \"Després de ..., toca %1$s\"</string>
+    <string name="cue_sentence">%1$s, toca %2$s</string>
+    <string name="add_identity">Afegeix una identitat</string>
+    <string name="im_identity">Soc %1$s</string>
+    <string name="suggested">"  (suggerit)"</string>
+    <string name="give_name_toast">Posa un nom a l\'hàbit</string>
+    <string name="already_have">Ja tens \"%1$s\"</string>
+    <string name="order_smart_hint">La llista d\'avui s\'ordena per l\'hora del senyal o per quan acostumes a fer cada hàbit. El teu ordre de sota decideix els empats.</string>
+    <string name="order_mine_hint">La llista d\'avui segueix exactament l\'ordre de sota.</string>
+    <string name="when_q">Quan ho faràs?</string>
+    <string name="when_sub">Els hàbits es mantenen molt millor si van lligats a un moment que ja tens.</string>
+    <string name="own_anchor_hint">o el teu: \"la meva dutxa del matí\"</string>
+    <string name="at_note">Rebràs un avís a aquesta hora si encara no està fet.</string>
+    <string name="usually_around">Acostumes a fer-ho cap a les %1$s</string>
+    <string name="use_it">Fes-lo servir</string>
+    <string name="cue_tip">Consell: \"Després de [una cosa que ja faig], toca %1$s.\"</string>
+    <string name="cue_plan">%1$s, toca %2$s.</string>
+    <string name="who_q">Qui et fa ser això?</string>
+    <string name="who_sub">Cada cop que ho fas compta com un vot per ser aquesta persona. Hàbits petits, identitat real.</string>
+    <string name="identity_hint">p. ex. una persona lectora</string>
+    <string name="no_identity_for">Sense identitat per a aquest hàbit</string>
+    <string name="im_quote">«Soc %1$s.»</string>
+    <string name="id_disciplined">una persona disciplinada</string>
+    <string name="id_healthy">una persona sana</string>
+    <string name="no_identity">Sense identitat</string>
+    <string-array name="cue_modes">
+        <item>Sense senyal</item>
+        <item>Després de...</item>
+        <item>A una hora</item>
+    </string-array>
+    <string name="up_late">Encara sense dormir?</string>
+    <string name="good_morning">Bon dia</string>
+    <string name="good_afternoon">Bona tarda</string>
+    <string name="good_evening">Bon vespre</string>
+    <string name="ring_done">FET</string>
+    <string name="ring_habits">HÀBITS</string>
+    <string name="keep_holding">Continua prement...</string>
+    <string name="say_done">Ho hem aconseguit!</string>
+    <string name="say_level">Nivell %1$d!</string>
+    <string name="say_up_next">Ara toca: %1$s</string>
+    <string name="say_one_more">Només un més!</string>
+    <string-array name="say_moved">
+        <item>Iuhuuu!</item>
+        <item>Lloc nou!</item>
+        <item>Gràcies pel passeig</item>
+    </string-array>
+    <string-array name="say_water">
+        <item>Glup! Hidratada.</item>
+        <item>Aah, que fresquet</item>
+        <item>Pausa per beure!</item>
+    </string-array>
+    <string-array name="say_book">
+        <item>Quin enganxament!</item>
+        <item>Bona jugada</item>
+        <item>Un capítol més?</item>
+    </string-array>
+    <string-array name="say_workout">
+        <item>A tope!</item>
+        <item>Quina força!</item>
+        <item>Som-hiii!</item>
+    </string-array>
+    <string-array name="say_zen">
+        <item>Ommm...</item>
+        <item>Quina pau</item>
+        <item>Respira a fons</item>
+    </string-array>
+    <string-array name="say_generic">
+        <item>Ben fet!</item>
+        <item>Visca!</item>
+        <item>Continua així!</item>
+        <item>Aquest és l\'esperit!</item>
+    </string-array>
+    <string-array name="say_done_streak">
+        <item>%1$d dies seguits!</item>
+        <item>El millor dia</item>
+        <item>%2$s està orgullosa de tu</item>
+    </string-array>
+    <string-array name="say_done_new">
+        <item>Temps lliure, ben guanyat</item>
+        <item>Avui ho hem aconseguit</item>
+        <item>%2$s està contenta</item>
+    </string-array>
+    <string-array name="say_nudge">
+        <item>Ei... i la nostra rutina?</item>
+        <item>Comencem per una cosa petita?</item>
+        <item>Un hàbit i després a gaudir</item>
+        <item>%2$s creu en tu</item>
+    </string-array>
+    <string-array name="say_progress">
+        <item>En queden %1$d!</item>
+        <item>Anem llançats</item>
+        <item>Ja hem passat la meitat</item>
+    </string-array>
+    <string name="widget_rest">Dia de descans</string>
+    <string name="widget_done">Tot fet!</string>
+    <string name="widget_count">%1$d / %2$d</string>
+    <string name="widget_start">Som-hi!</string>
+    <string name="no_streak_yet">Encara sense ratxa</string>
+    <string name="widget_unlocked">Apps desbloquejades</string>
+    <string name="widget_n_of">%1$d de %2$d fets</string>
+    <string name="widget_more">+%1$d més a l\'app</string>
+    <string name="widget_rest_body">Avui no hi ha res programat. La teva ratxa està a salvo.</string>
+    <plurals name="widget_to_go">
+        <item quantity="one">Falta %1$d</item>
+        <item quantity="other">Falten %1$d</item>
+    </plurals>
+    <string name="not_a_backup">Aquest fitxer no és una còpia de seguretat d\'aquesta app</string>
+    <string name="sounds_on">Sons activats</string>
+    <string name="sounds_off">Sons desactivats</string>
+    <string name="advanced_header">AVANÇAT</string>
+    <string name="expanded">Desplegat</string>
+    <string name="collapsed">Plegat</string>
+    <string name="language_phone">Idioma del telèfon</string>
+    <string name="selected">Seleccionat</string>
+    <string name="buddy_shown">%1$s torna a ser a la pantalla</string>
+    <string name="buddy_hidden">%1$s està amagada. Toca l\'ull perquè torni.</string>
+    <string name="focus_chip_back">Et fa tornar si en surts</string>
+    <string name="focus_chip_breaks">%1$d pauses de %2$d min</string>
+    <string name="focus_chip_done">S\'acaba quan acabes</string>
+    <string name="needs_love">NECESSITEN UNA EMPENTA</string>
+    <string name="more_stats">MÉS ESTADÍSTIQUES</string>
+    <string name="overlay_sub_buddy">Deixa que la teva mascota passegi per la pantalla</string>
+    <string name="got_it">Entesos</string>
+    <string name="offline_title">100 % sense connexió</string>
+    <string name="offline_short">Sense accés a internet: res no pot sortir del teu telèfon</string>
+    <string name="privacy_title">Les teves dades es queden aquí</string>
+    <string name="privacy_body">Aquesta app no té el permís d\'internet d\'Android. Ho imposa el mateix Android: l\'app no es pot connectar a res, així que no pot enviar els teus hàbits, la teva llista d\'apps ni res més enlloc, ni tan sols per error.\n\nSense comptes, sense anuncis, sense analítiques, sense rastreig. Les còpies de seguretat són fitxers que deses tu.\n\nHo pots comprovar: \"accés complet a la xarxa\" no surt a la llista de permisos d\'aquesta app.</string>
+    <string name="privacy_perms_header">PER A QUÈ SERVEIX CADA PERMÍS</string>
+    <string name="overlay_why">Mostra la llista damunt de les apps que has triat bloquejar i deixa passejar la teva mascota. Mai no es mostra sobre apps que no has triat.</string>
+    <string name="usage_why">Diu a l\'app quina app està oberta, només per comparar-la amb la teva llista de bloqueig. No es desa ni es comparteix res.</string>
+    <string name="notifications_why">Una línia d\'estat amb un botó de Pausa, i els avisos que has programat. Res més.</string>
+    <string name="battery_why">Evita que Android tanqui el bloqueig i la teva mascota en segon pla.</string>
+    <string name="root_title">Accés root</string>
+    <string name="root_why">Només s\'utilitza per amagar les apps que bloqueges (i tornar-les a mostrar) i per activar els permisos d\'aquesta app per tu.</string>
+    <string name="perm_back">Fet! T\'hem tornat aquí.</string>
+    <string name="accessory_none">Cap</string>
+    <string name="starts_tomorrow_toast">La rutina d\'avui continua completada. Els hàbits nous comencen demà.</string>
+    <string name="starts_tomorrow">Comença demà</string>
+    <string name="loosen_q">Afluixar el bloqueig d\'avui?</string>
+    <string name="loosen_body">Encara no has acabat la rutina i aquest canvi et fa el dia més fàcil. S\'aplica a l\'instant.\n\nNo t\'ho tornarem a preguntar durant els propers 5 minuts.</string>
+    <string name="yes_change">Sí, canvia-ho</string>
+    <string name="fix_day">Corregeix aquest dia</string>
+    <string name="fix_day_hint">Vas fer un hàbit però et vas oblidar de marcar-lo? Toca ahir o abans-d\'ahir per corregir-ho.</string>
+    <string name="fix_day_sub">Marca el que vas fer de debò. La ratxa i les estadístiques s\'actualitzen a l\'instant.</string>
+</resources>

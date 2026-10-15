@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "_doc": [
+    "Buddy accessories as data. Each one is drawn from 'layers' around an 'anchor':",
+    "'head' = top-centre of the head, 'eyes' = midpoint between the eyes. Units are dp.",
+    "A coordinate can be a number or a sum like '-1bw+1': bw/bh = body half-width/height,",
+    "ex = half the distance between the eyes, lk = where the buddy is looking (eyes follow it).",
+    "Layer types: circle (x,y,r), line (x1,y1,x2,y2), rect / rrect (l,t,r,b[,radius]),",
+    "arc (l,t,r,b,start,sweep), path (SVG 'd' with M L H V Q C Z, absolute or relative).",
+    "Style: color '#RRGGBB' / '#AARRGGBB' / 'accent' / 'accent2'; 'stroke': width for an outline;",
+    "'clip': true clips the layer to the previous path. Optional 'rotate': {deg,x,y} on the whole accessory.",
+    "Unlock: 'streak' = best streak needed; 'from' = yyyy-MM-dd before which it's not shown at all.",
+    "'hat': true moves the level-3 sprout aside. Order here is the order in the collection."
+  ],
+  "accessories": [
+    {
+      "id": "glasses", "name": {"en": "Glasses", "es": "Gafas", "ca": "Ulleres"},
+      "streak": 1, "anchor": "eyes",
+      "layers": [
+        {"type": "circle", "x": "-1ex+0.5lk", "y": 0, "r": 7, "stroke": 2, "color": "#1B1E26"},
+        {"type": "circle", "x": "1ex+0.5lk", "y": 0, "r": 7, "stroke": 2, "color": "#1B1E26"},
+        {"type": "line", "x1": "-1ex+7+0.5lk", "y1": 0, "x2": "1ex-7+0.5lk", "y2": 0, "stroke": 2, "color": "#1B1E26"},
+        {"type": "circle", "x": "-1ex+0.5lk", "y": 0, "r": 6, "color": "#26FFFFFF"},
+        {"type": "circle", "x": "1ex+0.5lk", "y": 0, "r": 6, "color": "#26FFFFFF"}
+      ]
+    },
+    {
+      "id": "bow", "name": {"en": "Bow", "es": "Lazo", "ca": "Llaç"},
+      "streak": 3, "anchor": "head", "hat": true,
+      "layers": [
+        {"type": "path", "d": "M14,5 L4,-2 L4,12 Z M14,5 L24,-2 L24,12 Z", "color": "#FF4F8B"},
+        {"type": "circle", "x": 14, "y": 5, "r": 3.2, "color": "#FF8FB5"}
+      ]
+    },
+    {
+      "id": "party_hat", "name": {"en": "Party hat", "es": "Gorro de fiesta", "ca": "Barret de festa"},
+      "streak": 7, "anchor": "head", "hat": true, "rotate": {"deg": 12, "x": 5, "y": 4},
+      "layers": [
+        {"type": "path", "d": "M-6,4 L16,4 L5,-20 Z", "color": "#7C5CFF"},
+        {"type": "rect", "l": -7, "t": -1.5, "r": 17, "b": 1.5, "color": "#FFD166", "clip": true},
+        {"type": "rect", "l": -7, "t": -8.5, "r": 17, "b": -5.5, "color": "#FFD166", "clip": true},
+        {"type": "rect", "l": -7, "t": -15.5, "r": 17, "b": -12.5, "color": "#FFD166", "clip": true},
+        {"type": "circle", "x": 5, "y": -20, "r": 3.2, "color": "#FFFFFF"}
+      ]
+    },
+    {
+      "id": "headphones", "name": {"en": "Headphones", "es": "Auriculares", "ca": "Auriculars"},
+      "streak": 14, "anchor": "head", "hat": true,
+      "layers": [
+        {"type": "arc", "l": "-1bw+1", "t": -5, "r": "1bw-1", "b": "1.6bh", "start": 195, "sweep": 150,
+          "stroke": 3.5, "color": "#2B2F3A"},
+        {"type": "rrect", "l": "-1bw-5", "t": "0.75bh-8", "r": "-1bw+4", "b": "0.75bh+8", "radius": 4, "color": "accent2"},
+        {"type": "rrect", "l": "1bw-4", "t": "0.75bh-8", "r": "1bw+5", "b": "0.75bh+8", "radius": 4, "color": "accent2"}
+      ]
+    },
+    {
+      "id": "crown", "name": {"en": "Crown", "es": "Corona", "ca": "Corona"},
+      "streak": 30, "anchor": "head", "hat": true,
+      "layers": [
+        {"type": "path", "d": "M-13,4 L-13,-6 L-6.5,-1 L0,-10 L6.5,-1 L13,-6 L13,4 Z", "color": "#FFC53D"},
+        {"type": "circle", "x": 0, "y": 0, "r": 2, "color": "#FF5A5F"},
+        {"type": "circle", "x": -7.5, "y": 1, "r": 1.6, "color": "#3BA8FF"},
+        {"type": "circle", "x": 7.5, "y": 1, "r": 1.6, "color": "#3BA8FF"}
+      ]
+    },
+    {
+      "id": "wizard_hat", "name": {"en": "Wizard hat", "es": "Sombrero de mago", "ca": "Barret de mag"},
+      "streak": 60, "anchor": "head", "hat": true, "rotate": {"deg": -8, "x": 0, "y": 4},
+      "layers": [
+        {"type": "path", "d": "M-12,4 Q-4,-6 -2,-16 Q2,-26 12,-28 Q5,-20 6,-10 Q8,-2 12,4 Z", "color": "#3B2A8C"},
+        {"type": "rrect", "l": -17, "t": 1, "r": 17, "b": 6, "radius": 2.5, "color": "#2A1E66"},
+        {"type": "path", "d": "M-3,-8 l1.2,2.6 2.8,0.3 -2.1,1.9 0.6,2.8 -2.5,-1.4 -2.5,1.4 0.6,-2.8 -2.1,-1.9 2.8,-0.3 Z", "color": "#FFD166"},
+        {"type": "circle", "x": 5, "y": -16, "r": 1.2, "color": "#FFFFFF"},
+        {"type": "circle", "x": -7, "y": -2, "r": 0.9, "color": "#FFFFFF"}
+      ]
+    },
+    {
+      "id": "santa_hat", "name": {"en": "Festive hat", "es": "Gorro navideño", "ca": "Barret de Nadal"},
+      "streak": 0, "from": "2026-12-01", "anchor": "head", "hat": true, "rotate": {"deg": 10, "x": 0, "y": 4},
+      "layers": [
+        {"type": "path", "d": "M-12,3 Q-8,-14 6,-16 Q14,-15 17,-6 L12,-8 Q8,-4 12,3 Z", "color": "#E63946"},
+        {"type": "rrect", "l": -14, "t": 0, "r": 14, "b": 6, "radius": 3, "color": "#FFFFFF"},
+        {"type": "circle", "x": 17, "y": -5, "r": 3.4, "color": "#FFFFFF"}
+      ]
+    }
+  ]
+}

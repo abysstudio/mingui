@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:gravity="center" android:background="@drawable/widget_bg"
+    android:padding="12dp">
+    <ImageView android:id="@+id/buddy" android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:scaleType="fitCenter" android:contentDescription="@string/app_name" />
+    <TextView android:id="@+id/title" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:gravity="center" android:textColor="#FFF2F4F8" android:textSize="16sp" android:textStyle="bold"
+        android:singleLine="true" android:layout_marginTop="4dp" />
+    <TextView android:id="@+id/sub" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:gravity="center" android:textColor="#FF8A93A6" android:textSize="11sp" android:singleLine="true" />
+            <ProgressBar android:id="@+id/progress" style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent" android:layout_height="6dp" android:layout_marginTop="8dp"
+                android:max="100" android:progressDrawable="@drawable/widget_progress" />
+            <ProgressBar android:id="@+id/progress_done" style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent" android:layout_height="6dp" android:layout_marginTop="8dp"
+                android:max="100" android:progress="100" android:visibility="gone"
+                android:progressDrawable="@drawable/widget_progress_done" />
+</LinearLayout>

@@ -1,0 +1,608 @@
+<resources>
+    <string name="app_name">Mingui</string>
+    <string name="widget_desc">Your buddy and today\'s habits. Tap a habit to check it off.</string>
+    <string name="settings">Settings</string>
+    <string name="todays_routine">TODAY\'S ROUTINE</string>
+    <string name="rest_day_body">Nothing scheduled today. Enjoy your rest day, your streak is safe.</string>
+    <string name="not_today">Not today: %1$s</string>
+    <string name="list_sep">", "</string>
+    <string name="work_apps">WORK APPS</string>
+    <string name="n_min">%1$d min</string>
+    <string name="timer_tap_start">"%1$d min timer  ·  tap to start"</string>
+    <string name="timer_left">"%1$d:%2$02d left  ·  hold to reset"</string>
+    <string name="times_up">"Time\'s up  ·  tap to check"</string>
+    <string name="timer_reset">Timer reset</string>
+    <string name="up_next_badge">UP NEXT</string>
+    <string name="finish_setup">Finish setup</string>
+    <string name="recommended">Recommended</string>
+    <string name="setup_required_body">Needed for the features you turned on. Each one only works on this phone.</string>
+    <string name="setup_optional_body">Optional: they make your buddy and reminders more reliable.</string>
+    <string name="usage_access">Usage access</string>
+    <string name="usage_access_sub">Notices when you open an app you chose to block</string>
+    <string name="usage_access_disclosure">To lock the apps you pick, the app needs to know which app is open right now. It only compares that with your own blocked and allowed lists, and never stores or shares it.\n\nThe app has no internet access, so this can\'t leave your phone.\n\nOn the next screen, turn Usage access on for this app. You\'ll be brought back here automatically.</string>
+    <string name="overlay">Display over other apps</string>
+    <string name="overlay_sub">Shows your checklist over blocked apps, and your buddy</string>
+    <string name="overlay_disclosure">"This lets the app:\n\n  - show your checklist on top of an app you chose to block,\n  - bring the checklist back when Focus lock is on (only if you turn it on),\n  - show your buddy walking on screen (you can turn it off any time).\n\nIt never draws over apps you didn\'t pick, and never imitates system screens."</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_sub">Status with a Pause button, and the nudges you set</string>
+    <string name="battery">Battery: Unrestricted</string>
+    <string name="battery_sub">Stops Android from closing the app in the background</string>
+    <string name="allow">Allow</string>
+    <string name="not_now">Not now</string>
+    <string name="continue_">Continue</string>
+    <string name="edit_routine_q">Edit your routine now?</string>
+    <string name="edit_routine_body">Today\'s routine isn\'t done yet. Changing it now (removing habits, shortening timers or moving days) applies straight away and can unlock your apps early.\n\nAre you sure you want to edit it?</string>
+    <string name="yes_edit">Yes, edit</string>
+    <string name="focus_q">Turn on Focus lock?</string>
+    <string name="focus_body">"While today\'s routine isn\'t done, leaving the checklist brings you back to it, and the system bars are hidden on this screen.\n\nYou always stay in control:\n  - Settings, phone calls, emergency and uninstalling are never blocked\n  - Apps you allow for work stay open\n  - %1$d five-minute breaks a day\n  - \"Pause for today\" turns everything off until tomorrow\n\nYou can turn Focus lock off again once today\'s routine is done."</string>
+    <string name="paused_banner">Paused for today. Blocking and focus lock are off until tomorrow.</string>
+    <string name="resume">Resume</string>
+    <string name="paused_for_today">Paused for today</string>
+    <string name="pause_for_today">Pause for today</string>
+    <string name="pause_q">Pause for today?</string>
+    <string name="paused_body">Blocking and focus lock are off until tomorrow. Your habits still count.</string>
+    <string name="pause_body">Turns off app blocking, focus lock and unlock prompts until tomorrow. Use it when you really need your phone. It\'s logged in your stats, and you can resume any time.</string>
+    <string name="resume_now">Resume now</string>
+    <string name="hold_to_pause">Hold to pause until tomorrow</string>
+    <string name="paused_toast">Paused until tomorrow</string>
+    <string name="keep_going">Keep going</string>
+    <string name="root_needed">Root access needed</string>
+    <string name="root_needed_body">%1$s hides apps using root. Allow it in Magisk / KernelSU, then try again.</string>
+    <string name="try_again">Try again</string>
+    <string name="still_no_root">Still no root access</string>
+    <string name="on_break_until">On a break until %1$s</string>
+    <string name="hero_rest">Rest day</string>
+    <string name="hero_done">All done</string>
+    <string name="hero_start">Let\'s get started</string>
+    <string name="hero_one_more">One more to go</string>
+    <string name="hero_halfway">Over halfway</string>
+    <string name="hero_nice_start">Nice start</string>
+    <string name="showed_up_as">You showed up as %1$s</string>
+    <string name="apps_unlocked_today">Your apps are unlocked for today</string>
+    <string name="day_streak">%1$d-day streak</string>
+    <string name="best_suffix">"  ·  best"</string>
+    <string name="start_streak">Start a streak</string>
+    <string name="lv">Lv %1$d</string>
+    <plurals name="breaks_left">
+        <item quantity="one">"Need your phone?  ·  %1$d break left today"</item>
+        <item quantity="other">"Need your phone?  ·  %1$d breaks left today"</item>
+    </plurals>
+    <plurals name="habits_left_unlock">
+        <item quantity="one">%1$d habit left to unlock</item>
+        <item quantity="other">%1$d habits left to unlock</item>
+    </plurals>
+    <string name="restricted">Allow restricted settings</string>
+    <string name="restricted_sub">Needed first on Android 13+ when installed outside Play</string>
+    <string name="restricted_disclosure">Android blocks some permissions for apps installed outside the Play Store until you allow them.\n\n1. On the next screen (App info), tap ⋮ at the top right.\n2. Tap \"Allow restricted settings\" and confirm.\n3. Come back and tap Allow on Usage access.\n\nDon\'t see ⋮ or the option? Tap Allow on Usage access once first (Android shows a \"Restricted setting\" message), then try this step again.</string>
+    <string name="open_app">Open %1$s</string>
+    <string name="all_apps_unlocked">All apps unlocked</string>
+    <string name="couldnt_open">Couldn\'t open %1$s</string>
+    <string name="couldnt_unhide">Couldn\'t unhide %1$s (no root)</string>
+    <string name="done">Done</string>
+    <string name="routine_header">ROUTINE</string>
+    <string name="edit_habits">Edit habits</string>
+    <string name="asks_first">" asks first until today\'s routine is done"</string>
+    <plurals name="more_to_unlock">
+        <item quantity="one">%1$d more to unlock</item>
+        <item quantity="other">%1$d more to unlock</item>
+    </plurals>
+    <plurals name="n_habits">
+        <item quantity="one">%1$d habit</item>
+        <item quantity="other">%1$d habits</item>
+    </plurals>
+    <string name="your_stats">Your stats</string>
+    <string name="your_stats_sub">Streaks, history and how each habit is going</string>
+    <string name="allowed_during_focus">ALLOWED DURING FOCUS LOCK</string>
+    <string name="manage">Manage</string>
+    <string name="no_work_apps">No work apps yet. Allowed apps can be opened from the checklist without being pulled back.</string>
+    <string name="blocked_apps_header">BLOCKED APPS</string>
+    <string name="no_blocked_apps">No apps blocked yet. Tap Manage to pick some.</string>
+    <string name="finish_to_unlock_app">Finish your routine to unlock %1$s</string>
+    <string name="staying_on_track">STAYING ON TRACK</string>
+    <string name="focus_lock">Focus lock</string>
+    <string name="focus_lock_sub">Keeps you on your checklist until it\'s done.</string>
+    <string name="emergency_exit">Emergency exit: turn off blocking and focus lock until tomorrow</string>
+    <string name="open_on_unlock">Open on unlock</string>
+    <string name="open_on_unlock_sub">Show this checklist every time you unlock your phone until today\'s routine is done.</string>
+    <string name="sounds">Sounds</string>
+    <string name="show_buddy">Show buddy</string>
+    <string name="snooze_name">Snooze %1$s</string>
+    <string name="back_at">Back at %1$s</string>
+    <string name="is_back">%1$s is back!</string>
+    <string name="back_in_hour">%1$s will be back in an hour. Tap again to undo.</string>
+    <string name="tracking_starts_today">Tracking starts today</string>
+    <string name="tracking_since">Tracking since %1$s</string>
+    <string name="overview">OVERVIEW</string>
+    <string name="current_streak">Current streak</string>
+    <string name="best_streak">Best streak</string>
+    <string name="last_7_days">Last 7 days</string>
+    <string name="last_30_days">Last 30 days</string>
+    <string name="milestones">MILESTONES</string>
+    <string name="last_12_weeks">LAST 12 WEEKS</string>
+    <string name="tap_day">Tap a day for details</string>
+    <string name="who_becoming">WHO YOU\'RE BECOMING</string>
+    <string name="who_becoming_intro">Every time you do a habit, it\'s a vote for the person you want to be.</string>
+    <string name="habits_weakest">"HABITS  ·  LAST 30 DAYS  ·  WEAKEST FIRST"</string>
+    <string name="timing_header">"TIMING  ·  LAST 30 DAYS"</string>
+    <string name="average_finish">Average finish</string>
+    <string name="weak_moments">"WEAK MOMENTS  ·  LAST 30 DAYS"</string>
+    <string name="peak_hour">Peak hour</string>
+    <string name="exit_by_hour">Exit attempts by hour of day. Tap a bar for details.</string>
+    <string name="day_not_tracked">"%1$s  ·  not tracked yet"</string>
+    <string name="day_missed">"%1$s  ·  missed"</string>
+    <string name="day_frozen">"%1$s  ·  covered by a streak freeze"</string>
+    <string name="day_rest">"%1$s  ·  rest day"</string>
+    <string name="day_habits">"%1$s  ·  %2$d of %3$d habits"</string>
+    <string name="day_finished">"  ·  finished %1$s"</string>
+    <plurals name="breaks_taken">
+        <item quantity="one">Break taken</item>
+        <item quantity="other">Breaks taken</item>
+    </plurals>
+    <plurals name="exit_attempts">
+        <item quantity="one">Exit attempt</item>
+        <item quantity="other">Exit attempts</item>
+    </plurals>
+    <plurals name="hour_attempts">
+        <item quantity="one">"%2$02d:00-%3$02d:00  ·  %1$d attempt"</item>
+        <item quantity="other">"%2$02d:00-%3$02d:00  ·  %1$d attempts"</item>
+    </plurals>
+    <plurals name="n_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+    <plurals name="done_of_days">
+        <item quantity="one">%1$d done of %2$d day</item>
+        <item quantity="other">%1$d done of %2$d days</item>
+    </plurals>
+    <plurals name="done_partial_of_days">
+        <item quantity="one">%1$d done + %3$d partial of %2$d day</item>
+        <item quantity="other">%1$d done + %3$d partial of %2$d days</item>
+    </plurals>
+    <plurals name="day_breaks">
+        <item quantity="one">"  ·  %1$d break"</item>
+        <item quantity="other">"  ·  %1$d breaks"</item>
+    </plurals>
+    <string name="days_this_month">"  ·  %1$d of %2$d days this month"</string>
+    <string name="more_to_strength">%1$d more to %2$s</string>
+    <string name="x_of_y_days">%1$d of %2$d days</string>
+    <string name="and_last">%1$s and %2$s</string>
+    <plurals name="n_votes">
+        <item quantity="one">%1$d vote</item>
+        <item quantity="other">%1$d votes</item>
+    </plurals>
+    <string-array name="heat_labels">
+        <item>Missed</item>
+        <item>Started</item>
+        <item>Partial</item>
+        <item>Done</item>
+        <item>Frozen</item>
+    </string-array>
+    <string-array name="strengths">
+        <item>Emerging</item>
+        <item>Building</item>
+        <item>Strong</item>
+        <item>Core</item>
+    </string-array>
+    <string-array name="color_names">
+        <item>Mood</item>
+        <item>Violet</item>
+        <item>Mint</item>
+        <item>Sunset</item>
+        <item>Ocean</item>
+        <item>Bubblegum</item>
+        <item>Sunshine</item>
+    </string-array>
+    <string-array name="size_names">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+    <string-array name="speed_names">
+        <item>Calm</item>
+        <item>Normal</item>
+        <item>Energetic</item>
+    </string-array>
+    <string-array name="chat_names">
+        <item>Quiet</item>
+        <item>Normal</item>
+        <item>Chatty</item>
+    </string-array>
+    <string-array name="evolution_names">
+        <item>Sprout</item>
+        <item>Glow</item>
+        <item>Wings</item>
+    </string-array>
+    <string name="xp_plus">+%1$d XP</string>
+    <string name="vote_plus">+1 %1$s</string>
+    <string name="unticked">Unticked %1$s</string>
+    <string name="undo">UNDO</string>
+    <string name="level_reached">%1$s reached level %2$d!</string>
+    <string name="evolved">%1$s evolved: %2$s!</string>
+    <string name="level_stronger">Every habit you finish makes %1$s stronger.</string>
+    <string name="ms_3">3 days in a row!</string>
+    <string name="ms_7">One full week!</string>
+    <string name="ms_14">Two weeks strong</string>
+    <string name="ms_21">21 days. This is a habit now.</string>
+    <string name="ms_30">A whole month!</string>
+    <string name="ms_50">50 days. Unstoppable.</string>
+    <string name="ms_100">100 days!</string>
+    <string name="ms_365">A full year!</string>
+    <string name="ms_other">%1$d-day streak!</string>
+    <string name="ms_best">And it\'s your best streak ever.</string>
+    <string name="ms_keep">Milestone unlocked. Keep the chain going.</string>
+    <string name="new_best">New personal best!</string>
+    <string name="new_best_sub">%1$d days in a row. You\'ve never gone this far.</string>
+    <string name="welcome_back">Welcome back</string>
+    <string name="welcome_back_sub">Missing a day happens. Not missing two is what counts.</string>
+    <string name="streak_counting">%1$d-day streak and counting.</string>
+    <string name="day_one">Day one of your next streak.</string>
+    <string name="earlier_than_usual">%1$s earlier than usual</string>
+    <string name="habit_run">%1$s: %2$d days in a row</string>
+    <string name="today_showed_up">Today you showed up as %1$s</string>
+    <string name="earned_freeze">Earned a streak freeze (%1$d banked)</string>
+    <string name="level_extra">%1$s reached level %2$d</string>
+    <string name="level_extra_evo">%1$s reached level %2$d and evolved: %3$s</string>
+    <string name="new_for">New for %1$s: %2$s</string>
+    <string name="no_breaks_today">No breaks or exit attempts today</string>
+    <string name="dur_h">%1$d h</string>
+    <string name="dur_h_min">%1$d h %2$d min</string>
+    <string name="keep_it_up">Keep it up</string>
+    <plurals name="freeze_covered">
+        <item quantity="one">A streak freeze covered yesterday. Your streak is safe!</item>
+        <item quantity="other">Streak freezes covered %1$d days. Your streak is safe!</item>
+    </plurals>
+    <string-array name="done_titles">
+        <item>Routine complete</item>
+        <item>All done. Nice work.</item>
+        <item>That\'s the day won</item>
+        <item>You showed up today</item>
+        <item>Done. Future you says thanks.</item>
+    </string-array>
+    <string name="surprise_me">Surprise me</string>
+    <string name="name_header">NAME</string>
+    <string name="colour_header">COLOUR</string>
+    <string name="collection">COLLECTION</string>
+    <string name="n_unlocked">%1$d / %2$d unlocked</string>
+    <string name="size_header">SIZE</string>
+    <string name="speed_header">WALKING SPEED</string>
+    <string name="chat_header">CHATTINESS</string>
+    <string name="reset_position">Reset position</string>
+    <string name="reset_position_toast">Back to the bottom of the screen (next time it appears)</string>
+    <string name="level_caps">LEVEL %1$d</string>
+    <string name="xp_progress">%1$d / %2$d XP</string>
+    <string name="xp_how">%1$d XP per habit, +%2$d for finishing the day. Partial days count too.</string>
+    <string name="level_n">Level %1$d</string>
+    <string name="personalize">Personalize</string>
+    <plurals name="days_word">
+        <item quantity="one">day</item>
+        <item quantity="other">days</item>
+    </plurals>
+    <string-array name="moods">
+        <item>Sad</item>
+        <item>Okay</item>
+        <item>Happy</item>
+    </string-array>
+    <string name="equipped">Equipped</string>
+    <string name="default_">Default</string>
+    <string name="n_day_reward">%1$d-day reward</string>
+    <string name="next_badge">NEXT</string>
+    <string name="mystery_accessory">Mystery accessory: unlocks at a %1$d-day streak</string>
+    <string name="hi_name">Hi %1$s!</string>
+    <string name="lets_go">Let\'s go</string>
+    <string name="next">Next</string>
+    <string name="pick_one_habit">Pick at least one habit</string>
+    <string name="onboard_done_toast">Edit habits and pick apps to block any time in Settings</string>
+    <plurals name="days_to_go">
+        <item quantity="one">%1$d day to go</item>
+        <item quantity="other">%1$d days to go</item>
+    </plurals>
+    <string-array name="starter_habits">
+        <item>Make bed</item>
+        <item>Drink water</item>
+        <item>Exercise 20 min</item>
+        <item>Read 10 pages</item>
+        <item>Meditate 5 min</item>
+        <item>Journal</item>
+        <item>Walk 15 min</item>
+        <item>Stretch 10 min</item>
+        <item>No phone first hour</item>
+        <item>Plan my day</item>
+    </string-array>
+    <string name="meet_buddy">Meet your buddy</string>
+    <string name="meet_buddy_sub">They\'ll walk around your screen and get happier every time you finish a habit.</string>
+    <string name="give_name">Give them a name</string>
+    <string name="how_it_works">How it works</string>
+    <string name="how_1">Tick off your daily habits</string>
+    <string name="how_1_sub">Timed habits make sure you really do them.</string>
+    <string name="how_2">Distractions stay locked until you\'re done</string>
+    <string name="how_2_sub">Pick the apps to block, like YouTube. They\'re back the moment you finish.</string>
+    <string name="how_3">Streaks unlock rewards</string>
+    <string name="how_3_sub">Accessories for %1$s, plus freezes that protect your streak on bad days.</string>
+    <string name="how_4">%1$s levels up with you</string>
+    <string name="how_4_sub">Every habit earns XP, even on partial days. %1$s grows a sprout, a glow, then wings.</string>
+    <string name="quick_setup">Quick setup</string>
+    <string name="quick_setup_sub">Android needs your OK for a couple of things. Tap Allow, flip the switch, then come back.</string>
+    <string name="all_set">All set!</string>
+    <string name="quick_setup_root">This version uses root to hide blocked apps completely. Tap below and approve %1$s in your root manager (Magisk, KernelSU, WildKSU...).</string>
+    <string name="grant_root">Grant root access</string>
+    <string name="waiting_root">Waiting for your root manager...</string>
+    <string name="root_granted">Root access granted. All set!</string>
+    <string name="no_root_yet">No root yet. On KernelSU-based managers, enable %1$s under Superuser, then tap again.</string>
+    <string name="first_habits">Your first habits</string>
+    <string name="first_habits_sub">Start small: two or three is plenty. You can rename them, add timers and set days later.</string>
+    <string name="your_data">YOUR DATA</string>
+    <string name="language">Language</string>
+    <string name="language_sub">English, Español or Català</string>
+    <string name="export_backup">Export backup</string>
+    <string name="export_backup_sub">Save habits, history, streaks and your buddy to a file</string>
+    <string name="restore_backup">Restore backup</string>
+    <string name="restore_backup_sub">Replace everything here with a backup file</string>
+    <string name="backup_saved">Backup saved</string>
+    <string name="backup_restored">Backup restored</string>
+    <string name="didnt_work">That didn\'t work: %1$s</string>
+    <string name="smart_prompts">SMART PROMPTS</string>
+    <string name="cooldown">Cooldown</string>
+    <string name="cooldown_sub">Don\'t reopen on unlock within this time</string>
+    <string name="off">Off</string>
+    <string name="on">On</string>
+    <string name="daily_limit">Daily limit</string>
+    <string name="daily_limit_sub">Most unlock prompts per day</string>
+    <string name="no_limit">No limit</string>
+    <string name="per_day">%1$d / day</string>
+    <string name="firmer_after">Firmer after</string>
+    <string name="firmer_after_sub">Ignore cooldown and limit if under half done</string>
+    <string name="weak_hour">Weak-hour nudge</string>
+    <string name="weak_hour_sub">Pop up 15 min before your usual exit-attempt peak</string>
+    <string name="prompts_foot">Cooldown and limit apply when focus lock is off; with it on, every unlock opens the checklist.</string>
+    <string name="scheduled_nudges">Scheduled nudges</string>
+    <string name="scheduled_nudges_sub">Open the checklist at these times if the routine isn\'t done</string>
+    <string name="add">Add</string>
+    <string name="take_break_q">Take a break?</string>
+    <string name="no_breaks_left">No breaks left</string>
+    <string name="break_body">You get %1$d minutes to use your phone, then this screen comes back. %2$d of %3$d breaks left today.</string>
+    <string name="breaks_used_body">You\'ve used all %1$d breaks today. Finish your routine to get your phone back.</string>
+    <string name="hold_break">Hold to start break</string>
+    <string name="ok">OK</string>
+    <string name="allowed_apps">Allowed apps</string>
+    <string name="blocked_apps">Blocked apps</string>
+    <string name="allowed_done_sub">Checked apps stay usable during focus lock, for work and essentials.</string>
+    <string name="allowed_locked_sub">You can remove apps now. Adding one asks first until today\'s routine is done.</string>
+    <string name="blocked_done_sub_root">Checked apps are hidden every day until your routine is done.</string>
+    <string name="blocked_done_sub">Checked apps are locked every day until your routine is done.</string>
+    <string name="blocked_locked_sub">You can add apps now. Removing one asks first until today\'s routine is done.</string>
+    <string name="search_apps">Search apps</string>
+    <string name="loading_apps">Loading apps…</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="locked_until_done">" locked until routine is done"</string>
+    <string name="build_routine">Build your routine</string>
+    <string name="your_habits">Your habits</string>
+    <string name="editor_sub">Tap a habit to edit it. Hold the handle to reorder.</string>
+    <string name="add_habit">Add habit</string>
+    <string name="add_one_habit">Add at least one habit</string>
+    <string-array name="order_modes">
+        <item>Smart order</item>
+        <item>My order</item>
+    </string-array>
+    <string name="cue_after">After %1$s</string>
+    <string name="cue_after_vowel">After %1$s</string>
+    <string name="cue_at">At %1$s</string>
+    <string name="id_learner">a learner</string>
+    <string name="id_reader">a reader</string>
+    <string name="id_runner">a runner</string>
+    <string name="id_athlete">an athlete</string>
+    <string name="id_mover">someone who moves</string>
+    <string name="id_body">someone who looks after their body</string>
+    <string name="id_selfcare">someone who takes care of themselves</string>
+    <string name="id_calm">a calm person</string>
+    <string name="id_writer">a writer</string>
+    <string name="id_organised">an organised person</string>
+    <string name="id_planner">a planner</string>
+    <string name="id_rests">someone who rests well</string>
+    <string name="id_phone">someone in control of their phone</string>
+    <string name="id_eater">a healthy eater</string>
+    <string name="id_languages">a language learner</string>
+    <string name="id_musician">a musician</string>
+    <string name="id_builder">a builder</string>
+    <string name="id_artist">an artist</string>
+    <string name="id_grateful">a grateful person</string>
+    <string name="id_money">someone who\'s good with money</string>
+    <string name="id_people">someone who shows up for people</string>
+    <string name="id_default">someone who keeps promises to themselves</string>
+    <string-array name="anchors">
+        <item>waking up</item>
+        <item>coffee</item>
+        <item>breakfast</item>
+        <item>brushing my teeth</item>
+        <item>lunch</item>
+        <item>work ends</item>
+        <item>getting home</item>
+        <item>dinner</item>
+        <item>before bed</item>
+    </string-array>
+    <string name="good_morning_cue">Good morning! %1$s</string>
+    <string name="locked_until_done_toast">Locked until your routine is done</string>
+    <string name="channel_watcher">Unlock watcher</string>
+    <string name="notif_hanging_out">%1$s is hanging out</string>
+    <string name="notif_not_done">Routine not done yet</string>
+    <string name="notif_buddy_on">Your buddy is on screen. Turn it off in Settings.</string>
+    <string name="notif_blocked">Blocked apps stay locked until it\'s finished.</string>
+    <string name="cue_say">%1$s: %2$s?</string>
+    <string-array name="day_letters">
+        <item>M</item>
+        <item>T</item>
+        <item>W</item>
+        <item>T</item>
+        <item>F</item>
+        <item>S</item>
+        <item>S</item>
+    </string-array>
+    <string-array name="day_short">
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
+    <string-array name="day_presets">
+        <item>Every day</item>
+        <item>Weekdays</item>
+        <item>Weekends</item>
+    </string-array>
+    <string name="new_habit">New habit</string>
+    <string name="edit_habit">Edit habit</string>
+    <string name="habit_hint">e.g. Read 10 pages</string>
+    <string name="timer_header">TIMER</string>
+    <string name="timer_note">A timed habit can only be ticked after its timer runs out.</string>
+    <string name="days_header">DAYS</string>
+    <string name="when_header">WHEN</string>
+    <string name="who_header">WHO IT MAKES YOU</string>
+    <string name="delete_habit">Delete habit</string>
+    <string name="do_it">do it</string>
+    <string name="add_cue">Add a cue: \"After ..., I will %1$s\"</string>
+    <string name="cue_sentence">%1$s, I will %2$s</string>
+    <string name="add_identity">Add an identity</string>
+    <string name="im_identity">I\'m %1$s</string>
+    <string name="suggested">"  (suggested)"</string>
+    <string name="give_name_toast">Give the habit a name</string>
+    <string name="already_have">You already have \"%1$s\"</string>
+    <string name="order_smart_hint">Today\'s list is sorted by cue time or when you usually do each habit. Your order below breaks ties.</string>
+    <string name="order_mine_hint">Today\'s list follows exactly the order below.</string>
+    <string name="when_q">When will you do it?</string>
+    <string name="when_sub">Habits stick far better when they\'re tied to a moment you already have.</string>
+    <string name="own_anchor_hint">or your own: \"my morning shower\"</string>
+    <string name="at_note">You\'ll get a nudge at this time if it\'s not done yet.</string>
+    <string name="usually_around">You usually do this around %1$s</string>
+    <string name="use_it">Use it</string>
+    <string name="cue_tip">Tip: \"After I [something I already do], I will %1$s.\"</string>
+    <string name="cue_plan">%1$s, I will %2$s.</string>
+    <string name="who_q">Who does this make you?</string>
+    <string name="who_sub">Each time you do it counts as a vote for being this person. Small habits, real identity.</string>
+    <string name="identity_hint">e.g. a reader</string>
+    <string name="no_identity_for">No identity for this habit</string>
+    <string name="im_quote">\"I\'m %1$s.\"</string>
+    <string name="id_disciplined">a disciplined person</string>
+    <string name="id_healthy">a healthy person</string>
+    <string name="no_identity">No identity</string>
+    <string-array name="cue_modes">
+        <item>No cue</item>
+        <item>After...</item>
+        <item>At a time</item>
+    </string-array>
+    <string name="up_late">Up late?</string>
+    <string name="good_morning">Good morning</string>
+    <string name="good_afternoon">Good afternoon</string>
+    <string name="good_evening">Good evening</string>
+    <string name="ring_done">DONE</string>
+    <string name="ring_habits">HABITS</string>
+    <string name="keep_holding">Keep holding...</string>
+    <string name="say_done">We did it!</string>
+    <string name="say_level">Level %1$d!</string>
+    <string name="say_up_next">Up next: %1$s</string>
+    <string name="say_one_more">Just one more!</string>
+    <string-array name="say_moved">
+        <item>Wheee!</item>
+        <item>New spot!</item>
+        <item>Thanks for the lift</item>
+    </string-array>
+    <string-array name="say_water">
+        <item>Gulp! Hydrated.</item>
+        <item>Ahh, refreshing</item>
+        <item>Water break!</item>
+    </string-array>
+    <string-array name="say_book">
+        <item>Page turner!</item>
+        <item>Smart move</item>
+        <item>One more chapter?</item>
+    </string-array>
+    <string-array name="say_workout">
+        <item>Feel the burn!</item>
+        <item>Strong!</item>
+        <item>Let\'s gooo</item>
+    </string-array>
+    <string-array name="say_zen">
+        <item>Ommm...</item>
+        <item>So calm</item>
+        <item>Deep breaths</item>
+    </string-array>
+    <string-array name="say_generic">
+        <item>Nice one!</item>
+        <item>Yay!</item>
+        <item>Keep going!</item>
+        <item>That\'s the spirit!</item>
+    </string-array>
+    <string-array name="say_done_streak">
+        <item>%1$d days strong!</item>
+        <item>Best day ever</item>
+        <item>%2$s is proud of you</item>
+    </string-array>
+    <string-array name="say_done_new">
+        <item>Free time, earned</item>
+        <item>We did it today</item>
+        <item>%2$s feels great</item>
+    </string-array>
+    <string-array name="say_nudge">
+        <item>Hey... our routine?</item>
+        <item>Let\'s start small?</item>
+        <item>One habit, then fun?</item>
+        <item>%2$s believes in you</item>
+    </string-array>
+    <string-array name="say_progress">
+        <item>%1$d more to go!</item>
+        <item>We\'re on a roll</item>
+        <item>Halfway feels nice</item>
+    </string-array>
+    <string name="widget_rest">Rest day</string>
+    <string name="widget_done">All done!</string>
+    <string name="widget_count">%1$d / %2$d</string>
+    <string name="widget_start">Let\'s get started</string>
+    <string name="no_streak_yet">No streak yet</string>
+    <string name="widget_unlocked">Apps unlocked</string>
+    <string name="widget_n_of">%1$d of %2$d done</string>
+    <string name="widget_more">+%1$d more in the app</string>
+    <string name="widget_rest_body">Nothing scheduled today. Your streak is safe.</string>
+    <plurals name="widget_to_go">
+        <item quantity="one">%1$d to go</item>
+        <item quantity="other">%1$d to go</item>
+    </plurals>
+    <string name="not_a_backup">This file isn\'t a backup from this app</string>
+    <string name="sounds_on">Sounds on</string>
+    <string name="sounds_off">Sounds off</string>
+    <string name="advanced_header">ADVANCED</string>
+    <string name="expanded">Expanded</string>
+    <string name="collapsed">Collapsed</string>
+    <string name="language_phone">Phone\'s language</string>
+    <string name="selected">Selected</string>
+    <string name="buddy_shown">%1$s is back on screen</string>
+    <string name="buddy_hidden">%1$s is hidden. Tap the eye to bring them back.</string>
+    <string name="focus_chip_back">Pulls you back if you leave</string>
+    <string name="focus_chip_breaks">%1$d × %2$d-min breaks</string>
+    <string name="focus_chip_done">Ends when you finish</string>
+    <string name="needs_love">NEEDS SOME LOVE</string>
+    <string name="more_stats">MORE STATS</string>
+    <string name="overlay_sub_buddy">Lets your buddy walk around on screen</string>
+    <string name="got_it">Got it</string>
+    <string name="offline_title">100% offline</string>
+    <string name="offline_short">No internet access, so nothing can leave your phone</string>
+    <string name="privacy_title">Your data stays here</string>
+    <string name="privacy_body">This app doesn\'t have Android\'s internet permission at all. Android itself enforces that: the app can\'t connect to anything, so it can\'t send your habits, your app list or anything else anywhere, not even by mistake.\n\nNo accounts, no ads, no analytics, no tracking. Backups are files you save and keep yourself.\n\nYou can check it: \"full network access\" is missing from this app\'s permission list.</string>
+    <string name="privacy_perms_header">WHAT EACH PERMISSION IS FOR</string>
+    <string name="overlay_why">Shows your checklist on top of apps you chose to block, and lets your buddy walk on screen. It never draws over apps you didn\'t pick.</string>
+    <string name="usage_why">Tells the app which app is open, only to compare it with your block list. Nothing is recorded or shared.</string>
+    <string name="notifications_why">A status line with a Pause button, plus the nudges you scheduled. Nothing else.</string>
+    <string name="battery_why">Keeps Android from closing the blocker and buddy in the background.</string>
+    <string name="root_title">Root access</string>
+    <string name="root_why">Used only to hide the apps you block (and show them again), and to switch on this app\'s own permissions so you don\'t have to.</string>
+    <string name="perm_back">Done! Brought you back.</string>
+    <string name="accessory_none">None</string>
+    <string name="starts_tomorrow_toast">Today\'s routine stays complete. New habits start tomorrow.</string>
+    <string name="starts_tomorrow">Starts tomorrow</string>
+    <string name="loosen_q">Loosen today\'s lock?</string>
+    <string name="loosen_body">Your routine isn\'t done yet, and this change makes today easier. It applies right away.\n\nYou won\'t be asked again for the next 5 minutes.</string>
+    <string name="yes_change">Yes, change it</string>
+    <string name="fix_day">Fix this day</string>
+    <string name="fix_day_hint">Did a habit but forgot to tick it? Tap yesterday or the day before to fix it.</string>
+    <string name="fix_day_sub">Tick what you actually did. Your streak and stats update right away.</string>
+</resources>

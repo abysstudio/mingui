@@ -1,0 +1,10 @@
+# Build output
+build/
+*.apk
+*.aab
+*.apks
+# Signing keys and passwords: never commit these.
+*.jks
+*.keystore
+signing/
+*.idsig
