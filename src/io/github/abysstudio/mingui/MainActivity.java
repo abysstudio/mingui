@@ -2494,7 +2494,7 @@ public class MainActivity extends Activity {
         name.setText(BuddyStyle.name(this));
         name.setTextColor(TEXT);
         name.setHintTextColor(MUTED);
-        name.setHint("Pip");
+        name.setHint("Mingui");
         name.setTextSize(14);
         name.setTypeface(MEDIUM);
         name.setGravity(Gravity.CENTER);
@@ -3891,7 +3891,7 @@ public class MainActivity extends Activity {
             @Override public void onTextChanged(CharSequence x, int a, int bb, int c) {}
             @Override public void afterTextChanged(Editable e) {
                 String n = e.toString().trim();
-                name[0] = n.isEmpty() ? "Pip" : n;
+                name[0] = n.isEmpty() ? "Mingui" : n;
             }
         });
         v.addView(et, new LinearLayout.LayoutParams(-1, -2));

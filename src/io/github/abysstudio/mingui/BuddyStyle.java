@@ -62,8 +62,8 @@ final class BuddyStyle {
     }
 
     static String name(Context c) {
-        String n = prefs(c).getString("buddy_name", "Pip").trim();
-        return n.isEmpty() ? "Pip" : n;
+        String n = prefs(c).getString("buddy_name", "Mingui").trim();
+        return n.isEmpty() ? "Mingui" : n;
     }
 
     static void setName(Context c, String name) {
