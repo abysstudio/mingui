@@ -11,7 +11,7 @@ A daily habit checklist with a little buddy, that keeps your distracting apps lo
 
 ## 100% offline
 
-Mingui doesn't request Android's internet permission, so it can't send anything anywhere. There are no accounts, ads, analytics or trackers. Everything stays on your phone. See the [privacy policy](https://abysstudio.github.io/mingui/privacy).
+Mingui doesn't request Android's internet permission, so it can't send anything anywhere. There are no accounts, ads, analytics or trackers. Everything stays on your phone. See the [privacy policy](https://abysstudio.github.io/mingui/privacy/).
 
 ## Two versions
 
