@@ -2631,11 +2631,6 @@ public class MainActivity extends Activity {
         sw.addView(swatches);
         body.addView(sw);
 
-        // ---- Size, speed and chattiness: three small tiles, further from the stage.
-        LinearLayout.LayoutParams plp = new LinearLayout.LayoutParams(-1, -2);
-        plp.topMargin = dp(16);
-        body.addView(optionsRow(new int[]{0, 1, 3}, stage, actor, preview, minis, resumeStroll), plp);
-
         // ---- Accessory collection.
         final int best = BuddyStyle.bestStreak(this);
         int owned = 0;
@@ -2691,6 +2686,11 @@ public class MainActivity extends Activity {
         });
 
         body.addView(levelSection());
+
+        // ---- Size, speed and chattiness: three small tiles at the bottom.
+        LinearLayout.LayoutParams plp = new LinearLayout.LayoutParams(-1, -2);
+        plp.topMargin = dp(16);
+        body.addView(optionsRow(new int[]{0, 1, 3}, stage, actor, preview, minis, resumeStroll), plp);
 
 
 
