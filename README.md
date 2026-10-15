@@ -15,10 +15,12 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/abysstudio/mingui/releases/latest"><img src=".github/assets/card-root.png" alt="Mingui Root: download the latest APK" width="380"></a>
+  <a href="https://github.com/abysstudio/mingui/releases/latest"><img src=".github/assets/card-app.png" alt="Mingui: download the latest APK" width="380"></a>
   &nbsp;
-  <a href="https://abysstudio.github.io/mingui/"><img src=".github/assets/card-play.png" alt="Mingui on Google Play: coming soon" width="380"></a>
+  <a href="https://github.com/abysstudio/mingui/releases/latest"><img src=".github/assets/card-root.png" alt="Mingui Root: download the latest APK" width="380"></a>
 </p>
+
+<p align="center"><sub>Google Play: coming soon. The GitHub and Play versions of Mingui are signed with the same key, so you can switch between them without losing your data.</sub></p>
 
 <p align="center">
   <a href="https://abysstudio.github.io/mingui/">Website</a> ·
@@ -90,7 +92,7 @@ Same app, same buddy. Pick the one that fits your phone; they can even live side
 | How it blocks | Covers a blocked app with your checklist | Hides blocked apps completely (`pm hide`) until you're done |
 | Permissions | Usage access + Display over other apps, asked only when a feature needs them | Granted by root |
 | Package | `io.github.abysstudio.mingui` | `io.github.abysstudio.mingui.root` |
-| Get it | Google Play (coming soon) | [GitHub Releases](https://github.com/abysstudio/mingui/releases/latest) |
+| Get it | [GitHub Releases](https://github.com/abysstudio/mingui/releases/latest) · Google Play (coming soon) | [GitHub Releases](https://github.com/abysstudio/mingui/releases/latest) |
 
 The Play version contains no root code at all.
 
@@ -117,7 +119,7 @@ The routine day starts at 4am, so a late night still counts as the previous day.
 <details>
 <summary><b>Will updates keep my habits and streak?</b></summary>
 
-Yes. Every Mingui Root release installs over the previous one and keeps your data, including builds from before 1.7.8, when it moved to its own release key. To move between phones, use Export backup in Settings.
+Yes. Every release installs over the previous one and keeps your data. Mingui from GitHub and Mingui from Google Play are signed with the same key, so either can update the other. Mingui Root keeps its own key; builds from before 1.7.8 update in place too. If you installed a Mingui (non-root) test build from before 1.7.9, export a backup, uninstall and reinstall once. To move between phones, use Export backup in Settings.
 </details>
 
 ## Building
@@ -127,12 +129,12 @@ No Gradle: a small shell script drives the Android SDK tools directly.
 Requirements: JDK 17, Android SDK with `platforms;android-36` and `build-tools;36.0.0`. For the Play bundle also [bundletool](https://github.com/google/bundletool) and the standalone `aapt2` from Google Maven, in a `TOOLS` folder.
 
 ```sh
-SDK=/path/to/sdk ./build.sh                                 # mingui.apk       (Play version, for testing)
+SDK=/path/to/sdk ./build.sh                                 # mingui.apk       (signed with signing/app-release.jks)
 SDK=/path/to/sdk ./build.sh root                            # mingui-root.apk
 SDK=/path/to/sdk TOOLS=/path/to/tools ./build.sh play aab   # mingui.aab       (signed with signing/upload.jks)
 ```
 
-APKs are signed with a local `debug.keystore` (created on first build); Mingui Root uses `signing/root-release.jks` when present. The version lives in `version.properties`.
+APKs are signed with a local `debug.keystore` (created on first build) unless the release keys are present: `signing/app-release.jks` for Mingui (also the Play app signing key) and `signing/root-release.jks` for Mingui Root. The version lives in `version.properties`.
 
 <details>
 <summary><b>Project layout</b></summary>

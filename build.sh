@@ -1,6 +1,7 @@
 #!/bin/bash
 # Builds without Gradle.
-#   SDK=... ./build.sh                 -> mingui.apk       Mingui, no root (Google Play; this APK for testing)
+#   SDK=... ./build.sh                 -> mingui.apk       Mingui, no root (GitHub releases; signed with
+#                                         signing/app-release.jks, the same app signing key Play uses)
 #   SDK=... TOOLS=... ./build.sh play aab -> mingui.aab    Google Play bundle, signed with the upload key
 #   SDK=... ./build.sh root            -> mingui-root.apk  Mingui Root (GitHub releases; signed with
 #                                         signing/root-release.jks when present, else the debug key)
@@ -112,6 +113,13 @@ if [ "$VARIANT" = root ] && [ -f signing/root-release.properties ]; then
         --next-signer --ks signing/root-release.jks --ks-key-alias "$ROOT_KEY_ALIAS" \
         --ks-pass "pass:$ROOT_STORE_PASS" --key-pass "pass:$ROOT_STORE_PASS" \
         --lineage signing/root-lineage --rotation-min-sdk-version 28 --out $NAME.apk $OUT/aligned.apk
+elif [ "$VARIANT" = play ] && [ -f signing/app-release.properties ]; then
+    # Mingui (no root) on GitHub: signed with the app signing key that is also registered with
+    # Play App Signing, so GitHub and Play installs update each other. No rotation lineage:
+    # Android 8.x ignores v3 lineage and would still see the old key.
+    source signing/app-release.properties
+    $BT/apksigner sign --ks signing/app-release.jks --ks-key-alias "$APP_KEY_ALIAS" \
+        --ks-pass "pass:$APP_STORE_PASS" --key-pass "pass:$APP_STORE_PASS" --out $NAME.apk $OUT/aligned.apk
 else
     $BT/apksigner sign --ks debug.keystore --ks-pass pass:android --out $NAME.apk $OUT/aligned.apk
 fi

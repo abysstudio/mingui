@@ -1,7 +1,28 @@
 # Google Play submission: Mingui
 
 Everything Play Console asks for, ready to paste. Package `io.github.abysstudio.mingui` (the Play
-variant: no root code). Upload `mingui.aab` built with `./build.sh play aab` (signed with the upload key).
+variant: no root code; the same build is on GitHub). Upload `mingui.aab` built with `./build.sh play aab` (signed with the upload key).
+
+## App signing: use our own key (do this on the first upload)
+
+Mingui is also released on GitHub, signed with `signing/app-release.jks` (alias `mingui`,
+SHA-256 `3F:E7:EC:69:FF:F9:C6:CE:8A:AC:0E:62:A2:F0:7E:43:14:6C:F2:B6:E2:E5:35:75:9A:1D:27:5E:37:B3:05:99`).
+Play must sign with that same key, or GitHub users can't update from Play (and vice versa) without
+uninstalling. **Decide this before the first bundle upload: once Google generates a key, it can't be
+swapped for existing installs.**
+
+1. Create the app, open **Test and release → Setup → App signing** (or the prompt on the first release).
+2. Choose **Use a different app signing key** (not "Use Google-generated key").
+3. Pick **Export and upload a key from Java keystore**. Download `pepk.jar` and the encryption public key it offers.
+4. Run, from the repo root (password in `signing/app-release.properties`):
+   ```sh
+   java -jar pepk.jar --keystore=signing/app-release.jks --alias=mingui \
+     --output=mingui-app-key.zip --include-cert --rsa-aes-encryption \
+     --encryption-key-path=encryption_public_key.pem
+   ```
+5. Upload `mingui-app-key.zip`, then delete it locally.
+6. Upload `mingui.aab` (signed with the separate upload key, `signing/upload.jks`). Play registers that as the upload key.
+7. Check: App signing shows the SHA-256 above as the **app signing key certificate**.
 
 ## Assets (this folder)
 
@@ -144,7 +165,7 @@ Instal·la Mingui, afegeix tres hàbits per a demà al matí i recupera els teus
 
 **Category:** Productivity · **Tags:** Habit tracker, Productivity, Self-improvement · **Contact email:** required, use the studio address · **Website:** https://abysstudio.github.io/mingui/
 
-## Release notes: 1.7.8 (code 23)
+## Release notes: 1.7.9 (code 24)
 
 ```
 <en-US>

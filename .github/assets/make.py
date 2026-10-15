@@ -81,6 +81,8 @@ def card(name, eyebrow, title, sub, accent, icon):
 DL = """<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#c4b8ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 19h16"/></svg>"""
 PLAY = """<svg width="38" height="38" viewBox="0 0 24 24"><path d="M6 3.5v17l14-8.5z" fill="#2fd180"/></svg>"""
 card("card-root.png", "GitHub · rooted phones", "Mingui Root", "Download the latest APK", "#7c5cff", DL)
+GH = DL.replace("#c4b8ff", "#2fd180")
+card("card-app.png", "GitHub · every phone", "Mingui", "Download the latest APK", "#2fd180", GH)
 card("card-play.png", "Google Play · every phone", "Mingui", "Coming soon", "#2fd180", PLAY)
 
 # Screenshot strip, 1600x740: five phones in a row.
