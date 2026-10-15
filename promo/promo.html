@@ -1,0 +1,349 @@
+<!doctype html>
+<!--
+  Mingui promo: a code-driven motion video. Everything is a pure function of time:
+  render(t) sets every element's state for second t, so a headless browser can step
+  frame by frame (see render.py) and the result is perfectly smooth at any fps.
+  Open in a browser with ?lang=es&play=1 to preview in real time, or ?t=8.5 for one frame.
+-->
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=block" rel="stylesheet">
+<style>
+:root{--bg:#0e1014;--sheet:#14171d;--card:#181b22;--done:#13211a;--border:#262a33;--text:#f2f4f8;--muted:#8a93a6;
+ --accent:#7c5cff;--accent2:#4f8bff;--good:#2fd180;--warn:#ff5a5f;--orange:#ff9f43}
+html,body{margin:0}
+body{width:1080px;height:1920px;overflow:hidden;font-family:Inter,'Segoe UI',Roboto,sans-serif;color:var(--text);background:#0b0918;position:relative}
+.abs{position:absolute}
+#bg{inset:0;background:radial-gradient(900px 760px at var(--bx,50%) var(--by,20%),var(--bc,#3b2a8c) 0%,transparent 62%),
+ radial-gradient(700px 600px at 50% 105%,#24185c 0%,transparent 60%),#0b0918}
+/* captions */
+.cap{left:70px;right:70px;top:120px;text-align:left}
+.cap h1{font-size:92px;line-height:1.02;letter-spacing:-3px;margin:0;font-weight:800}
+.cap h1 .w{display:inline-block;will-change:transform}
+.cap h1 span.g .w{background:linear-gradient(90deg,#c4b8ff,#7c5cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* phone */
+#stage{left:0;top:0;width:1080px;height:1920px;perspective:2600px}
+#phone{left:220px;top:470px;width:640px;height:1390px;border-radius:84px;padding:13px;box-sizing:border-box;
+ background:linear-gradient(145deg,#5a5a66,#16161c 40%,#2e2e37);box-shadow:0 60px 120px rgba(0,0,0,.6),0 0 0 2px #62626e inset,0 0 110px rgba(124,92,255,.3);
+ transform-origin:50% 40%}
+#screen{position:relative;width:614px;height:1364px;border-radius:71px;overflow:hidden;background:var(--bg)}
+.cam{top:26px;left:50%;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:#000;z-index:50}
+.status{left:44px;right:40px;top:22px;height:34px;display:flex;justify-content:space-between;font-size:22px;font-weight:600;z-index:40}
+.scr{inset:0}
+/* home screen */
+#home{background:radial-gradient(500px 500px at 30% 20%,#2a2f6e,transparent 70%),radial-gradient(500px 600px at 80% 90%,#3a1f5e,transparent 70%),#101226}
+.hclock{left:0;right:0;top:120px;text-align:center;font-size:120px;font-weight:300;letter-spacing:-4px}
+.hdate{left:0;right:0;top:268px;text-align:center;font-size:24px;color:#c9cbe0;font-weight:500}
+.grid{left:52px;right:52px;top:470px;display:grid;grid-template-columns:repeat(4,1fr);row-gap:44px}
+.app{display:flex;flex-direction:column;align-items:center;gap:12px;font-size:19px;color:#e6e7f2;position:relative}
+.ico{width:104px;height:104px;border-radius:30px;display:flex;align-items:center;justify-content:center;position:relative}
+.lockb{position:absolute;right:-10px;bottom:-10px;width:44px;height:44px;border-radius:50%;background:#1b1e26;border:3px solid #101226;
+ display:flex;align-items:center;justify-content:center}
+.dock{left:40px;right:40px;bottom:60px;height:150px;border-radius:44px;background:rgba(255,255,255,.08);display:flex;justify-content:space-around;align-items:center}
+.tap{width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;background:rgba(255,255,255,.35);border:3px solid rgba(255,255,255,.7)}
+/* lock screen */
+#lock{background:rgba(10,8,24,.82);backdrop-filter:blur(18px)}
+.lockbig{left:50%;top:330px;width:200px;height:200px;margin-left:-100px;border-radius:60px;background:linear-gradient(145deg,#2a2350,#16132e);
+ box-shadow:0 0 0 2px rgba(124,92,255,.5),0 30px 80px rgba(124,92,255,.35);display:flex;align-items:center;justify-content:center}
+.locktitle{left:40px;right:40px;top:590px;text-align:center;font-size:42px;font-weight:800;letter-spacing:-1px}
+.locksub{left:60px;right:60px;top:654px;text-align:center;font-size:25px;color:#b9b3dc;line-height:1.35}
+.pill{left:50%;top:780px;transform:translateX(-50%);white-space:nowrap;padding:16px 30px;border-radius:999px;background:#f7f8fb;color:#1b1e26;font-size:23px;font-weight:600;
+ display:flex;gap:12px;align-items:center}
+/* mingui app */
+#app{background:var(--bg)}
+.greet-d{left:36px;top:96px;font-size:17px;letter-spacing:1.5px;color:var(--muted);font-weight:600}
+.greet{left:36px;top:124px;font-size:40px;font-weight:700;letter-spacing:-1px}
+.settings{right:30px;top:128px;padding:10px 18px;border-radius:999px;background:var(--card);border:1px solid var(--border);font-size:18px;color:#cfd3dd}
+.hero{left:26px;right:26px;top:200px;height:190px;border-radius:30px;background:var(--card);border:1px solid var(--border);overflow:hidden}
+.ring{left:28px;top:30px;width:130px;height:130px}
+.ringtxt{left:28px;top:30px;width:130px;height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ringtxt b{font-size:38px;font-weight:800;letter-spacing:-1px}.ringtxt i{font-style:normal;font-size:12px;letter-spacing:1.5px;color:var(--muted);font-weight:600}
+.htitle{left:186px;top:40px;font-size:30px;font-weight:700}
+.hsub{left:186px;top:82px;font-size:19px;color:var(--muted);width:360px}
+.streak{left:186px;top:122px;padding:8px 16px;border-radius:999px;background:rgba(255,159,67,.14);color:var(--orange);font-size:18px;font-weight:700;display:flex;gap:6px;align-items:center;white-space:nowrap}
+.rlabel{left:36px;top:420px;font-size:16px;letter-spacing:1.6px;color:var(--muted);font-weight:700}
+.habit{left:26px;right:26px;height:108px;border-radius:26px;background:var(--card);border:1px solid var(--border);box-sizing:border-box}
+.habit .box{left:26px;top:30px;width:44px;height:44px;border-radius:50%;border:3px solid #4a5060;box-sizing:border-box}
+.habit .chk{left:26px;top:30px;width:44px;height:44px;border-radius:50%;background:var(--good);display:flex;align-items:center;justify-content:center}
+.habit .nm{left:92px;top:26px;font-size:27px;font-weight:600;white-space:nowrap}
+.habit .meta{left:92px;top:64px;font-size:17px;color:var(--muted)}
+.habit .strike{left:90px;top:44px;height:3px;background:#8fd8b0;transform-origin:0 50%}
+.foot{left:26px;right:26px;bottom:60px;height:96px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:24px;font-weight:700}
+/* celebration */
+#cele{inset:0}
+.dim{inset:0;background:rgba(5,6,10,.72)}
+.sheet{left:36px;right:36px;top:360px;border-radius:40px;background:#171a22;border:1px solid #2c3140;padding:40px 30px 34px;text-align:center;transform-origin:50% 60%}
+.flame{width:120px;height:120px;border-radius:50%;margin:0 auto;background:radial-gradient(circle,#4a2a10,#2a1a10);display:flex;align-items:center;justify-content:center;box-shadow:0 0 60px rgba(255,159,67,.45)}
+.sheet h2{font-size:40px;margin:26px 0 8px;font-weight:800;letter-spacing:-1px}
+.sheet .big{font-size:120px;font-weight:800;letter-spacing:-5px;line-height:1;height:120px;overflow:hidden;position:relative;margin:16px 0 4px;color:var(--orange)}
+.sheet .big div{position:absolute;left:0;right:0}
+.sheet .sm{font-size:22px;color:var(--muted)}
+.sheet .btn{margin:30px auto 0;padding:24px;border-radius:999px;background:var(--accent);font-size:26px;font-weight:700}
+.conf{width:16px;height:26px;border-radius:4px}
+/* buddy showcase */
+.bcard{left:0;right:0;top:0;bottom:0}
+.hm{left:110px;top:1380px;display:grid;grid-template-columns:repeat(12,58px);grid-auto-rows:58px;gap:12px}
+.hm div{border-radius:12px;background:#2a2f3a}
+/* end card */
+#end{inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#end h1{font-size:170px;margin:10px 0 0;letter-spacing:-6px;font-weight:800}
+#end p{font-size:58px;line-height:1.22;margin:30px 0 0;color:#d4cff0;font-weight:600;letter-spacing:-1px}
+#end p b{background:linear-gradient(90deg,#c4b8ff,#7c5cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.badge{margin-top:56px;padding:20px 40px;border-radius:999px;border:3px solid rgba(47,209,128,.45);color:var(--good);font-size:40px;font-weight:700;background:rgba(47,209,128,.1)}
+.free{margin-top:34px;font-size:34px;color:#8a93a6;font-weight:600;letter-spacing:.5px}
+</style></head><body>
+<div id="bg" class="abs"></div>
+<div id="caps"></div>
+<div id="stage" class="abs">
+ <div id="phone" class="abs"><div id="screen">
+  <div class="cam abs"></div>
+  <div class="status abs"><span id="clk">7:12</span><span>▮▮▮ ◔</span></div>
+  <div id="home" class="scr abs"></div>
+  <div id="lock" class="scr abs"></div>
+  <div id="app" class="scr abs"></div>
+  <div id="cele" class="abs"></div>
+ </div></div>
+</div>
+<div id="bigbuddy" class="abs"></div>
+<div id="hm" class="hm abs"></div>
+<div id="end" class="abs"></div>
+<script>
+const Q = new URLSearchParams(location.search);
+const LANG = Q.get('lang') || 'en';
+const S = {
+ en:{caps:[["It's 7am.","You reach for","your phone."],["Not so fast.","Your apps wait","for your routine."],["Tick off","your habits…",""],["…celebrate","every win…",""],["…and your apps","unlock.",""],["A buddy that","grows with","your streak."]],
+  date:"Thursday, October 15",greetD:"THURSDAY, OCTOBER 15",greet:"Good morning",settings:"Settings",habitsLbl:"HABITS",
+  hero:["Nice start","Almost there","All done"],left:n=>`${n} habit${n==1?'':'s'} left to unlock`,doneSub:"You showed up for yourself today.",
+  streak:n=>`${n}-day streak`,lv:"Lv",routine:"TODAY'S ROUTINE",
+  habits:[["Make bed","After waking up"],["Drink water","After breakfast"],["Exercise 20 min","20 min timer"],["Read 10 pages","Before work"],["Meditate 5 min","5 min timer"]],
+  more:n=>`${n} more to unlock`,unlocked:"All apps unlocked",lockT:"YouTube is locked",lockS:"Finish your morning routine first.\nYou've got this.",
+  pill:"Locked until your routine is done",bubble:"3 habits first!",pb:"New personal best!",days:"days in a row",keep:"Keep it up",
+  endA:"Finish your routine.",endB:"Then your apps unlock.",badge:"100% offline · No accounts",free:"Free on Android",
+  apps:["Maps","Photos","Camera","Mail","YouTube","Music","Social","Games"]},
+ es:{caps:[["Son las 7.","Y ya vas","a por el móvil."],["Alto ahí.","Tus apps esperan","a tu rutina."],["Marca","tus hábitos…",""],["…celebra","cada logro…",""],["…y tus apps se","desbloquean.",""],["Una mascota","que crece","con tu racha."]],
+  date:"jueves, 15 de octubre",greetD:"JUEVES, 15 DE OCTUBRE",greet:"Buenos días",settings:"Ajustes",habitsLbl:"HÁBITOS",
+  hero:["Buen comienzo","Casi está","Todo hecho"],left:n=>`Falta${n==1?'':'n'} ${n} hábito${n==1?'':'s'} para desbloquear`,doneSub:"Hoy has cumplido contigo.",
+  streak:n=>`Racha de ${n} días`,lv:"Nv",routine:"RUTINA DE HOY",
+  habits:[["Hacer la cama","Después de despertarme"],["Beber agua","Después de desayunar"],["Ejercicio 20 min","Temporizador de 20 min"],["Leer 10 páginas","Antes del trabajo"],["Meditar 5 min","Temporizador de 5 min"]],
+  more:n=>`Falta${n==1?'':'n'} ${n} para desbloquear`,unlocked:"Todas las apps desbloqueadas",lockT:"YouTube está bloqueada",lockS:"Termina tu rutina de mañana primero.\n¡Tú puedes!",
+  pill:"Bloqueada hasta que termines tu rutina",bubble:"¡Primero 3 hábitos!",pb:"¡Nuevo récord personal!",days:"días seguidos",keep:"¡Sigue así!",
+  endA:"Termina tu rutina.",endB:"Y tus apps se desbloquean.",badge:"100 % sin conexión · Sin cuentas",free:"Gratis en Android",
+  apps:["Mapas","Fotos","Cámara","Correo","YouTube","Música","Social","Juegos"]},
+ ca:{caps:[["Són les 7.","I ja vas","a pel mòbil."],["Para el carro.","Les apps esperen","la teva rutina."],["Marca","els teus hàbits…",""],["…celebra","cada èxit…",""],["…i les apps es","desbloquegen.",""],["Una mascota","que creix","amb la ratxa."]],
+  date:"dijous, 15 d'octubre",greetD:"DIJOUS, 15 D'OCTUBRE",greet:"Bon dia",settings:"Configuració",habitsLbl:"HÀBITS",
+  hero:["Bon començament","Gairebé","Tot fet"],left:n=>`Falta${n==1?'':'n'} ${n} hàbit${n==1?'':'s'} per desbloquejar`,doneSub:"Avui has complert amb tu.",
+  streak:n=>`Ratxa de ${n} dies`,lv:"Nv",routine:"RUTINA D'AVUI",
+  habits:[["Fer el llit","Després de despertar-me"],["Beure aigua","Després d'esmorzar"],["Exercici 20 min","Temporitzador de 20 min"],["Llegir 10 pàgines","Abans de la feina"],["Meditar 5 min","Temporitzador de 5 min"]],
+  more:n=>`${n==1?'Falta':'Falten'} ${n} per desbloquejar`,unlocked:"Totes les apps desbloquejades",lockT:"YouTube està bloquejada",lockS:"Primer acaba la rutina del matí.\nTu pots!",
+  pill:"Bloquejada fins que acabis la rutina",bubble:"Primer 3 hàbits!",pb:"Nou rècord personal!",days:"dies seguits",keep:"Continua així!",
+  endA:"Acaba la rutina.",endB:"I les apps es desbloquegen.",badge:"100 % sense connexió · Sense comptes",free:"Gratis a Android",
+  apps:["Mapes","Fotos","Càmera","Correu","YouTube","Música","Social","Jocs"]},
+}[LANG];
+
+// ---------- helpers ----------
+const $ = id => document.getElementById(id);
+const clamp = (x,a=0,b=1) => Math.max(a,Math.min(b,x));
+const lin = (t,a,b) => clamp((t-a)/(b-a));
+const eOut = x => 1-Math.pow(1-x,3);
+const eIn = x => x*x*x;
+const eIO = x => x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const eBack = x => {const c=1.70158,d=c+1;return 1+d*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const eElastic = x => x===0||x===1?x:Math.pow(2,-10*x)*Math.sin((x*10-.75)*2*Math.PI/3)+1;
+const mix = (a,b,k) => a+(b-a)*k;
+const win = (t,a,b,fi=.35,fo=.35) => Math.min(eOut(lin(t,a,a+fi)), 1-eIn(lin(t,b-fo,b)));
+function st(el,o){ if(typeof el==='string') el=$(el); const s=el.style;
+  if('o' in o) s.opacity=o.o; if('v' in o) s.visibility=o.v?'visible':'hidden';
+  const tr=[]; if(o.x||o.y) tr.push(`translate(${o.x||0}px,${o.y||0}px)`); if(o.rx) tr.push(`rotateX(${o.rx}deg)`); if(o.ry) tr.push(`rotateY(${o.ry}deg)`);
+  if(o.r) tr.push(`rotate(${o.r}deg)`); if(o.s!==undefined) tr.push(`scale(${o.s})`); if(o.sx!==undefined) tr.push(`scale(${o.sx},${o.sy})`);
+  s.transform=(o.pre||'')+tr.join(' '); if(o.f!==undefined) s.filter=o.f; }
+const SVG = {
+ check:(c='#0e1014',w=26)=>`<svg width="${w}" height="${w}" viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" stroke="${c}" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+ lock:(c='#fff',w=24)=>`<svg width="${w}" height="${w}" viewBox="0 0 24 24"><path fill="${c}" d="M18,8h-1V6c0,-2.76 -2.24,-5 -5,-5S7,3.24 7,6v2H6c-1.1,0 -2,0.9 -2,2v10c0,1.1 0.9,2 2,2h12c1.1,0 2,-0.9 2,-2V10c0,-1.1 -0.9,-2 -2,-2zM12,17c-1.1,0 -2,-0.9 -2,-2s0.9,-2 2,-2 2,0.9 2,2 -0.9,2 -2,2zM15.1,8H8.9V6c0,-1.71 1.39,-3.1 3.1,-3.1 1.71,0 3.1,1.39 3.1,3.1v2z"/></svg>`,
+ flame:(c='#ff9f43',w=24)=>`<svg width="${w}" height="${w}" viewBox="0 0 24 24"><path fill="${c}" d="M19.48,12.35c-1.57,-4.08 -7.16,-4.3 -5.81,-10.23c0.1,-0.44 -0.37,-0.78 -0.75,-0.55C9.29,3.71 6.68,8 8.87,13.62c0.18,0.46 -0.36,0.89 -0.75,0.59c-1.81,-1.37 -2,-3.34 -1.84,-4.75c0.06,-0.52 -0.62,-0.77 -0.91,-0.34C4.69,10.16 4,11.84 4,14.37c0.38,5.6 5.11,7.32 6.81,7.54c2.43,0.31 5.06,-0.14 6.95,-1.87C19.84,18.11 20.6,15.03 19.48,12.35z"/></svg>`,
+};
+// Buddy: the app mascot. Body colour, hat and expression are parameters so it can be animated.
+const HATS = {
+ none:'',
+ party:`<path d="M60 2 L44 30 L76 30 Z" fill="#ff8fc0"/><path d="M52 16 L68 16" stroke="#fff" stroke-width="3" opacity=".7"/><circle cx="60" cy="3" r="5" fill="#ffd66b"/>`,
+ crown:`<path d="M38 30 L42 10 L52 22 L60 6 L68 22 L78 10 L82 30 Z" fill="#ffd166" stroke="#e0a92a" stroke-width="2"/>`,
+ beanie:`<path d="M24 34 Q60 -6 96 34 Z" fill="#4f8bff"/><rect x="22" y="30" width="76" height="10" rx="5" fill="#2f6edb"/><circle cx="60" cy="6" r="7" fill="#fff"/>`,
+ cap:`<path d="M28 34 Q60 0 92 34 Z" fill="#2fd180"/><path d="M84 30 Q104 30 108 38 L86 36 Z" fill="#1fa865"/>`,
+};
+function buddySVG(o={}){
+  const c1=o.c1||'#9a80ff', c2=o.c2||'#5b3fd9', blink=o.blink||0, look=o.look||0, smile=o.smile??1, hat=HATS[o.hat||'none'], wings=o.wings||0, id='g'+Math.random().toString(36).slice(2,7);
+  const ey=62, eh=10*(1-blink*.9);
+  return `<svg viewBox="0 -14 120 136" width="${o.w||200}" height="${(o.w||200)*136/120}" style="overflow:visible"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs>
+  ${wings?`<g opacity="${wings}"><path d="M16 60 Q-14 38 -6 74 Q4 70 16 74Z" fill="#d9cfff"/><path d="M104 60 Q134 38 126 74 Q116 70 104 74Z" fill="#d9cfff"/></g>`:''}
+  <ellipse cx="60" cy="112" rx="34" ry="6" fill="#000" opacity=".35"/>
+  <ellipse cx="60" cy="68" rx="46" ry="42" fill="url(#${id})"/><ellipse cx="44" cy="46" rx="14" ry="7" fill="#fff" opacity=".18"/>
+  <ellipse cx="42" cy="${ey}" rx="10" ry="${eh}" fill="#fff"/><ellipse cx="78" cy="${ey}" rx="10" ry="${eh}" fill="#fff"/>
+  ${blink<.7?`<circle cx="${43.5+look*3}" cy="${ey+1.5}" r="5.5" fill="#140f2e"/><circle cx="${79.5+look*3}" cy="${ey+1.5}" r="5.5" fill="#140f2e"/>
+  <circle cx="${41.5+look*3}" cy="${ey-1}" r="2" fill="#fff"/><circle cx="${77.5+look*3}" cy="${ey-1}" r="2" fill="#fff"/>`:''}
+  <path d="M${50-smile*2} 82 q${10+smile*2} ${9*smile} ${20+smile*4} 0" stroke="#140f2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <ellipse cx="30" cy="78" rx="6" ry="3.5" fill="#ff8fc0" opacity=".55"/><ellipse cx="90" cy="78" rx="6" ry="3.5" fill="#ff8fc0" opacity=".55"/>
+  <g transform="translate(0,${-8})">${hat}</g></svg>`;
+}
+// deterministic randomness (confetti must be identical on every render of the same frame)
+function rng(seed){ let s=seed>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+
+// ---------- build static DOM ----------
+const APPC = ['#34a853','#f4b400','#3d3f4a','#4f8bff','#ff2a2a','#ff5ca8','#7c5cff','#2fd180'];
+const APPG = ['◉','✿','◎','✉','▶','♪','☺','✦'];
+const BLOCKED = [4,6,7]; // YouTube, Social, Games are gated
+$('home').innerHTML = `<div class="hclock abs" id="hclock">7:12</div><div class="hdate abs">${S.date}</div>
+ <div class="grid abs">${S.apps.map((n,i)=>`<div class="app" id="a${i}"><div class="ico" style="background:${APPC[i]}"><span style="font-size:52px;color:#fff">${APPG[i]}</span>
+ ${BLOCKED.includes(i)?`<div class="lockb" id="lb${i}">${SVG.lock('#ff9f43',22)}</div>`:''}</div>${n}</div>`).join('')}</div>
+ <div class="dock abs">${['#4f8bff','#2fd180','#ff9f43','#7c5cff'].map(c=>`<div class="ico" style="background:${c};width:96px;height:96px"></div>`).join('')}</div>
+ <div class="tap abs" id="tap"></div>`;
+$('lock').innerHTML = `<div class="lockbig abs" id="lockbig">${SVG.lock('#c4b8ff',110)}</div>
+ <div class="locktitle abs" id="lockt">${S.lockT}</div><div class="locksub abs" id="locks">${S.lockS.replace('\n','<br>')}</div>
+ <div class="pill abs" id="pill">${SVG.lock('#7c5cff',22)}${S.pill}</div>
+ <div class="abs" id="lbud" style="left:207px;top:1000px"></div>
+ <div class="abs" id="bubble" style="left:150px;top:900px;padding:18px 26px;border-radius:26px;background:#f7f8fb;color:#1b1e26;font-size:26px;font-weight:700;white-space:nowrap;transform-origin:50% 100%">${S.bubble}</div>`;
+const HY = [470,592,714,836,958];
+$('app').innerHTML = `<div class="greet-d abs">${S.greetD}</div><div class="greet abs">${S.greet}</div><div class="settings abs">⚙ ${S.settings}</div>
+ <div class="hero abs"><svg class="ring abs" viewBox="0 0 130 130"><circle cx="65" cy="65" r="56" stroke="#262a33" stroke-width="12" fill="none"/>
+  <circle id="ringc" cx="65" cy="65" r="56" stroke="url(#rg)" stroke-width="12" fill="none" stroke-linecap="round" transform="rotate(-90 65 65)" stroke-dasharray="351.9" stroke-dashoffset="211"/>
+  <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#4f8bff"/></linearGradient></defs></svg>
+  <div class="ringtxt abs"><b id="ringn">2/5</b><i>${S.habitsLbl}</i></div>
+  <div class="htitle abs" id="htitle">${S.hero[0]}</div><div class="hsub abs" id="hsub">${S.left(3)}</div>
+  <div class="streak abs" id="streak">${SVG.flame('#ff9f43',20)}<span id="streakn">${S.streak(26)}</span> · ${S.lv} 7</div></div>
+ <div class="rlabel abs">${S.routine}</div>
+ ${S.habits.map(([n,m],i)=>`<div class="habit abs" id="h${i}" style="top:${HY[i]}px"><div class="box abs"></div><div class="chk abs" id="hc${i}">${SVG.check()}</div>
+   <div class="nm abs" id="hn${i}">${n}</div><div class="meta abs">${m}</div><div class="strike abs" id="hs${i}" style="width:${n.length*14.5}px"></div></div>`).join('')}
+ <div class="tap abs" id="tap2"></div>
+ <div class="foot abs" id="foot"></div>
+ <div class="abs" id="abud" style="left:430px;top:1100px"></div>`;
+$('cele').innerHTML = `<div class="dim abs" id="dim"></div><div id="confw" class="abs" style="inset:0"></div>
+ <div class="sheet abs" id="sheet"><div class="flame">${SVG.flame('#ff9f43',70)}</div><h2>${S.pb}</h2>
+ <div class="big"><div id="n26">26</div><div id="n27">27</div></div><div class="sm">${S.days}</div><div class="btn">${S.keep}</div></div>`;
+const CONF = []; { const r=rng(7), cols=['#7c5cff','#2fd180','#ff9f43','#ff8fc0','#4f8bff','#ffd166'];
+  for(let i=0;i<70;i++){ const d=document.createElement('div'); d.className='conf abs'; d.style.background=cols[i%6]; $('confw').appendChild(d);
+    CONF.push({el:d, a:-Math.PI/2+(r()-.5)*2.4, v:900+r()*900, spin:(r()-.5)*1400, x0:307+(r()-.5)*60, y0:620, sz:.6+r()*.8}); } }
+$('caps').innerHTML = S.caps.map((c,i)=>`<div class="cap abs" id="c${i}"><h1>${c.filter(Boolean).map((line,j,arr)=>
+  `<span class="${j==arr.length-1?'g':''}">${line.split(' ').map(w=>`<span class="w">${w}</span>`).join(' ')}</span>`).join('<br>')}</h1></div>`).join('');
+$('end').innerHTML = `<div id="ebud"></div><h1 id="eh">Mingui</h1><p id="ep">${S.endA}<br><b>${S.endB}</b></p><div class="badge" id="eb">${S.badge}</div><div class="free" id="ef">${S.free}</div>`;
+// 12-week heatmap, 7 rows; pattern mostly done with a few misses, like a real 27-day streak
+const HM=[]; { const r=rng(3); for(let i=0;i<84;i++){ const d=document.createElement('div'); const age=83-i-(i%7);
+  const done = (i>=84-27)||r()>.25; d.dataset.col = done?(r()>.3?'#2fd180':'#279a64'):'#2a2f3a'; $('hm').appendChild(d); HM.push(d);} }
+$('hm').style.gridAutoFlow='column'; $('hm').style.gridTemplateRows='repeat(7,58px)'; $('hm').style.gridTemplateColumns='repeat(12,58px)';
+
+// ---------- timeline ----------
+const T = { home:[0,3.1], lock:[3.1,6.3], app:[6.3,11.2], cele:[11.2,14.6], unl:[14.6,17.8], bud:[17.8,21.2], end:[21.2,25] };
+const DURATION = 25;
+const CAPW = [[0.15,3.0],[3.3,6.2],[6.5,11.0],[11.3,14.5],[14.7,17.7],[17.9,21.1]];
+const TICKS = [7.3,8.5,9.7]; // habits 2,3,4 get ticked
+const COLORS = [['#9a80ff','#5b3fd9'],['#7de3b5','#1fa865'],['#ffc07a','#f2683c'],['#7ab8ff','#2f5fd9'],['#ffa8d8','#d9408f']];
+const HATN = ['party','crown','beanie','cap'];
+
+function caption(i,t){
+  const [a,b]=CAPW[i], el=$('c'+i), on = t>=a-.01 && t<=b+.01;
+  el.style.visibility = on?'visible':'hidden'; if(!on) return;
+  const ws = el.querySelectorAll('.w'); const out = eIn(lin(t,b-.35,b));
+  ws.forEach((w,k)=>{ const p = eOut(lin(t,a+k*.07,a+k*.07+.55)); w.style.opacity = p*(1-out);
+    w.style.transform = `translateY(${(1-p)*60 - out*30}px) rotate(${(1-p)*4}deg)`; w.style.filter=`blur(${(1-p)*8+out*6}px)`; });
+}
+function render(t){
+  // background colour drifts per scene
+  const bgc = t<T.lock[0]?'#2a2f6e':t<T.app[0]?'#5a1f3a':t<T.cele[0]?'#3b2a8c':t<T.unl[0]?'#6a3a10':t<T.bud[0]?'#1c5a48':'#3b2a8c';
+  $('bg').style.setProperty('--bc',bgc); $('bg').style.setProperty('--bx',(50+30*Math.sin(t*.35))+'%'); $('bg').style.setProperty('--by',(22+6*Math.cos(t*.5))+'%');
+  for(let i=0;i<CAPW.length;i++) caption(i,t);
+
+  // ---- phone camera: enters from below, floats, pushes in on the checklist, exits for the buddy scene
+  const enter = eOut(lin(t,0,.9)), exit = eIO(lin(t,T.bud[0]-.1,T.bud[0]+.7));
+  const push = eIO(lin(t,T.app[0]+.2,T.app[0]+1.1)) - eIO(lin(t,T.cele[0]-.3,T.cele[0]+.4));
+  const shake = t>T.lock[0]+.15 && t<T.lock[0]+.55 ? Math.sin((t-T.lock[0])*70)*10*(1-lin(t,T.lock[0]+.15,T.lock[0]+.55)) : 0;
+  const tapPunch = TICKS.reduce((s,k)=>s+Math.max(0,1-Math.abs(t-k-.05)/.12),0)*.008;
+  st('phone',{o:Math.min(enter,1-exit), y:(1-enter)*500 + exit*700 + Math.sin(t*1.3)*8 + push*60, x:shake + exit*0,
+     ry: Math.sin(t*.7)*5*(1-push) , rx: 4*(1-enter) + Math.cos(t*.9)*2, s:(.96 + push*.1 - tapPunch)*(1-exit*.3)});
+  $('clk').textContent = t<T.unl[0]? '7:12' : '7:48';
+
+  // ---- scene 1: home screen
+  const homeOn = t<T.lock[0]+.4 || (t>=T.unl[0]-.3 && t<T.bud[0]+1);
+  $('home').style.visibility = homeOn?'visible':'hidden';
+  $('hclock').textContent = t<T.unl[0]? '7:12':'7:48';
+  S.apps.forEach((_,i)=>{ const k = eBack(lin(t,.35+i*.05,.85+i*.05)); const back = t>=T.unl[0];
+     const k2 = back? eBack(lin(t,T.unl[0]-.2+i*.04,T.unl[0]+.3+i*.04)) : k;
+     const yt = i===4 ? (t>2.25&&t<2.6? 1-.12*Math.sin(lin(t,2.25,2.6)*Math.PI) : 1) : 1;
+     const joy = back && BLOCKED.includes(i) ? 1+.18*Math.sin(lin(t,T.unl[0]+.9+BLOCKED.indexOf(i)*.35,T.unl[0]+1.4+BLOCKED.indexOf(i)*.35)*Math.PI) : 1;
+     st('a'+i,{o:k2, s:(.6+.4*k2)*yt*joy}); });
+  BLOCKED.forEach((i,j)=>{ const p = lin(t,T.unl[0]+.8+j*.35,T.unl[0]+1.25+j*.35);   // locks pop off one by one
+     const pin = eBack(lin(t,1.0+j*.1,1.4+j*.1));
+     st('lb'+i,{o: t<T.unl[0]? pin : 1-eIn(p), s: t<T.unl[0]? pin : 1+p*.6, y: -eOut(p)*90, r: p*40, x:p*30}); });
+  const tp = lin(t,2.15,2.7); st('tap',{o: tp>0&&tp<1 ? (1-tp)*.9 : 0, s:.4+tp*.9}); $('tap').style.left='397px'; $('tap').style.top='520px';
+  const ytZoom = eIn(lin(t,2.65,T.lock[0]+.2)); st('home',{s:1+ytZoom*1.4*(t<T.unl[0]-.3?1:0), o:t<T.unl[0]?1-eIn(lin(t,2.9,T.lock[0]+.3)):eOut(lin(t,T.unl[0]-.3,T.unl[0]+.2)), pre:''});
+  $('home').style.transformOrigin='397px 520px';
+
+  // ---- scene 2: lock screen
+  const lk = win(t,T.lock[0]-.15,T.app[0]+.2,.3,.4); $('lock').style.visibility = lk>0?'visible':'hidden'; $('lock').style.opacity=lk;
+  st('lockbig',{s:eElastic(lin(t,T.lock[0],T.lock[0]+1)), r: Math.sin(lin(t,T.lock[0]+.15,T.lock[0]+.8)*Math.PI*4)*10*(1-lin(t,T.lock[0]+.15,T.lock[0]+.8))});
+  [['lockt',.25],['locks',.4],['pill',.55]].forEach(([id,d])=>{ const p=eOut(lin(t,T.lock[0]+d,T.lock[0]+d+.5)); st(id,{o:p,y:(1-p)*30,pre:id==='pill'?'translateX(-50%) ':''}); });
+  const bp = eBack(lin(t,T.lock[0]+.9,T.lock[0]+1.5)); const hop = Math.abs(Math.sin((t-T.lock[0])*5))*18*lin(t,T.lock[0]+1.5,T.lock[0]+1.7);
+  $('lbud').innerHTML = buddySVG({w:200, blink: blinkAt(t), smile:-.4+ .4*0, look:-.6});
+  st('lbud',{y:(1-bp)*400 - hop});
+  const bb = eBack(lin(t,T.lock[0]+1.4,T.lock[0]+1.8)); st('bubble',{o:bb>0?1:0, s:bb, y:-hop});
+
+  // ---- scene 3: the Mingui checklist
+  const ap = win(t,T.app[0]-.3,T.cele[0]+3.4,.5,.3) * (t<T.unl[0]-.2?1:0);
+  $('app').style.visibility = ap>0?'visible':'hidden'; st('app',{o:ap, s:mix(1.08,1,eOut(lin(t,T.app[0]-.3,T.app[0]+.4)))});
+  let done = 2; TICKS.forEach(k=>{ if(t>=k) done++; });
+  S.habits.forEach((_,i)=>{ const k = i<2 ? 99 : TICKS[i-2]; const p = i<2?1:eBack(lin(t,k,k+.35)), sp=i<2?1:eOut(lin(t,k+.1,k+.45));
+    const el=$('h'+i); el.style.background = (i<2||t>=k+.05)?'var(--done)':'var(--card)'; el.style.borderColor=(i<2||t>=k+.05)?'#1e3b2c':'var(--border)';
+    const press = i>=2 ? 1-.035*Math.sin(clamp((t-k+.12)/.24)*Math.PI) : 1;
+    st(el,{s:press}); st('hc'+i,{s:p, o:p>0?1:0}); st('hs'+i,{sx:sp, sy:1, o:sp>0?1:0});
+    $('hn'+i).style.color = sp>.5?'#7f8a99':'#f2f4f8';
+    // entrance stagger
+    const en = eOut(lin(t,T.app[0]+.1+i*.06,T.app[0]+.6+i*.06)); el.style.opacity=en; el.style.translate = `0 ${(1-en)*40}px`; });
+  // tap ripple follows the habit being ticked
+  const cur = TICKS.findIndex(k=>t>k-.25&&t<k+.35); const tp2 = cur>=0? lin(t,TICKS[cur]-.2,TICKS[cur]+.35):0;
+  st('tap2',{o: cur>=0? (1-tp2)*.8:0, s:.3+tp2*.9}); if(cur>=0){ $('tap2').style.left='74px'; $('tap2').style.top=(HY[cur+2]+52)+'px'; }
+  // ring + counters (ring animates smoothly between steps)
+  let ringv = 2; TICKS.forEach(k=> ringv += eOut(lin(t,k+.05,k+.55)));
+  $('ringc').setAttribute('stroke-dashoffset', 351.9*(1-ringv/5)); $('ringn').textContent = `${done}/5`;
+  if(done===5){ $('ringc').setAttribute('stroke','#2fd180'); } else $('ringc').setAttribute('stroke','url(#rg)');
+  $('htitle').textContent = done<4?S.hero[0]:done<5?S.hero[1]:S.hero[2]; $('hsub').textContent = done<5?S.left(5-done):S.doneSub;
+  const sbump = eBack(lin(t,TICKS[2]+.3,TICKS[2]+.7));
+  $('streakn').textContent = S.streak(t>=TICKS[2]+.3?27:26); st('streak',{s: t>=TICKS[2]+.3 && t<TICKS[2]+.7 ? 1+.25*Math.sin(lin(t,TICKS[2]+.3,TICKS[2]+.7)*Math.PI):1});
+  const ft=$('foot'); if(done<5){ ft.style.background='#1b1e26'; ft.style.color='#b9c0cc'; ft.innerHTML=SVG.lock('#b9c0cc',22)+S.more(5-done); }
+  else { ft.style.background='linear-gradient(90deg,#7c5cff,#4f8bff)'; ft.style.color='#fff'; ft.innerHTML=S.unlocked+' '+SVG.check('#fff',24); }
+  const fp = done===5 ? eBack(lin(t,TICKS[2]+.15,TICKS[2]+.6)) : 1; st(ft,{s:fp});
+  // buddy cheers from the bottom corner on each tick
+  const cheer = TICKS.reduce((s,k)=>s+Math.max(0,Math.sin(clamp((t-k)/.5)*Math.PI)),0);
+  $('abud').innerHTML = buddySVG({w:150, blink:blinkAt(t+.7), smile:1+cheer*.6, look:-.5});
+  const ain = eBack(lin(t,T.app[0]+.8,T.app[0]+1.3)); st('abud',{y:(1-ain)*300 - cheer*50, r:Math.sin(t*6)*cheer*8});
+
+  // ---- scene 4: celebration
+  const cl = win(t,T.cele[0],T.cele[1]+.2,.25,.35); $('cele').style.visibility = cl>0?'visible':'hidden';
+  $('dim').style.opacity = cl; const sp = eBack(lin(t,T.cele[0]+.1,T.cele[0]+.6));
+  st('sheet',{o:cl, s:.6+.4*sp, y:(1-sp)*80});
+  const roll = eIO(lin(t,T.cele[0]+.8,T.cele[0]+1.4)); st('n26',{y:-roll*120,o:1-roll}); st('n27',{y:(1-roll)*120,o:roll, s:1+.2*Math.sin(lin(t,T.cele[0]+1.3,T.cele[0]+1.7)*Math.PI)});
+  const ct = t-(T.cele[0]+.15);
+  CONF.forEach(c=>{ if(ct<0||cl<=0){ c.el.style.opacity=0; return; }
+     const x = c.x0 + Math.cos(c.a)*c.v*ct*.7 + Math.sin(ct*3+c.spin)*20, y = c.y0 + Math.sin(c.a)*c.v*ct + 900*ct*ct;
+     c.el.style.opacity = clamp(1.6-ct*.5)*cl; c.el.style.transform=`translate(${x}px,${y}px) rotate(${c.spin*ct}deg) scale(${c.sz},${c.sz*Math.cos(ct*8+c.spin)})`; });
+
+  // ---- scene 6: buddy showcase (outside the phone)
+  const bo = win(t,T.bud[0]+.2,T.end[0]+.15,.6,.45);
+  const bb2=$('bigbuddy'); bb2.style.visibility = bo>0?'visible':'hidden';
+  if(bo>0){ const lt=t-T.bud[0]; const ci=Math.floor(clamp((lt-.6)/.55,0,COLORS.length-1)); const hi=Math.floor(clamp((lt-.9)/.55,0,3.99));
+    const squash = Math.sin(lt*7)*.05;
+    bb2.innerHTML = buddySVG({w:560, c1:COLORS[ci][0], c2:COLORS[ci][1], hat:lt>.9?HATN[hi]:'none', blink:blinkAt(t), smile:1.4, wings:eOut(lin(lt,2.6,3))});
+    bb2.style.left='260px'; bb2.style.top='560px';
+    const pop = Math.max(0,1-((lt-.6)%.55)/.2)*(lt>.6&&lt<.6+.55*(COLORS.length-1)+.2?1:0);
+    st(bb2,{o:bo, s:(.7+.3*eBack(lin(lt,.2,.8)))*(1+pop*.08), sx:undefined, y:Math.sin(lt*3)*14, r:Math.sin(lt*2)*3}); }
+  const hm = win(t,T.bud[0]+.5,T.end[0]+.15,.4,.4); $('hm').style.visibility = hm>0?'visible':'hidden'; $('hm').style.opacity=hm;
+  HM.forEach((d,i)=>{ const col=Math.floor(i/7), row=i%7; const p = eBack(lin(t,T.bud[0]+.7+(col+row)*.07,T.bud[0]+1.0+(col+row)*.07));
+     d.style.background = p>.5? d.dataset.col : '#2a2f3a'; d.style.transform=`scale(${.3+.7*clamp(p,0,1.3)})`; d.style.opacity=clamp(p*2); });
+
+  // ---- scene 7: end card
+  const ep = t-T.end[0]; const eo = clamp(ep*3); $('end').style.visibility = eo>0?'visible':'hidden'; $('end').style.opacity=eo;
+  if(eo>0){ $('ebud').innerHTML = buddySVG({w:300, blink:blinkAt(t), smile:1.2, hat:'party'});
+    st('ebud',{s:eBack(lin(ep,0,.5)), y:Math.sin(ep*3)*10});
+    [['eh',.15],['ep',.35],['eb',.6],['ef',.8]].forEach(([id,d])=>{ const p=eOut(lin(ep,d,d+.6)); st(id,{o:p,y:(1-p)*50,f:`blur(${(1-p)*8}px)`}); }); }
+}
+function blinkAt(t){ const c=t%3.1; return c<.14? Math.sin(c/.14*Math.PI):0; }
+window.DURATION = DURATION; window.render = render;
+window.ready = document.fonts.ready.then(()=>true);
+const t0 = Q.get('t'); if(t0!==null) render(+t0);
+if(Q.get('play')){ const s=performance.now(); (function f(){ render(((performance.now()-s)/1000)%DURATION); requestAnimationFrame(f); })(); }
+if(t0===null && !Q.get('play')) render(0);
+</script></body></html>
