@@ -192,19 +192,23 @@ final class Buddy {
     static final long ROAM_MS = 3 * 60_000;
     /** Screen off this long ends a scrolling session. */
     private static final long SESSION_GAP_MS = 2 * 60_000;
-    /** Uptime when the buddy goes to nap; -1 while the routine isn't done. */
+    /** A peek ("I'm watching you") when you open one of your blocked apps after the routine. */
+    private static final long PEEK_MS = 7000, PEEK_COOLDOWN_MS = 2 * 60_000;
+    /** Uptime when the buddy goes to nap (and starts counting phone use); -1 while the routine isn't done. */
     private long napAt = -1;
-    private long roamUntil, useMs, offMs, lastUseTick, lastDoneCheck, lastAppCheck;
-    private boolean exemptApp, warnPending, saidNight;
+    private long roamUntil, useMs, offMs, lastUseTick, lastDoneCheck, lastAppCheck, lastPeek = -PEEK_COOLDOWN_MS;
+    private boolean exemptApp, warnPending, peekPending, saidNight, naps = true;
+    private String lastFg;
 
     private boolean napping(long now) {
-        return napAt >= 0 && now >= napAt && now >= roamUntil;
+        return naps && napAt >= 0 && now >= napAt && now >= roamUntil;
     }
 
     /** Re-reads "done today" every few seconds, also while the buddy is away. */
     private void checkDone(long now) {
         if (now - lastDoneCheck < 3000) return;
         lastDoneCheck = now;
+        naps = BuddyStyle.naps(c);
         boolean dn = Routine.isDoneToday(c);
         if (!dn) {
             // Not done (or a new day began): back to normal, out on screen.
@@ -216,7 +220,7 @@ final class Buddy {
             // Already done when we started (or finished inside the app): straight to the nap.
             boolean onScreen = root != null && root.getVisibility() == View.VISIBLE && !leaving;
             napAt = onScreen ? now + 9000 : now;
-            saidNight = !onScreen;
+            saidNight = !onScreen || !naps;
         }
     }
 
@@ -234,11 +238,22 @@ final class Buddy {
             return;
         }
         offMs = 0;
-        if (MainActivity.visible || now < roamUntil) return;
-        if (now - lastAppCheck > 5000) {
+        if (MainActivity.visible) {
+            lastFg = null;
+            return;
+        }
+        if (now - lastAppCheck > 1500) {
             lastAppCheck = now;
-            // Allowed work apps, essentials and calls aren't scrolling.
             String fg = Apps.foreground(c);
+            // Just opened one of the apps you'd blocked: a quick "I'm watching you", then back to the nap.
+            if (fg != null && !fg.equals(lastFg) && Routine.blockedApps(c).contains(fg)
+                    && now - lastPeek > PEEK_COOLDOWN_MS && now >= roamUntil) {
+                lastPeek = now;
+                peekPending = true;
+                roamUntil = now + PEEK_MS;
+            }
+            if (fg != null) lastFg = fg;
+            // Allowed work apps, essentials and calls aren't scrolling.
             int mode = c.getSystemService(android.media.AudioManager.class).getMode();
             exemptApp = (fg != null && (Routine.allowedApps(c).contains(fg) || Apps.essentials(c).contains(fg)))
                     || mode == android.media.AudioManager.MODE_IN_CALL
@@ -745,15 +760,23 @@ final class Buddy {
             applyStyle();
             checkState();
         }
-        if (warnPending) {
+        if (peekPending) {
+            peekPending = false;
+            body.jump();
+            body.startIdle(BuddyView.LOOK);
+            idleUntil = now + PEEK_MS;
+            say(pickRes(R.array.say_watching, 0, BuddyStyle.name(c)), PEEK_MS - 1500);
+            nextChatter = Math.max(nextChatter, now + PEEK_MS + 1000);
+        } else if (warnPending) {
             // Out of its nap because you've been scrolling a while.
             warnPending = false;
             body.jump();
             body.startIdle(BuddyView.LOOK);
             idleUntil = now + 2500;
-            say(pickRes(R.array.say_scrolling, SCROLL_WARN_MS / 60_000, BuddyStyle.name(c)), 6000);
-            nextChatter = now + 60_000;
-        } else if (!saidNight && napAt >= 0 && now >= napAt - 4500) {
+            say(pickRes(R.array.say_scrolling, SCROLL_WARN_MS / 60_000, BuddyStyle.name(c)), 5000);
+            // Then the big questions, one every half minute while it roams.
+            nextChatter = now + 6500;
+        } else if (!saidNight && naps && napAt >= 0 && now >= napAt - 4500) {
             saidNight = true;
             body.startIdle(BuddyView.WAVE);
             idleUntil = now + 3000;
@@ -788,7 +811,11 @@ final class Buddy {
             if (now > bubbleUntil) hideCloud();
             else placeCloud(size);
         }
-        if (now > nextChatter) {
+        if (now > nextChatter && done && now < roamUntil && now - lastPeek > PEEK_MS) {
+            // Caught scrolling after the routine: a question every half minute, even for quiet buddies.
+            say(nextQuestion(), 7000);
+            nextChatter = now + 25_000 + rnd.nextInt(10_000);
+        } else if (now > nextChatter) {
             // Quiet buddies only react to progress; chatty ones talk about twice as often.
             if (chat > 0) chatter();
             nextChatter = now + (chat == 2 ? 20_000 + rnd.nextInt(20_000) : 45_000 + rnd.nextInt(45_000));
@@ -891,9 +918,7 @@ final class Buddy {
         int streak = Routine.streak(c);
         String name = BuddyStyle.name(c);
         String msg;
-        if (done && SystemClock.uptimeMillis() < roamUntil) {
-            msg = pickRes(R.array.say_scrolling, SCROLL_WARN_MS / 60_000, name);
-        } else if (done) {
+        if (done) {
             msg = streak > 1 ? pickRes(R.array.say_done_streak, streak, name) : pickRes(R.array.say_done_new, streak, name);
         } else if (mood <= 0) {
             msg = pickRes(R.array.say_nudge, left, name);
@@ -915,6 +940,21 @@ final class Buddy {
             }
         }
         say(msg, 4000);
+    }
+
+    /** Existential questions for a buddy that caught you scrolling: shuffled, no repeats until all are used. */
+    private final java.util.ArrayDeque<String> questions = new java.util.ArrayDeque<>();
+
+    private String nextQuestion() {
+        if (questions.isEmpty()) {
+            List<String> all = new java.util.ArrayList<>(java.util.Arrays.asList(
+                    c.getResources().getStringArray(R.array.say_existential)));
+            java.util.Collections.shuffle(all, rnd);
+            questions.addAll(all);
+        }
+        body.startIdle(BuddyView.LOOK);
+        idleUntil = SystemClock.uptimeMillis() + 3000; // stop and look at you while asking
+        return questions.poll();
     }
 
     /** For cue reminders from outside: speak (and hop) if the buddy is currently on screen. */

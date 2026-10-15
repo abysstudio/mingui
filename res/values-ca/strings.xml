@@ -631,4 +631,29 @@
         <item>Una petita pausa?</item>
         <item>%2$s s\'avorria dormint</item>
     </string-array>
+    <string-array name="say_existential">
+        <item>Això importarà demà?</item>
+        <item>És el que vols ara mateix?</item>
+        <item>Segur que això és rellevant?</item>
+        <item>Què estaves buscant?</item>
+        <item>Això és descans o soroll?</item>
+        <item>Et sents millor que abans?</item>
+        <item>Què faria el teu jo del futur?</item>
+        <item>Tu fas scroll o ell a tu?</item>
+        <item>Saps que no té fons, oi?</item>
+        <item>Per què has agafat el mòbil?</item>
+        <item>Digues una cosa que acabes de veure.</item>
+        <item>És alegria o només costum?</item>
+        <item>El cel encara és allà fora.</item>
+        <item>Qui decideix què veus després?</item>
+        <item>Temps ben aprofitat?</item>
+        <item>Què estàs evitant?</item>
+    </string-array>
+    <string-array name="say_watching">
+        <item>T\'estic vigilant 👀</item>
+        <item>👀 Et veig…</item>
+        <item>Només mirava què fas 👀</item>
+    </string-array>
+    <string name="buddy_naps">Migdiada en acabar</string>
+    <string name="buddy_naps_sub">Després de la rutina %1$s dorm, treu el cap si obres una app bloquejada i surt si fas scroll 10 minuts.</string>
 </resources>

@@ -631,4 +631,29 @@
         <item>Maybe a little break?</item>
         <item>%2$s got bored napping</item>
     </string-array>
+    <string-array name="say_existential">
+        <item>Will this matter tomorrow?</item>
+        <item>Is this what you want right now?</item>
+        <item>Are you sure this is relevant?</item>
+        <item>What were you looking for?</item>
+        <item>Is this rest, or just noise?</item>
+        <item>Do you feel better than before?</item>
+        <item>What would future you do?</item>
+        <item>Is the feed scrolling you?</item>
+        <item>You know there\'s no bottom, right?</item>
+        <item>Remember why you picked up the phone?</item>
+        <item>Name one thing you just saw.</item>
+        <item>Is this joy, or just habit?</item>
+        <item>The sky is still out there.</item>
+        <item>Who decides what you see next?</item>
+        <item>Time well spent?</item>
+        <item>What are you avoiding?</item>
+    </string-array>
+    <string-array name="say_watching">
+        <item>I\'m watching you 👀</item>
+        <item>👀 I see you…</item>
+        <item>Just checking on you 👀</item>
+    </string-array>
+    <string name="buddy_naps">Nap when you\'re done</string>
+    <string name="buddy_naps_sub">After your routine %1$s sleeps, peeks out when you open a blocked app, and comes out if you scroll for 10 minutes.</string>
 </resources>

@@ -2825,6 +2825,16 @@ public class MainActivity extends Activity {
         plp.topMargin = dp(16);
         body.addView(optionsRow(new int[]{0, 1, 3}, stage, actor, preview, minis, resumeStroll), plp);
 
+        // After the routine: nap (and keep an eye on scrolling) or stay out.
+        View nap = toggleRow(s(R.string.buddy_naps), s(R.string.buddy_naps_sub, BuddyStyle.name(this)),
+                BuddyStyle.naps(this), on -> {
+                    BuddyStyle.setNaps(this, on);
+                    UnlockWatcher.pokeBuddy();
+                }, false);
+        LinearLayout.LayoutParams nlp = new LinearLayout.LayoutParams(-1, -2);
+        nlp.topMargin = dp(12);
+        body.addView(nap, nlp);
+
 
 
         TextView close = text(s(R.string.done), 16, Color.WHITE);

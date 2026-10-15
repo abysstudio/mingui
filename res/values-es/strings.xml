@@ -631,4 +631,29 @@
         <item>¿Un pequeño descanso?</item>
         <item>%2$s se aburría durmiendo</item>
     </string-array>
+    <string-array name="say_existential">
+        <item>¿Esto importará mañana?</item>
+        <item>¿Es lo que quieres ahora mismo?</item>
+        <item>¿Seguro que esto es relevante?</item>
+        <item>¿Qué estabas buscando?</item>
+        <item>¿Esto es descanso o ruido?</item>
+        <item>¿Te sientes mejor que antes?</item>
+        <item>¿Qué haría tu yo del futuro?</item>
+        <item>¿Tú haces scroll o él a ti?</item>
+        <item>Sabes que no tiene fondo, ¿no?</item>
+        <item>¿Para qué cogiste el móvil?</item>
+        <item>Dime una cosa que acabas de ver.</item>
+        <item>¿Es alegría o solo costumbre?</item>
+        <item>El cielo sigue ahí fuera.</item>
+        <item>¿Quién decide lo próximo que ves?</item>
+        <item>¿Tiempo bien invertido?</item>
+        <item>¿Qué estás evitando?</item>
+    </string-array>
+    <string-array name="say_watching">
+        <item>Te estoy vigilando 👀</item>
+        <item>👀 Te veo…</item>
+        <item>Solo miraba qué haces 👀</item>
+    </string-array>
+    <string name="buddy_naps">Siesta al terminar</string>
+    <string name="buddy_naps_sub">Tras tu rutina %1$s duerme, se asoma si abres una app bloqueada y sale si haces scroll 10 minutos.</string>
 </resources>

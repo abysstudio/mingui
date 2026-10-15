@@ -121,6 +121,15 @@ final class BuddyStyle {
         return clamp(prefs(c).getInt("buddy_chat", 1), CHAT_LEVELS);
     }
 
+    /** After the routine: true = nap (and come out if you keep scrolling), false = stay on screen. */
+    static boolean naps(Context c) {
+        return prefs(c).getBoolean("buddy_nap", true);
+    }
+
+    static void setNaps(Context c, boolean on) {
+        prefs(c).edit().putBoolean("buddy_nap", on).apply();
+    }
+
     static void set(Context c, String key, int value) {
         prefs(c).edit().putInt(key, value).apply();
     }

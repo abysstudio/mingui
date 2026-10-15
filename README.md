@@ -64,7 +64,7 @@ You reach for your phone at 7am, open YouTube "for a minute", and the morning is
 | ✅ **A checklist that sticks** | Timers for habits you want to really do, weekday schedules, rest days, partial credit and streak freezes. Forgot to tick something? Fix yesterday. |
 | 🔒 **Apps unlock when you're done** | Blocked apps are covered by your checklist until today's routine is complete. Allowed apps (your work tools) always get through. |
 | 🤝 **Honest by design** | Changes that would make today's unfinished routine easier start tomorrow; applying them today takes a deliberate 3-second hold. Tick a few habits in seconds and your buddy asks, without judging, whether you really did them all. |
-| 🟣 **A buddy on your screen** | It walks around your phone, climbs out of portals, cheers you on and levels up with you: sprout, glow, then wings. Once you're done it naps, and only comes back out if you've been scrolling for 10 minutes. |
+| 🟣 **A buddy on your screen** | It walks around your phone, climbs out of portals, cheers you on and levels up with you: sprout, glow, then wings. Once you're done it naps (or stays out, your choice): it peeks out with "I'm watching you 👀" when you open a blocked app, and after 10 minutes of scrolling comes out to ask whether this is really how you want to spend your time. |
 | 🎨 **Personalize** | Colours, hats and entrance styles that unlock as your streak grows. Size, speed and chattiness are up to you. |
 | 📈 **Streaks & stats** | A 12-week heatmap, your best streak and the habits that need some love. |
 | 🎯 **Focus lock (optional)** | Pulls you back to the checklist if you wander off, with three 5-minute breaks a day. |
