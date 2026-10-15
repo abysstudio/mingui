@@ -865,11 +865,6 @@ public class MainActivity extends Activity {
     }
 
     private void showDisclosure(String title, String body, String noLabel, String goLabel, final Runnable onContinue) {
-        showDisclosure(title, body, noLabel, goLabel, onContinue, null);
-    }
-
-    private void showDisclosure(String title, String body, String noLabel, String goLabel, final Runnable onContinue,
-                                final Runnable onNo) {
         final Dialog d = new Dialog(this);
         d.requestWindowFeature(Window.FEATURE_NO_TITLE);
         LinearLayout sheet = new LinearLayout(this);
@@ -888,10 +883,7 @@ public class MainActivity extends Activity {
         no.setTypeface(MEDIUM);
         no.setGravity(Gravity.CENTER);
         no.setBackground(rounded(CARD, 26, BORDER));
-        no.setOnClickListener(v -> {
-            d.dismiss();
-            if (onNo != null) onNo.run();
-        });
+        no.setOnClickListener(v -> d.dismiss());
         LinearLayout.LayoutParams nlp = new LinearLayout.LayoutParams(0, dp(52), 1);
         nlp.rightMargin = dp(10);
         buttons.addView(no, nlp);
@@ -4706,9 +4698,7 @@ public class MainActivity extends Activity {
                 }
             }
             if (easier) {
-                showDisclosure(s(R.string.edits_easier_q), s(R.string.edits_easier_body), s(R.string.edits_apply_today),
-                        s(R.string.edits_start_tomorrow),
-                        () -> saveEdits(d, sb.toString(), timers, dayMasks, cues, identities, renames, false, true),
+                askEasierEdits(() -> saveEdits(d, sb.toString(), timers, dayMasks, cues, identities, renames, false, true),
                         () -> saveEdits(d, sb.toString(), timers, dayMasks, cues, identities, renames, false, false));
             } else {
                 saveEdits(d, sb.toString(), timers, dayMasks, cues, identities, renames, wasDone, false);
@@ -4728,6 +4718,43 @@ public class MainActivity extends Activity {
         d.show();
         w.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
                 (int) (getResources().getDisplayMetrics().heightPixels * 0.9f));
+    }
+
+    /**
+     * Edits that would make today's unfinished routine easier: starting them tomorrow is one tap,
+     * applying them today takes a 3-second hold, like "Pause for today".
+     */
+    private void askEasierEdits(Runnable tomorrow, Runnable today) {
+        final Dialog d = new Dialog(this);
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        LinearLayout sheet = new LinearLayout(this);
+        sheet.setOrientation(LinearLayout.VERTICAL);
+        sheet.setPadding(dp(20), dp(10), dp(20), dp(20));
+        sheet.setBackground(sheetBackground());
+        sheet.addView(sheetHandle());
+        TextView t = text(s(R.string.edits_easier_q), 22, TEXT);
+        t.setTypeface(Typeface.DEFAULT_BOLD);
+        sheet.addView(t);
+        TextView b = text(s(R.string.edits_easier_body), 15, MUTED);
+        b.setPadding(0, dp(10), 0, dp(18));
+        sheet.addView(b);
+        TextView go = text(s(R.string.edits_start_tomorrow), 16, Color.WHITE);
+        go.setTypeface(MEDIUM);
+        go.setGravity(Gravity.CENTER);
+        go.setBackground(gradientPill(26));
+        go.setOnClickListener(v -> {
+            d.dismiss();
+            tomorrow.run();
+        });
+        sheet.addView(go, new LinearLayout.LayoutParams(-1, dp(52)));
+        HoldButton hold = new HoldButton(this, s(R.string.edits_hold_today), () -> {
+            d.dismiss();
+            today.run();
+        });
+        LinearLayout.LayoutParams hlp = new LinearLayout.LayoutParams(-1, dp(56));
+        hlp.topMargin = dp(10);
+        sheet.addView(hold, hlp);
+        showSheet(d, sheet);
     }
 
     /** Saves the editor's habits: now, or (tomorrow = true) as the routine that starts tomorrow. */

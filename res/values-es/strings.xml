@@ -590,8 +590,8 @@
     <string name="starts_tomorrow">Empieza mañana</string>
     <string name="edits_waiting">Tienes cambios pendientes: empiezan mañana. La rutina de hoy sigue igual.</string>
     <string name="edits_easier_q">¿Empezar estos cambios mañana?</string>
-    <string name="edits_easier_body">Hacen más fácil la rutina de hoy, que aún no has terminado, así que desbloquearían tus apps antes de tiempo. Guardarlos para mañana mantiene el día de hoy honesto. Si un hábito está mal hoy, aún puedes aplicarlos ahora.</string>
-    <string name="edits_apply_today">Aplicar hoy</string>
+    <string name="edits_easier_body">Hacen más fácil la rutina de hoy, que aún no has terminado, así que desbloquearían tus apps antes de tiempo. Guardarlos para mañana mantiene el día de hoy honesto. Si un hábito está mal hoy, mantén pulsado el botón de abajo para aplicarlos ahora.</string>
+    <string name="edits_hold_today">Mantén pulsado para aplicar hoy</string>
     <string name="edits_start_tomorrow">Empezar mañana</string>
     <string name="edits_saved_tomorrow">Guardado para mañana. La rutina de hoy sigue igual.</string>
     <string name="loosen_q">¿Aflojar el bloqueo de hoy?</string>

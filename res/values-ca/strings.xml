@@ -590,8 +590,8 @@
     <string name="starts_tomorrow">Comença demà</string>
     <string name="edits_waiting">Tens canvis pendents: comencen demà. La rutina d\'avui continua igual.</string>
     <string name="edits_easier_q">Començar aquests canvis demà?</string>
-    <string name="edits_easier_body">Fan més fàcil la rutina d\'avui, que encara no has acabat, i desbloquejarien les apps abans d\'hora. Desar-los per a demà manté el dia d\'avui honest. Si un hàbit està malament avui, encara els pots aplicar ara.</string>
-    <string name="edits_apply_today">Aplica avui</string>
+    <string name="edits_easier_body">Fan més fàcil la rutina d\'avui, que encara no has acabat, i desbloquejarien les apps abans d\'hora. Desar-los per a demà manté el dia d\'avui honest. Si un hàbit està malament avui, mantén premut el botó de sota per aplicar-los ara.</string>
+    <string name="edits_hold_today">Mantén premut per aplicar avui</string>
     <string name="edits_start_tomorrow">Comença demà</string>
     <string name="edits_saved_tomorrow">Desat per a demà. La rutina d\'avui continua igual.</string>
     <string name="loosen_q">Afluixar el bloqueig d\'avui?</string>

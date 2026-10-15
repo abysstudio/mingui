@@ -590,8 +590,8 @@
     <string name="starts_tomorrow">Starts tomorrow</string>
     <string name="edits_waiting">You have changes waiting: they start tomorrow. Today\'s routine stays as it was.</string>
     <string name="edits_easier_q">Start these changes tomorrow?</string>
-    <string name="edits_easier_body">They make today\'s unfinished routine easier, so they\'d unlock your apps early. Saving them for tomorrow keeps today honest. If a habit is simply wrong today, you can still apply them now.</string>
-    <string name="edits_apply_today">Apply today</string>
+    <string name="edits_easier_body">They make today\'s unfinished routine easier, so they\'d unlock your apps early. Saving them for tomorrow keeps today honest. If a habit is simply wrong today, hold the button below to apply them now.</string>
+    <string name="edits_hold_today">Hold to apply today</string>
     <string name="edits_start_tomorrow">Start tomorrow</string>
     <string name="edits_saved_tomorrow">Saved for tomorrow. Today\'s routine stays as it was.</string>
     <string name="loosen_q">Loosen today\'s lock?</string>
