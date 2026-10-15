@@ -263,14 +263,9 @@
     <string name="colour_header">COLOR</string>
     <string name="collection">COLECCIÓN</string>
     <string name="n_unlocked">%1$d / %2$d desbloqueados</string>
-    <string name="size_header">TAMAÑO</string>
-    <string name="speed_header">VELOCIDAD AL CAMINAR</string>
-    <string name="chat_header">CHARLA</string>
     <string name="reset_position">Restablecer posición</string>
     <string name="reset_position_toast">Volverá a la parte inferior de la pantalla (la próxima vez que aparezca)</string>
-    <string name="level_caps">NIVEL %1$d</string>
     <string name="xp_progress">%1$d / %2$d XP</string>
-    <string name="xp_how">%1$d XP por hábito, +%2$d por terminar el día. Los días parciales también cuentan.</string>
     <string name="level_n">Nivel %1$d</string>
     <string name="personalize">Personalizar</string>
     <plurals name="days_word">
@@ -609,13 +604,16 @@
     <string name="crash_body">¡Lo sentimos! Esto es lo que falló. Se queda en tu teléfono a menos que lo compartas. Enviarlo al desarrollador ayuda a arreglarlo.</string>
     <string name="crash_share">Compartir informe</string>
     <string name="crash_continue">Continuar</string>
-    <string name="entrance_header">ENTRADA</string>
-    <string name="entrance_hint">Cómo aparece y se va tu mascota al abrir o cerrar Mingui. Toca uno para verlo.</string>
     <string-array name="entrance_names">
         <item>Portal</item>
         <item>Pop</item>
         <item>Caminando</item>
         <item>Fundido</item>
         <item>Ninguna</item>
+        <item>Carrera</item>
     </string-array>
+    <string name="opt_size">TAMAÑO</string>
+    <string name="opt_speed">VELOCIDAD</string>
+    <string name="opt_entrance">ENTRADA</string>
+    <string name="opt_chat">CHARLA</string>
 </resources>

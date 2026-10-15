@@ -2555,17 +2555,37 @@ public class MainActivity extends Activity {
                     }).start();
         };
         // Entrance: sprints in from off-stage, skids to a stop in a puff of dust, waves, then strolls.
+        // The screen opens (and closes) with the entrance you picked for your buddy.
         actor.setVisibility(View.INVISIBLE);
-        stage.post(() -> sprintIn(stage, actor, preview, () -> actor.postDelayed(stroll[0], 1400)));
+        stage.post(() -> playIn(BuddyStyle.entranceIndex(this), stage, actor, preview,
+                () -> actor.postDelayed(stroll[0], 1400)));
 
-        LinearLayout moods = chipGroup(getResources().getStringArray(R.array.moods), 2, i -> {
-            preview.mood = i == 0 ? 0f : i == 1 ? 0.5f : 1f;
-            preview.done = i == 2;
+        // Mood preview: a pill on the stage that cycles sad -> okay -> happy.
+        final String[] moodNames = getResources().getStringArray(R.array.moods);
+        final int[] mood = {2};
+        final TextView moodPill = text(moodNames[2], 13, TEXT);
+        moodPill.setTypeface(MEDIUM);
+        moodPill.setPadding(dp(12), dp(7), dp(12), dp(7));
+        moodPill.setBackground(rounded(0x66000000, 16, withAlpha(Color.WHITE, 0x33)));
+        moodPill.setForeground(ripple(16));
+        moodPill.setOnClickListener(v -> {
+            mood[0] = (mood[0] + 1) % 3;
+            moodPill.setText(moodNames[mood[0]]);
+            preview.mood = mood[0] == 0 ? 0f : mood[0] == 1 ? 0.5f : 1f;
+            preview.done = mood[0] == 2;
             preview.jump();
         });
-        moods.setPadding(0, dp(10), 0, 0);
-        body.addView(moods);
-        body.addView(levelSection());
+        FrameLayout.LayoutParams moodLp = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.START);
+        moodLp.topMargin = dp(12);
+        moodLp.leftMargin = dp(12);
+        stage.addView(moodPill, moodLp);
+
+        // Size, speed, entrance and chattiness: one row, tap a tile to cycle it. Right under the stage,
+        // so you see each change (and the entrance animation) play on the buddy straight away.
+        final List<Buddy.BuddyView> minis = new ArrayList<>();
+        LinearLayout.LayoutParams olp = new LinearLayout.LayoutParams(-1, -2);
+        olp.topMargin = dp(10);
+        body.addView(optionsRow(stage, actor, preview, minis), olp);
 
         // ---- Name (the stage tag updates as you type).
         body.addView(sectionLabel(s(R.string.name_header)));
@@ -2613,15 +2633,10 @@ public class MainActivity extends Activity {
         cc.setTypeface(MEDIUM);
         collHead.addView(cc);
         body.addView(collHead);
-        LinearLayout.LayoutParams cbar = new LinearLayout.LayoutParams(-1, dp(6));
-        cbar.bottomMargin = dp(12);
-        body.addView(new BarView(this, (float) owned / total), cbar);
         final LinearLayout grid = new LinearLayout(this);
         grid.setOrientation(LinearLayout.VERTICAL);
         body.addView(grid);
 
-        // The little buddies on the Size / Speed / Chattiness tiles wear the current look too.
-        final List<Buddy.BuddyView> minis = new ArrayList<>();
         // Equipping something is a little celebration.
         final Runnable celebrateEquip = () -> {
             for (Buddy.BuddyView m : minis) dressMini(m);
@@ -2656,28 +2671,7 @@ public class MainActivity extends Activity {
             refresh[0].run();
         });
 
-        // ---- Personality.
-        body.addView(sectionLabel(s(R.string.size_header)));
-        body.addView(pictureChoices(BuddyStyle.sizeNames(this), BuddyStyle.sizeIndex(this),
-                i -> sizeArt(i, minis), i -> {
-                    BuddyStyle.set(this, "buddy_size", i);
-                    applyPreviewStyle(preview);
-                    preview.jump();
-                }));
-        body.addView(sectionLabel(s(R.string.speed_header)));
-        body.addView(pictureChoices(BuddyStyle.speedNames(this), BuddyStyle.speedIndex(this),
-                i -> speedArt(i, minis), i -> BuddyStyle.set(this, "buddy_speed", i)));
-        body.addView(sectionLabel(s(R.string.entrance_header)));
-        TextView entHint = text(s(R.string.entrance_hint), 13, MUTED);
-        entHint.setPadding(dp(4), 0, 0, dp(10));
-        body.addView(entHint);
-        body.addView(chipFlow(BuddyStyle.entranceNames(this), BuddyStyle.entranceIndex(this), i -> {
-            BuddyStyle.set(this, "buddy_entrance", i);
-            demoEntrance(i, stage, actor, preview);
-        }));
-        body.addView(sectionLabel(s(R.string.chat_header)));
-        body.addView(pictureChoices(BuddyStyle.chatNames(this), BuddyStyle.chatIndex(this),
-                i -> chatArt(i, minis), i -> BuddyStyle.set(this, "buddy_chat", i)));
+        body.addView(levelSection());
 
         TextView reset = text(s(R.string.reset_position), 15, ACCENT);
         reset.setTypeface(MEDIUM);
@@ -2699,7 +2693,7 @@ public class MainActivity extends Activity {
             if (leaving[0]) return;
             leaving[0] = true;
             actor.removeCallbacks(stroll[0]);
-            dashOut(stage, actor, preview, d::dismiss);
+            playOut(BuddyStyle.entranceIndex(this), stage, actor, preview, d::dismiss);
         };
         close.setOnClickListener(v -> exit.run());
         if (Build.VERSION.SDK_INT >= 33) {
@@ -2734,57 +2728,62 @@ public class MainActivity extends Activity {
     }
 
     /** Level, XP bar and the evolution roadmap (locked stages are silhouettes). */
+    /**
+     * Level and evolutions in one compact card: level + XP bar on top, then the evolution track
+     * (small buddies joined by a line, the ones not reached yet as silhouettes).
+     */
     private View levelSection() {
         LinearLayout box = new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
+        box.setPadding(dp(16), dp(14), dp(16), dp(12));
+        box.setBackground(rounded(CARD, 18, BORDER));
         int xp = Levels.xp(this), lv = Levels.level(xp);
         int from = Levels.threshold(lv), to = Levels.threshold(lv + 1);
         LinearLayout head = new LinearLayout(this);
         head.setGravity(Gravity.CENTER_VERTICAL);
-        head.setPadding(dp(4), dp(22), dp(4), dp(8));
-        TextView l = text(s(R.string.level_caps, lv), 12, MUTED);
-        l.setLetterSpacing(0.12f);
-        l.setTypeface(MEDIUM);
+        TextView l = text(s(R.string.level_n, lv), 15, TEXT);
+        l.setTypeface(Typeface.DEFAULT_BOLD);
         head.addView(l, new LinearLayout.LayoutParams(0, -2, 1));
-        head.addView(text(s(R.string.xp_progress, xp - from, to - from), 13, TEXT));
+        head.addView(text(s(R.string.xp_progress, xp - from, to - from), 13, MUTED));
         box.addView(head);
         LinearLayout.LayoutParams blp = new LinearLayout.LayoutParams(-1, dp(6));
-        blp.bottomMargin = dp(6);
-        box.addView(new BarView(this, (float) (xp - from) / (to - from)), blp);
-        TextView how = text(s(R.string.xp_how, Levels.XP_PER_HABIT, Levels.XP_DAY_BONUS), 12, MUTED);
-        how.setPadding(dp(4), 0, 0, dp(10));
-        box.addView(how);
+        blp.topMargin = dp(8);
+        blp.bottomMargin = dp(10);
+        box.addView(new BarView(this, (float) (xp - from) / (to - from), ACCENT), blp);
 
-        LinearLayout row = new LinearLayout(this);
+        LinearLayout track = new LinearLayout(this);
+        track.setGravity(Gravity.CENTER_VERTICAL);
+        String[] evo = getResources().getStringArray(R.array.evolution_names);
         for (int i = 0; i < Levels.EVOLUTIONS.length; i++) {
             int at = Levels.EVOLUTIONS[i];
             boolean open = lv >= at;
-            LinearLayout tile = new LinearLayout(this);
-            tile.setOrientation(LinearLayout.VERTICAL);
-            tile.setGravity(Gravity.CENTER_HORIZONTAL);
-            tile.setPadding(dp(6), dp(8), dp(6), dp(10));
-            tile.setBackground(rounded(open ? withAlpha(0xFFFFD166, 0x1A) : CARD, 18,
-                    open ? withAlpha(0xFFFFD166, 0x80) : BORDER));
+            if (i > 0) {
+                View line = new View(this);
+                line.setBackgroundColor(open ? withAlpha(0xFFFFD166, 0x99) : BORDER);
+                track.addView(line, new LinearLayout.LayoutParams(0, dp(2), 1));
+            }
+            LinearLayout step = new LinearLayout(this);
+            step.setOrientation(LinearLayout.VERTICAL);
+            step.setGravity(Gravity.CENTER_HORIZONTAL);
             Buddy.BuddyView mini = new Buddy.BuddyView(this);
             mini.mood = 1f;
             mini.done = open;
             mini.level = at;
-            mini.setScale(0.75f);
+            mini.setScale(0.5f);
             mini.color = BuddyStyle.COLORS[BuddyStyle.colorIndex(this)];
             mini.silhouette = !open;
             mini.selfAnimate = open;
             mini.setClickable(false);
-            tile.addView(mini, new LinearLayout.LayoutParams(dp(76), dp(70)));
-            TextView name = text(open ? getResources().getStringArray(R.array.evolution_names)[i] : "???", 13,
-                    open ? TEXT : MUTED);
-            name.setTypeface(MEDIUM);
-            tile.addView(name);
-            tile.addView(text(s(R.string.level_n, at), 11, open ? MUTED : STREAK_ORANGE));
-            LinearLayout.LayoutParams tlp = new LinearLayout.LayoutParams(0, -2, 1);
-            if (i > 0) tlp.leftMargin = dp(8);
-            row.addView(tile, tlp);
+            step.addView(mini, new LinearLayout.LayoutParams(dp(52), dp(48)));
+            TextView name = text(open ? evo[i] : s(R.string.level_n, at), 11, open ? TEXT : STREAK_ORANGE);
+            name.setSingleLine(true);
+            step.addView(name);
+            track.addView(step);
         }
-        box.addView(row);
+        box.addView(track, new LinearLayout.LayoutParams(-1, -2));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+        lp.topMargin = dp(12);
+        box.setLayoutParams(lp);
         return box;
     }
 
@@ -2798,46 +2797,122 @@ public class MainActivity extends Activity {
     }
 
     /** Plays an entrance style on the Personalize stage: out, then back in that way. */
-    private void demoEntrance(int style, final FrameLayout stage, final LinearLayout actor,
+    private void demoEntrance(final int style, final FrameLayout stage, final LinearLayout actor,
                               final Buddy.BuddyView preview) {
+        playOut(style, stage, actor, preview, () -> playIn(style, stage, actor, preview, null));
+    }
+
+    private void stagePivots(Buddy.BuddyView preview) {
         preview.animate().cancel();
         preview.setPivotX(preview.getWidth() / 2f);
         preview.setPivotY(preview.getHeight() * 0.92f);
         preview.setCameraDistance(8000 * getResources().getDisplayMetrics().density);
-        final Runnable settle = () -> {
-            preview.setRotationY(0);
-            preview.jump();
-            preview.startIdle(Buddy.BuddyView.WAVE);
-        };
+    }
+
+    /** The buddy leaves the stage the way it would leave your screen. */
+    private void playOut(int style, final FrameLayout stage, final LinearLayout actor,
+                         final Buddy.BuddyView preview, final Runnable then) {
+        if (actor.getWidth() == 0) {
+            then.run();
+            return;
+        }
+        stagePivots(preview);
+        actor.animate().cancel();
         switch (style) {
             case BuddyStyle.ENTRANCE_PORTAL:
-                // Sinks with a spin, then spins back up.
                 preview.animate().translationY(preview.getHeight()).rotationY(-360).alpha(0f).setDuration(420)
-                        .withEndAction(() -> {
-                            preview.setRotationY(0);
-                            preview.animate().translationY(0).rotationY(360).alpha(1f).setDuration(620)
-                                    .setInterpolator(new OvershootInterpolator(1.3f)).withEndAction(settle).start();
-                        }).start();
+                        .setInterpolator(new android.view.animation.AccelerateInterpolator(1.5f))
+                        .withEndAction(then).start();
                 break;
             case BuddyStyle.ENTRANCE_POP:
                 preview.animate().scaleX(0f).scaleY(0f).setDuration(240)
                         .setInterpolator(new android.view.animation.AnticipateInterpolator(2f))
-                        .withEndAction(() -> preview.animate().scaleX(1f).scaleY(1f).setDuration(480)
-                                .setInterpolator(new OvershootInterpolator(2.2f)).withEndAction(settle).start()).start();
+                        .withEndAction(then).start();
                 break;
-            case BuddyStyle.ENTRANCE_WALK:
-                dashOut(stage, actor, preview, () -> sprintIn(stage, actor, preview, null));
+            case BuddyStyle.ENTRANCE_WALK: {
+                preview.facing = 1;
+                preview.walking = true;
+                float end = stage.getWidth() / 2f + actor.getWidth() / 2f + dp(20);
+                actor.animate().translationX(end).setDuration(900).setInterpolator(new LinearInterpolator())
+                        .withEndAction(() -> {
+                            preview.walking = false;
+                            then.run();
+                        }).start();
+                break;
+            }
+            case BuddyStyle.ENTRANCE_SPRINT:
+                dashOut(stage, actor, preview, then);
                 break;
             case BuddyStyle.ENTRANCE_FADE:
-                preview.animate().alpha(0f).setDuration(260).withEndAction(() ->
-                        preview.animate().alpha(1f).setDuration(420).withEndAction(settle).start()).start();
+                preview.animate().alpha(0f).setDuration(260).withEndAction(then).start();
                 break;
             default:
                 preview.setAlpha(0f);
-                preview.postDelayed(() -> {
-                    preview.setAlpha(1f);
-                    settle.run();
-                }, 400);
+                preview.postDelayed(then, 250);
+                break;
+        }
+    }
+
+    /** The buddy arrives on the stage the way it would arrive on your screen. */
+    private void playIn(int style, final FrameLayout stage, final LinearLayout actor,
+                        final Buddy.BuddyView preview, final Runnable then) {
+        if (stage.getWidth() == 0 || actor.getWidth() == 0) {
+            stage.post(() -> playIn(style, stage, actor, preview, then));
+            return;
+        }
+        stagePivots(preview);
+        actor.animate().cancel();
+        final Runnable settle = () -> {
+            preview.setRotationY(0);
+            preview.setRotation(0);
+            preview.jump();
+            preview.startIdle(Buddy.BuddyView.WAVE);
+            if (then != null) then.run();
+        };
+        if (style == BuddyStyle.ENTRANCE_SPRINT) {
+            preview.setAlpha(1f);
+            sprintIn(stage, actor, preview, then);
+            return;
+        }
+        actor.setVisibility(View.VISIBLE);
+        float off = -(stage.getWidth() / 2f + actor.getWidth() / 2f + dp(10));
+        switch (style) {
+            case BuddyStyle.ENTRANCE_PORTAL:
+                actor.setTranslationX(0);
+                preview.setTranslationY(preview.getHeight());
+                preview.setRotationY(0);
+                preview.setAlpha(0f);
+                preview.animate().translationY(0).rotationY(360).alpha(1f).setDuration(620)
+                        .setInterpolator(new OvershootInterpolator(1.3f)).withEndAction(settle).start();
+                break;
+            case BuddyStyle.ENTRANCE_POP:
+                actor.setTranslationX(0);
+                preview.setAlpha(1f);
+                preview.setScaleX(0f);
+                preview.setScaleY(0f);
+                preview.animate().scaleX(1f).scaleY(1f).setDuration(480)
+                        .setInterpolator(new OvershootInterpolator(2.2f)).withEndAction(settle).start();
+                break;
+            case BuddyStyle.ENTRANCE_WALK:
+                preview.setAlpha(1f);
+                actor.setTranslationX(off);
+                preview.facing = 1;
+                preview.walking = true;
+                actor.animate().translationX(0).setDuration(1100).setInterpolator(new LinearInterpolator())
+                        .withEndAction(() -> {
+                            preview.walking = false;
+                            settle.run();
+                        }).start();
+                break;
+            case BuddyStyle.ENTRANCE_FADE:
+                actor.setTranslationX(0);
+                preview.setAlpha(0f);
+                preview.animate().alpha(1f).setDuration(420).withEndAction(settle).start();
+                break;
+            default:
+                actor.setTranslationX(0);
+                preview.setAlpha(1f);
+                settle.run();
                 break;
         }
     }
@@ -3180,16 +3255,16 @@ public class MainActivity extends Activity {
             if (need > best && (next < 0 || need < BuddyStyle.unlockStreak(this, next))) next = i;
         }
         List<Accessories.Def> defs = Accessories.all(this);
-        LinearLayout row = null;
+        // One horizontally scrolling strip instead of a tall grid.
+        final HorizontalScrollView strip = new HorizontalScrollView(this);
+        strip.setHorizontalScrollBarEnabled(false);
+        LinearLayout row = new LinearLayout(this);
+        strip.addView(row);
+        grid.addView(strip);
         int n = defs.size();
+        int scrollTo = -1;
         String[] accNames = BuddyStyle.accessoryNames(this);
         for (int i = 0; i < n; i++) {
-            if (i % 3 == 0) {
-                row = new LinearLayout(this);
-                LinearLayout.LayoutParams rlp = new LinearLayout.LayoutParams(-1, -2);
-                rlp.bottomMargin = dp(8);
-                grid.addView(row, rlp);
-            }
             final int idx = i;
             final int need = BuddyStyle.unlockStreak(this, i);
             final boolean open = best >= need;
@@ -3285,82 +3360,153 @@ public class MainActivity extends Activity {
                 equip.run();
                 refresh.run();
             });
-            // Match parent height: every tile in a row gets the height of the tallest one.
-            LinearLayout.LayoutParams tlp = new LinearLayout.LayoutParams(0, -1, 1);
-            if (i % 3 != 0) tlp.leftMargin = dp(8);
+            // Fixed width; match parent height so every tile is as tall as the tallest one.
+            LinearLayout.LayoutParams tlp = new LinearLayout.LayoutParams(dp(100), -1);
+            if (i > 0) tlp.leftMargin = dp(8);
             row.addView(tileWrap, tlp);
+            if (equipped) scrollTo = i;
         }
-        // Keep tiles the same width when the last row isn't full.
-        for (int i = n; i % 3 != 0; i++) {
-            LinearLayout.LayoutParams slp = new LinearLayout.LayoutParams(0, 1, 1);
-            slp.leftMargin = dp(8);
-            row.addView(new View(this), slp);
-        }
+        // Bring the equipped accessory into view.
+        final int target = scrollTo;
+        final LinearLayout strRow = row;
+        if (target > 1) strip.post(() -> strip.scrollTo(strRow.getChildAt(target).getLeft() - dp(40), 0));
     }
 
     /** Single-choice pills in a row. */
-    /** Like {@link #chipGroup} but chips keep their natural width and wrap onto more lines (for 4+ options). */
-    private View chipFlow(final String[] labels, int selected, final java.util.function.IntConsumer onPick) {
-        FlowLayout flow = new FlowLayout(this, dp(8), dp(8));
-        final TextView[] chips = new TextView[labels.length];
-        for (int i = 0; i < labels.length; i++) {
-            final int idx = i;
-            TextView chip = text(labels[i], 14, TEXT);
-            chip.setTypeface(MEDIUM);
-            chip.setSingleLine(true);
-            chip.setPadding(dp(16), dp(10), dp(16), dp(10));
-            chip.setForeground(ripple(20));
-            chips[i] = chip;
-            chip.setOnClickListener(v -> {
-                for (int k = 0; k < chips.length; k++) styleChip(chips[k], k == idx);
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                onPick.accept(idx);
-            });
-            styleChip(chip, i == selected);
-            flow.addView(chip);
-        }
-        return flow;
-    }
-
-    /** Picture tiles: a little drawn scene over a label, one per option, selected like a chip. */
-    private LinearLayout pictureChoices(final String[] labels, int selected,
-                                        java.util.function.IntFunction<View> art,
-                                        final java.util.function.IntConsumer onPick) {
-        final LinearLayout row = new LinearLayout(this);
-        final LinearLayout[] tiles = new LinearLayout[labels.length];
-        for (int i = 0; i < labels.length; i++) {
-            final int idx = i;
+    /**
+     * Size, walking speed, entrance and chattiness as four tiles in one row. Each shows a little scene
+     * of its current value; tapping cycles to the next value and plays it on the stage above.
+     */
+    private View optionsRow(final FrameLayout stage, final LinearLayout actor, final Buddy.BuddyView preview,
+                            final List<Buddy.BuddyView> minis) {
+        LinearLayout row = new LinearLayout(this);
+        String[] heads = {s(R.string.opt_size), s(R.string.opt_speed), s(R.string.opt_entrance), s(R.string.opt_chat)};
+        final String[][] names = {BuddyStyle.sizeNames(this), BuddyStyle.speedNames(this),
+                BuddyStyle.entranceNames(this), BuddyStyle.chatNames(this)};
+        final String[] keys = {"buddy_size", "buddy_speed", "buddy_entrance", "buddy_chat"};
+        final int[] cur = {BuddyStyle.sizeIndex(this), BuddyStyle.speedIndex(this),
+                BuddyStyle.entranceIndex(this), BuddyStyle.chatIndex(this)};
+        for (int k = 0; k < 4; k++) {
+            final int opt = k;
             LinearLayout tile = new LinearLayout(this);
             tile.setOrientation(LinearLayout.VERTICAL);
             tile.setGravity(Gravity.CENTER_HORIZONTAL);
-            tile.setPadding(dp(4), dp(8), dp(4), dp(10));
-            tile.setForeground(ripple(20));
-            View scene = art.apply(i);
-            tile.addView(scene, new LinearLayout.LayoutParams(-1, dp(70)));
-            TextView l = text(labels[i], 13, TEXT);
-            l.setTypeface(MEDIUM);
-            l.setGravity(Gravity.CENTER);
-            l.setSingleLine(true);
-            l.setEllipsize(TextUtils.TruncateAt.END);
-            l.setPadding(0, dp(6), 0, 0);
-            tile.addView(l, new LinearLayout.LayoutParams(-1, -2));
-            tiles[i] = tile;
+            tile.setPadding(dp(4), dp(6), dp(4), dp(8));
+            tile.setBackground(rounded(CARD, 18, BORDER));
+            tile.setForeground(ripple(18));
+            final FrameLayout art = new FrameLayout(this);
+            art.addView(optionArt(opt, cur[opt], minis), new FrameLayout.LayoutParams(-1, -1));
+            tile.addView(art, new LinearLayout.LayoutParams(-1, dp(52)));
+            TextView h = text(heads[k], 10, MUTED);
+            h.setLetterSpacing(0.1f);
+            h.setTypeface(MEDIUM);
+            h.setSingleLine(true);
+            h.setPadding(0, dp(4), 0, 0);
+            tile.addView(h);
+            final TextView value = text(names[k][cur[k]], 13, TEXT);
+            value.setTypeface(MEDIUM);
+            value.setSingleLine(true);
+            value.setEllipsize(TextUtils.TruncateAt.END);
+            value.setGravity(Gravity.CENTER);
+            tile.addView(value, new LinearLayout.LayoutParams(-1, -2));
+            tile.setContentDescription(heads[k] + ": " + names[k][cur[k]]);
             tile.setOnClickListener(v -> {
-                for (int k = 0; k < tiles.length; k++) styleTile(tiles[k], k == idx);
+                cur[opt] = (cur[opt] + 1) % names[opt].length;
+                BuddyStyle.set(this, keys[opt], cur[opt]);
+                value.setText(names[opt][cur[opt]]);
+                v.setContentDescription(heads[opt] + ": " + names[opt][cur[opt]]);
+                art.removeAllViews();
+                art.addView(optionArt(opt, cur[opt], minis), new FrameLayout.LayoutParams(-1, -1));
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                onPick.accept(idx);
+                if (opt == 0) {
+                    applyPreviewStyle(preview);
+                    preview.jump();
+                } else if (opt == 2) {
+                    demoEntrance(cur[opt], stage, actor, preview);
+                } else {
+                    preview.jump();
+                }
             });
-            styleTile(tile, i == selected);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, -2, 1);
-            if (i > 0) lp.leftMargin = dp(8);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, -1, 1);
+            if (k > 0) lp.leftMargin = dp(6);
             row.addView(tile, lp);
         }
         return row;
     }
 
-    private void styleTile(LinearLayout tile, boolean on) {
-        tile.setBackground(on ? rounded(withAlpha(ACCENT, 0x26), 20, ACCENT) : rounded(CARD, 20, BORDER));
-        ((TextView) tile.getChildAt(1)).setTextColor(on ? TEXT : MUTED);
+    private View optionArt(int opt, int value, List<Buddy.BuddyView> minis) {
+        switch (opt) {
+            case 0: return sizeArt(value, minis);
+            case 1: return speedArt(value, minis);
+            case 2: return entranceArt(value, minis);
+            default: return chatArt(value, minis);
+        }
+    }
+
+    /** Entrance: a mini buddy looping that entrance (rise from a hole, pop, walk in, fade, or just there). */
+    private View entranceArt(final int style, List<Buddy.BuddyView> minis) {
+        final FrameLayout art = new FrameLayout(this);
+        art.setClipChildren(true);
+        if (style == BuddyStyle.ENTRANCE_PORTAL) {
+            View hole = new View(this);
+            GradientDrawable g = new GradientDrawable();
+            g.setShape(GradientDrawable.OVAL);
+            g.setColor(0xFF07051A);
+            g.setStroke(dp(1), 0xFFD9CFFF);
+            hole.setBackground(g);
+            FrameLayout.LayoutParams hlp = new FrameLayout.LayoutParams(dp(34), dp(8), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+            hlp.bottomMargin = dp(1);
+            art.addView(hole, hlp);
+        }
+        final Buddy.BuddyView m = mini(minis, 0.42f);
+        art.addView(m, new FrameLayout.LayoutParams(-1, -1));
+        if (style == BuddyStyle.ENTRANCE_NONE) return art;
+        final ValueAnimator loop = ValueAnimator.ofFloat(0f, 1f);
+        loop.setDuration(2200);
+        loop.setRepeatCount(ValueAnimator.INFINITE);
+        loop.setInterpolator(new LinearInterpolator());
+        loop.addUpdateListener(a -> {
+            if (!m.isAttachedToWindow() && a.getCurrentPlayTime() > 3000) {
+                a.cancel();
+                return;
+            }
+            float t = (float) a.getAnimatedValue();
+            // In for the first 40%, stay, out for 70-85%, gone till the end.
+            float in = Math.min(1f, t / 0.4f), out = t < 0.7f ? 0f : Math.min(1f, (t - 0.7f) / 0.15f);
+            float k = in * (1 - out);
+            m.setPivotX(m.getWidth() / 2f);
+            m.setPivotY(m.getHeight());
+            switch (style) {
+                case BuddyStyle.ENTRANCE_PORTAL:
+                    m.setTranslationY((1 - k) * m.getHeight());
+                    m.setRotationY(360 * (1 - k));
+                    break;
+                case BuddyStyle.ENTRANCE_POP: {
+                    float s = k < 1 ? k * (1.25f - 0.25f * k) : 1f;
+                    m.setScaleX(s);
+                    m.setScaleY(s);
+                    break;
+                }
+                case BuddyStyle.ENTRANCE_WALK:
+                    m.walking = k > 0 && k < 1;
+                    m.setTranslationX((k - 1) * art.getWidth() * (t < 0.7f ? 1 : -1));
+                    break;
+                case BuddyStyle.ENTRANCE_SPRINT: {
+                    // Dashes in leaning forward, leans back as it skids, dashes off.
+                    float e = 1 - (1 - in) * (1 - in) * (1 - in);
+                    float x = t < 0.7f ? (e - 1) * art.getWidth() : out * art.getWidth();
+                    m.walking = (t < 0.3f) || (t >= 0.7f && out < 1);
+                    m.setTranslationX(x);
+                    m.setRotation(t < 0.3f ? 12 : t < 0.45f ? -14 * (1 - (t - 0.3f) / 0.15f) : t >= 0.7f ? 12 : 0);
+                    break;
+                }
+                default:
+                    m.setAlpha(k);
+                    break;
+            }
+        });
+        art.post(loop::start);
+        return art;
     }
 
     private Buddy.BuddyView mini(List<Buddy.BuddyView> minis, float scale) {

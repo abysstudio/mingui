@@ -332,6 +332,7 @@ final class Buddy {
 
     /** Resets everything an entrance/exit animation may have changed. */
     private void restPose() {
+        body.setRotation(0);
         body.setTranslationX(0);
         body.setTranslationY(0);
         body.setRotationY(0);
@@ -385,6 +386,50 @@ final class Buddy {
                 body.setAlpha(0f);
                 runAnim(420, a -> body.setAlpha((float) a.getAnimatedValue() / 420f), this::restPose);
                 break;
+            case BuddyStyle.ENTRANCE_SPRINT: {
+                // Sprint in from the nearest edge leaning forward, then brake: lean back and skid to a stop.
+                final int[] size = screen();
+                final float home = Math.max(0, Math.min(size[0] - bw(), x));
+                final int dir = home < size[0] / 2f ? 1 : -1;
+                final float start = dir > 0 ? -bw() : size[0];
+                final float brake = home - dir * dp(36);
+                body.facing = dir;
+                body.setPivotX(bw() / 2f);
+                body.setPivotY(bh());
+                final android.view.animation.Interpolator dash = new android.view.animation.AccelerateInterpolator(1.2f),
+                        slide = new android.view.animation.DecelerateInterpolator(2f),
+                        rock = new android.view.animation.OvershootInterpolator(3f);
+                runAnim(900, a -> {
+                    float t = (float) a.getAnimatedValue();
+                    float px;
+                    if (t < 420) {
+                        float k = dash.getInterpolation(t / 420);
+                        px = start + (brake - start) * k;
+                        body.walking = true;
+                        body.setRotation(11 * dir);
+                    } else if (t < 720) {
+                        float k = slide.getInterpolation((t - 420) / 300);
+                        px = brake + (home - brake) * k;
+                        body.walking = false;
+                        body.setRotation(-13 * dir * (1 - k * 0.3f));
+                    } else {
+                        float k = rock.getInterpolation((t - 720) / 180);
+                        px = home;
+                        body.setRotation(-13 * dir * 0.7f * (1 - k));
+                    }
+                    x = px;
+                    lp.x = (int) px;
+                    update(root, lp);
+                    body.invalidate();
+                }, () -> {
+                    x = home;
+                    body.setRotation(0);
+                    restPose();
+                    body.jump();
+                    body.startIdle(BuddyView.WAVE);
+                });
+                break;
+            }
             default:
                 restPose();
                 break;
@@ -435,6 +480,41 @@ final class Buddy {
             case BuddyStyle.ENTRANCE_FADE:
                 runAnim(260, a -> body.setAlpha(1 - (float) a.getAnimatedValue() / 260f), gone);
                 break;
+            case BuddyStyle.ENTRANCE_SPRINT: {
+                // Crouch, then dash off the nearest edge leaning forward.
+                final int[] size = screen();
+                final float from = x, home = x;
+                final int dir = from < size[0] / 2f ? -1 : 1;
+                final float to = dir < 0 ? -bw() : size[0];
+                body.facing = dir;
+                body.setPivotX(bw() / 2f);
+                body.setPivotY(bh());
+                final android.view.animation.Interpolator dash = new android.view.animation.AccelerateInterpolator(1.6f);
+                runAnim(480, a -> {
+                    float t = (float) a.getAnimatedValue();
+                    if (t < 110) {
+                        float k = t / 110;
+                        body.setScaleX(1 + 0.1f * k);
+                        body.setScaleY(1 - 0.14f * k);
+                    } else {
+                        float k = dash.getInterpolation((t - 110) / 370);
+                        body.setScaleX(1.1f - 0.1f * k);
+                        body.setScaleY(0.86f + 0.14f * k);
+                        body.setRotation(12 * dir);
+                        body.walking = true;
+                        lp.x = (int) (from + (to - from) * k);
+                        update(root, lp);
+                    }
+                    body.invalidate();
+                }, () -> {
+                    body.setRotation(0);
+                    x = home; // reappear from this spot
+                    lp.x = (int) home;
+                    update(root, lp);
+                    gone.run();
+                });
+                break;
+            }
             default:
                 gone.run();
                 break;
@@ -559,6 +639,12 @@ final class Buddy {
             return;
         }
         if (root.getVisibility() != View.VISIBLE || leaving) enter();
+        if (anim != null) {
+            // An entrance animation is moving the buddy: let it finish before walking around again.
+            body.invalidate();
+            handler.postDelayed(frame, FRAME_MS);
+            return;
+        }
 
         if (dragging) {
             body.invalidate();

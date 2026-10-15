@@ -263,14 +263,9 @@
     <string name="colour_header">COLOUR</string>
     <string name="collection">COLLECTION</string>
     <string name="n_unlocked">%1$d / %2$d unlocked</string>
-    <string name="size_header">SIZE</string>
-    <string name="speed_header">WALKING SPEED</string>
-    <string name="chat_header">CHATTINESS</string>
     <string name="reset_position">Reset position</string>
     <string name="reset_position_toast">Back to the bottom of the screen (next time it appears)</string>
-    <string name="level_caps">LEVEL %1$d</string>
     <string name="xp_progress">%1$d / %2$d XP</string>
-    <string name="xp_how">%1$d XP per habit, +%2$d for finishing the day. Partial days count too.</string>
     <string name="level_n">Level %1$d</string>
     <string name="personalize">Personalize</string>
     <plurals name="days_word">
@@ -609,13 +604,16 @@
     <string name="crash_body">Sorry! Here\'s what went wrong. It stays on your phone unless you share it. Sending it to the developer helps fix it.</string>
     <string name="crash_share">Share report</string>
     <string name="crash_continue">Continue</string>
-    <string name="entrance_header">ENTRANCE</string>
-    <string name="entrance_hint">How your buddy comes and goes when you open or close Mingui. Tap one to see it.</string>
     <string-array name="entrance_names">
         <item>Portal</item>
         <item>Pop</item>
         <item>Walk in</item>
         <item>Fade</item>
         <item>None</item>
+        <item>Sprint</item>
     </string-array>
+    <string name="opt_size">SIZE</string>
+    <string name="opt_speed">SPEED</string>
+    <string name="opt_entrance">ENTRANCE</string>
+    <string name="opt_chat">CHAT</string>
 </resources>

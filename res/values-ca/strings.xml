@@ -263,14 +263,9 @@
     <string name="colour_header">COLOR</string>
     <string name="collection">COL·LECCIÓ</string>
     <string name="n_unlocked">%1$d / %2$d desbloquejats</string>
-    <string name="size_header">MIDA</string>
-    <string name="speed_header">VELOCITAT EN CAMINAR</string>
-    <string name="chat_header">XERRAMECA</string>
     <string name="reset_position">Restableix la posició</string>
     <string name="reset_position_toast">Tornarà a la part de baix de la pantalla (la propera vegada que aparegui)</string>
-    <string name="level_caps">NIVELL %1$d</string>
     <string name="xp_progress">%1$d / %2$d XP</string>
-    <string name="xp_how">%1$d XP per hàbit, +%2$d per acabar el dia. Els dies parcials també compten.</string>
     <string name="level_n">Nivell %1$d</string>
     <string name="personalize">Personalitza</string>
     <plurals name="days_word">
@@ -609,13 +604,16 @@
     <string name="crash_body">Ho sentim! Això és el que ha fallat. Es queda al teu telèfon tret que el comparteixis. Enviar-lo al desenvolupador ajuda a arreglar-ho.</string>
     <string name="crash_share">Comparteix l\'informe</string>
     <string name="crash_continue">Continua</string>
-    <string name="entrance_header">ENTRADA</string>
-    <string name="entrance_hint">Com apareix i se\'n va la teva mascota quan obres o tanques Mingui. Toca\'n un per veure\'l.</string>
     <string-array name="entrance_names">
         <item>Portal</item>
         <item>Pop</item>
         <item>Caminant</item>
         <item>Fos</item>
         <item>Cap</item>
+        <item>Cursa</item>
     </string-array>
+    <string name="opt_size">MIDA</string>
+    <string name="opt_speed">VELOCITAT</string>
+    <string name="opt_entrance">ENTRADA</string>
+    <string name="opt_chat">XERRADA</string>
 </resources>
