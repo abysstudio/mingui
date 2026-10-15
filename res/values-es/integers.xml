@@ -1,0 +1,6 @@
+<resources>
+    <!-- Greeting hours (24h): morning until greet_morning_end, afternoon until greet_afternoon_end, then evening.
+         Spanish and Catalan keep "días/dia" until lunch and "tardes/tarda" until about 9pm. -->
+    <integer name="greet_morning_end">14</integer>
+    <integer name="greet_afternoon_end">21</integer>
+</resources>

@@ -2483,6 +2483,7 @@ public class MainActivity extends Activity {
 
         final LinearLayout actor = new LinearLayout(this);
         actor.setOrientation(LinearLayout.VERTICAL);
+        actor.setClipChildren(false); // a leaning / spinning large buddy may draw past its own box
         actor.setGravity(Gravity.CENTER_HORIZONTAL);
         final Buddy.BuddyView preview = new Buddy.BuddyView(this);
         preview.selfAnimate = true;
@@ -5314,8 +5315,8 @@ public class MainActivity extends Activity {
     private String greeting() {
         int h = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         if (h < 5) return s(R.string.up_late);
-        if (h < 12) return s(R.string.good_morning);
-        if (h < 17) return s(R.string.good_afternoon);
+        if (h < getResources().getInteger(R.integer.greet_morning_end)) return s(R.string.good_morning);
+        if (h < getResources().getInteger(R.integer.greet_afternoon_end)) return s(R.string.good_afternoon);
         return s(R.string.good_evening);
     }
 

@@ -82,6 +82,9 @@ final class Buddy {
         clipBox = new android.widget.FrameLayout(c);
         clipBox.addView(body, new android.widget.FrameLayout.LayoutParams(bw(), bh()));
         root.addView(clipBox, new android.widget.FrameLayout.LayoutParams(-1, -1));
+        // Let a leaning / popping / stretching buddy draw into the animation margin (see animMode).
+        root.setClipChildren(false);
+        clipBox.setClipChildren(false);
         cloud = new CloudView(c);
         cloud.setOnClickListener(v -> {
             hideCloud();
@@ -190,14 +193,27 @@ final class Buddy {
     }
 
     /** While a portal animation runs, the window grows a little downward so the portal fits below the feet. */
-    private void portalMode(boolean on) {
-        int h = on ? bh() + dp(14 * scale) : bh();
-        if (lp.height != h) {
-            lp.height = h;
-            update(root, lp);
-        }
+    /** Extra room around the buddy while an entrance animation runs (0 at rest). */
+    private int pad;
+    /** Whether the running animation clips the buddy at the portal's rim. */
+    private boolean portalClip;
+
+    /**
+     * While an entrance or exit animation runs, the window grows by a margin on every side (and a bit more
+     * below, for the portal), so a large buddy that leans, pops or stretches is never cut off. At rest the
+     * window is exactly the buddy again, so it doesn't block touches around it.
+     */
+    private void animMode(boolean on) {
+        pad = on ? dp(28 * scale) : 0;
+        root.setPadding(pad, pad, pad, 0);
+        lp.width = bw() + 2 * pad;
+        lp.height = bh() + pad + (on ? dp(14 * scale) : 0);
+        lp.x = (int) x - pad;
+        lp.y = (int) baseY(screen()) - pad;
+        update(root, lp);
         portal.ground = ground();
-        clipBox.setClipBounds(on ? new android.graphics.Rect(0, 0, bw(), (int) ground()) : null);
+        clipBox.setClipBounds(on && portalClip
+                ? new android.graphics.Rect(-pad, -pad, bw() + pad, (int) ground()) : null);
         if (!on) portal.reset();
     }
 
@@ -210,6 +226,7 @@ final class Buddy {
             anim.removeAllListeners();
             anim.cancel();
         }
+        animMode(true);
         anim = android.animation.ValueAnimator.ofFloat(0, ms);
         anim.setDuration(ms);
         anim.setInterpolator(new android.view.animation.LinearInterpolator());
@@ -218,6 +235,7 @@ final class Buddy {
             @Override
             public void onAnimationEnd(android.animation.Animator a) {
                 anim = null;
+                animMode(false);
                 end.run();
             }
         });
@@ -230,6 +248,8 @@ final class Buddy {
      * Picks up from wherever an interrupted leave got to.
      */
     private void enter() {
+        // Settings may have just changed (e.g. you're leaving Personalize): use them from the first frame.
+        applyStyle();
         int style = BuddyStyle.entranceIndex(c);
         if (style != BuddyStyle.ENTRANCE_PORTAL) {
             simpleEnter(style);
@@ -238,7 +258,7 @@ final class Buddy {
         leaving = false;
         boolean wasGone = root.getVisibility() != View.VISIBLE;
         root.setVisibility(View.VISIBLE);
-        portalMode(true);
+        portalClip = true;
         body.setPivotX(bw() / 2f);
         body.setPivotY(bh());
         final float g = ground();
@@ -272,7 +292,6 @@ final class Buddy {
             body.setScaleY(1f);
             body.setAlpha(1f);
             body.setTranslationY(0);
-            portalMode(false);
             body.jump();
             body.startIdle(BuddyView.WAVE);
         });
@@ -289,7 +308,7 @@ final class Buddy {
         }
         leaving = true;
         removeCloudNow();
-        portalMode(true);
+        portalClip = true;
         body.setPivotX(bw() / 2f);
         body.setPivotY(bh());
         final float g = ground();
@@ -326,7 +345,6 @@ final class Buddy {
             body.setAlpha(1f);
             body.setScaleX(1f);
             body.setScaleY(1f);
-            portalMode(false);
         });
     }
 
@@ -347,7 +365,7 @@ final class Buddy {
         leaving = false;
         boolean wasGone = root.getVisibility() != View.VISIBLE;
         root.setVisibility(View.VISIBLE);
-        portalMode(false);
+        portalClip = false;
         body.setPivotX(bw() / 2f);
         body.setPivotY(bh());
         if (!wasGone && anim != null) {
@@ -414,7 +432,7 @@ final class Buddy {
                         body.setRotation(-13 * dir * 0.7f * (1 - k));
                     }
                     x = px;
-                    lp.x = (int) px;
+                    lp.x = (int) px - pad;
                     update(root, lp);
                     body.invalidate();
                 }, () -> {
@@ -462,7 +480,7 @@ final class Buddy {
                 final float home = from;
                 runAnim((long) (Math.abs(to - from) / (dp(200)) * 1000) + 150, a -> {
                     float k = (float) a.getAnimatedValue() / a.getDuration();
-                    lp.x = (int) (from + (to - from) * k);
+                    lp.x = (int) (from + (to - from) * k) - pad;
                     update(root, lp);
                     body.invalidate();
                 }, () -> {
@@ -495,7 +513,7 @@ final class Buddy {
                         body.setScaleY(0.86f + 0.14f * k);
                         body.setRotation(12 * dir);
                         body.walking = true;
-                        lp.x = (int) (from + (to - from) * k);
+                        lp.x = (int) (from + (to - from) * k) - pad;
                         update(root, lp);
                     }
                     body.invalidate();
