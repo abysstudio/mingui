@@ -539,7 +539,8 @@ final class Buddy {
         handler.post(frame);
     }
 
-    private static final int BODY_W = 72, BODY_H = 80;
+    /** Window size around the buddy: wide enough for its arms, wings and glow. */
+    private static final int BODY_W = 88, BODY_H = 80;
     private float scale = 1f, speedMul = 1f;
     private int chat = 1;
 
@@ -596,7 +597,10 @@ final class Buddy {
     }
 
     private float baseY(int[] size) {
-        return homeY >= 0 ? Math.min(homeY, size[1] - bh()) : size[1] - dp(190);
+        // Default: a little above the middle of the screen. The bottom is where the dock, search bar and
+        // apps' tab bars live, so standing there covers icons; the middle of a home screen is usually free.
+        // Dragging the buddy elsewhere saves that spot instead.
+        return homeY >= 0 ? Math.min(homeY, size[1] - bh()) : size[1] * 0.42f - bh() / 2f;
     }
 
     void hide() {
@@ -1230,7 +1234,9 @@ final class Buddy {
             float midY = (top + bottom) / 2;
             // Evolution: soft pulsing aura (level 5+).
             if (level >= Levels.GLOW) {
-                float gr = bodyW * 1.7f;
+                // Fades out before the edge of the view, so it's never cut off into a visible box.
+                float gr = Math.min(bodyW * 1.7f, Math.min(Math.min(cx, getWidth() - cx),
+                        Math.min(midY, getHeight() - midY)) - 1);
                 int a = (int) (90 + 40 * Math.sin(t * 2));
                 glow.setShader(new android.graphics.RadialGradient(cx, midY, gr,
                         new int[]{Color.argb(a, Color.red(col), Color.green(col), Color.blue(col)), 0x00000000},

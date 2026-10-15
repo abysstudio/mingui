@@ -66,7 +66,7 @@ final class HabitMeta {
 
     private static JSONObject all(Context c) {
         try {
-            return new JSONObject(Routine.prefs(c).getString("habit_meta", "{}"));
+            return new JSONObject(Routine.prefs(c).getString(Routine.key("habit_meta"), "{}"));
         } catch (JSONException e) {
             return new JSONObject();
         }

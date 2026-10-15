@@ -104,7 +104,7 @@ final class Routine {
     /** Habit name -> timer minutes, for habits that have a timer. */
     static java.util.Map<String, Integer> timers(Context c) {
         java.util.Map<String, Integer> out = new java.util.HashMap<>();
-        for (String e : prefs(c).getStringSet("timers", new HashSet<String>())) {
+        for (String e : prefs(c).getStringSet(key("timers"), new HashSet<String>())) {
             int tab = e.indexOf('\t');
             if (tab <= 0) continue;
             try {
@@ -174,7 +174,85 @@ final class Routine {
     }
 
     static SharedPreferences prefs(Context c) {
-        return c.createDeviceProtectedStorageContext().getSharedPreferences("routine", Context.MODE_PRIVATE);
+        SharedPreferences p = c.createDeviceProtectedStorageContext().getSharedPreferences("routine", Context.MODE_PRIVATE);
+        applyPending(p);
+        return p;
+    }
+
+    // ---- edits saved for tomorrow: an edit that would make an unfinished day easier (removing an
+    // unticked habit, shortening its timer, taking today off its schedule) can't unlock apps early,
+    // so the edited routine is kept under "pending_" keys and becomes the routine when its day starts.
+
+    /** The prefs that make up the routine itself; everything else (ticks, history, settings) applies right away. */
+    private static final String[] ROUTINE_KEYS = {"items", "timers", "days", "since", "habit_meta"};
+    private static final String PENDING = "pending_", PENDING_FROM = "pending_from";
+    /** Set while the editor loads its drafts, so it shows (and keeps editing) tomorrow's routine. */
+    private static final ThreadLocal<Boolean> READ_PENDING = new ThreadLocal<>();
+
+    static String key(String k) {
+        return Boolean.TRUE.equals(READ_PENDING.get()) ? PENDING + k : k;
+    }
+
+    static boolean hasPending(Context c) {
+        return prefs(c).contains(PENDING_FROM);
+    }
+
+    /** Runs {@code r} with the routine getters reading tomorrow's pending routine, if there is one. */
+    static void readingPending(Context c, Runnable r) {
+        boolean on = hasPending(c);
+        READ_PENDING.set(on);
+        try {
+            r.run();
+        } finally {
+            READ_PENDING.remove();
+        }
+    }
+
+    static java.util.Map<String, Object> snapshot(Context c) {
+        java.util.Map<String, ?> all = prefs(c).getAll();
+        java.util.Map<String, Object> out = new java.util.HashMap<>();
+        for (String k : ROUTINE_KEYS) out.put(k, all.get(k));
+        return out;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void write(SharedPreferences.Editor e, String prefix, java.util.Map<String, ?> values) {
+        for (String k : ROUTINE_KEYS) {
+            Object v = values.get(k);
+            if (v == null) e.remove(prefix + k);
+            else if (v instanceof String) e.putString(prefix + k, (String) v);
+            else e.putStringSet(prefix + k, new HashSet<>((Set<String>) v));
+        }
+    }
+
+    /** Moves the routine just saved to tomorrow, and puts {@code before} back as today's routine. */
+    static void stageForTomorrow(Context c, java.util.Map<String, Object> before) {
+        SharedPreferences p = prefs(c);
+        java.util.Map<String, ?> edited = snapshot(c);
+        SharedPreferences.Editor e = p.edit();
+        write(e, PENDING, edited);
+        write(e, "", before);
+        e.putString(PENDING_FROM, tomorrow()).commit();
+    }
+
+    /** Drops tomorrow's routine (a later edit replaced it with one that applies now). */
+    static void clearPending(Context c) {
+        SharedPreferences.Editor e = prefs(c).edit().remove(PENDING_FROM);
+        for (String k : ROUTINE_KEYS) e.remove(PENDING + k);
+        e.commit();
+    }
+
+    private static void applyPending(SharedPreferences p) {
+        String from = p.getString(PENDING_FROM, null);
+        if (from == null || from.compareTo(today()) > 0) return;
+        java.util.Map<String, ?> all = p.getAll();
+        java.util.Map<String, Object> pending = new java.util.HashMap<>();
+        for (String k : ROUTINE_KEYS) pending.put(k, all.get(PENDING + k));
+        SharedPreferences.Editor e = p.edit();
+        write(e, "", pending);
+        e.remove(PENDING_FROM);
+        for (String k : ROUTINE_KEYS) e.remove(PENDING + k);
+        e.commit();
     }
 
     /** The routine day starts at this hour, so late nights still count as the previous day. */
@@ -198,7 +276,7 @@ final class Routine {
     /** Every habit in the routine, whatever day it's scheduled for. */
     static List<String> allItems(Context c) {
         List<String> out = new ArrayList<>();
-        for (String s : prefs(c).getString("items", defaultItems(c)).split("\n")) {
+        for (String s : prefs(c).getString(key("items"), defaultItems(c)).split("\n")) {
             if (!s.trim().isEmpty()) out.add(s.trim());
         }
         return out;
@@ -239,7 +317,7 @@ final class Routine {
     /** Habit name -> weekday mask, only for habits not scheduled every day. */
     static java.util.Map<String, Integer> days(Context c) {
         java.util.Map<String, Integer> out = new java.util.HashMap<>();
-        for (String e : prefs(c).getStringSet("days", new HashSet<String>())) {
+        for (String e : prefs(c).getStringSet(key("days"), new HashSet<String>())) {
             int tab = e.indexOf('\t');
             if (tab <= 0) continue;
             try {
@@ -328,7 +406,7 @@ final class Routine {
 
     static java.util.Map<String, String> startDates(Context c) {
         java.util.Map<String, String> out = new java.util.HashMap<>();
-        for (String e : prefs(c).getStringSet("since", new HashSet<String>())) {
+        for (String e : prefs(c).getStringSet(key("since"), new HashSet<String>())) {
             int tab = e.indexOf('\t');
             if (tab > 0) out.put(e.substring(tab + 1), e.substring(0, tab));
         }

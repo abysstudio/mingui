@@ -8,3 +8,7 @@ build/
 *.keystore
 signing/
 *.idsig
+
+# Rendered promo videos: attached to GitHub releases, not committed (see promo/).
+store/**/*.mp4
+store/**/*.gif

@@ -382,6 +382,8 @@ public class MainActivity extends Activity {
         streakLabel = text("", 13, TEXT);
         streakLabel.setTypeface(MEDIUM);
         streakLabel.setPadding(dp(10), dp(5), dp(10), dp(5));
+        streakLabel.setMaxLines(1);
+        streakLabel.setEllipsize(TextUtils.TruncateAt.END);
         streakLabel.setBackground(rounded(withAlpha(0xFFFF9F43, 0x26), 14, 0));
         heroText.addView(heroTitle);
         heroText.addView(heroSub);
@@ -863,6 +865,11 @@ public class MainActivity extends Activity {
     }
 
     private void showDisclosure(String title, String body, String noLabel, String goLabel, final Runnable onContinue) {
+        showDisclosure(title, body, noLabel, goLabel, onContinue, null);
+    }
+
+    private void showDisclosure(String title, String body, String noLabel, String goLabel, final Runnable onContinue,
+                                final Runnable onNo) {
         final Dialog d = new Dialog(this);
         d.requestWindowFeature(Window.FEATURE_NO_TITLE);
         LinearLayout sheet = new LinearLayout(this);
@@ -881,7 +888,10 @@ public class MainActivity extends Activity {
         no.setTypeface(MEDIUM);
         no.setGravity(Gravity.CENTER);
         no.setBackground(rounded(CARD, 26, BORDER));
-        no.setOnClickListener(v -> d.dismiss());
+        no.setOnClickListener(v -> {
+            d.dismiss();
+            if (onNo != null) onNo.run();
+        });
         LinearLayout.LayoutParams nlp = new LinearLayout.LayoutParams(0, dp(52), 1);
         nlp.rightMargin = dp(10);
         buttons.addView(no, nlp);
@@ -1055,10 +1065,12 @@ public class MainActivity extends Activity {
         int freezes = Routine.freezes(this);
         int level = Levels.level(Levels.xp(log));
         streakLabel.setText(TextUtils.concat(icon(R.drawable.ic_flame, 0xFFFF9F43, 15),
-                streak > 0 ? " " + s(R.string.day_streak, streak) + (streak > 1 && streak == bestEver ? s(R.string.best_suffix) : "")
-                        : " " + s(R.string.start_streak),
+                streak > 0 ? " " + s(R.string.day_streak, streak) : " " + s(R.string.start_streak),
+                // On your best streak ever: a small gold star instead of a word, so the pill stays on one line.
+                streak > 1 && streak == bestEver ? TextUtils.concat(" ", icon(R.drawable.ic_star, 0xFFFFD166, 14)) : "",
                 freezes > 0 ? TextUtils.concat("  ", icon(R.drawable.ic_snow, 0xFF7CC4FF, 14), " " + freezes) : "",
                 "  ·  " + s(R.string.lv, level)));
+        shrinkToOneLine(streakLabel, 13, 9);
         checkLevelUp(level, animate && !(done && !wasDone));
 
         cta.setEnabled(done);
@@ -1211,21 +1223,15 @@ public class MainActivity extends Activity {
         col.addView(title);
         int n = Routine.allItems(this).size();
         TextView sub = text("", 13, MUTED);
-        sub.setText(done ? q(R.plurals.n_habits, n) : TextUtils.concat(q(R.plurals.n_habits, n)
-                + "  ·  ", icon(R.drawable.ic_lock, MUTED, 13), s(R.string.asks_first)));
+        sub.setText(q(R.plurals.n_habits, n));
         sub.setPadding(0, dp(2), dp(8), 0);
         col.addView(sub);
         row.addView(col, new LinearLayout.LayoutParams(0, -2, 1));
         row.addView(iconView(R.drawable.ic_chevron, MUTED), new LinearLayout.LayoutParams(dp(24), dp(24)));
         row.setOnClickListener(v -> {
             settings.dismiss();
-            if (Routine.isDoneToday(this)) {
-                openEditor(false);
-                return;
-            }
-            // Mid-day edits are allowed, but only after a deliberate "yes".
-            showDisclosure(s(R.string.edit_routine_q), s(R.string.edit_routine_body),
-                    s(R.string.not_now), s(R.string.yes_edit), () -> openEditor(false));
+            // Always editable: saving asks only if the edits would make today's unfinished routine easier.
+            openEditor(false);
         });
 
         LinearLayout stats = new LinearLayout(this);
@@ -3463,6 +3469,23 @@ public class MainActivity extends Activity {
         return row;
     }
 
+    /** Steps the text size down (to {@code minSp}) until it fits on its one line without "…". */
+    private void shrinkToOneLine(final TextView t, final int maxSp, final int minSp) {
+        t.setTextSize(maxSp);
+        t.post(new Runnable() {
+            float sp = maxSp;
+
+            @Override
+            public void run() {
+                android.text.Layout l = t.getLayout();
+                if (l == null || l.getLineCount() == 0 || l.getEllipsisCount(0) == 0 || sp <= minSp) return;
+                sp -= 0.5f;
+                t.setTextSize(sp);
+                t.post(this);
+            }
+        });
+    }
+
     /** One centred line that auto-shrinks between {@code minSp} and {@code maxSp} to fit its box. */
     private void fitCentered(TextView t, int minSp, int maxSp) {
         t.setGravity(Gravity.CENTER);
@@ -4544,14 +4567,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void openEditor(boolean firstRun) {
-        if (editor != null && editor.isShowing()) return;
-        final Dialog d = new Dialog(this);
-        editor = d;
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        // Load habits into drafts.
-        final List<HabitDraft> drafts = new ArrayList<>();
+    private void loadDrafts(List<HabitDraft> drafts, boolean firstRun) {
         List<String> names = firstRun ? java.util.Arrays.asList(Routine.defaultItems(this).split("\n")) : Routine.allItems(this);
         for (String n : names) {
             HabitDraft h = new HabitDraft();
@@ -4564,6 +4580,19 @@ public class MainActivity extends Activity {
             h.identity = HabitMeta.explicitIdentity(this, h.name);
             drafts.add(h);
         }
+    }
+
+    private void openEditor(boolean firstRun) {
+        if (editor != null && editor.isShowing()) return;
+        final Dialog d = new Dialog(this);
+        editor = d;
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        // Load habits into drafts.
+        final List<HabitDraft> drafts = new ArrayList<>();
+        // With edits already saved for tomorrow, the editor shows (and keeps editing) that version.
+        final boolean editingTomorrow = !firstRun && Routine.hasPending(this);
+        Routine.readingPending(this, () -> loadDrafts(drafts, firstRun));
 
         LinearLayout sheet = new LinearLayout(this);
         sheet.setOrientation(LinearLayout.VERTICAL);
@@ -4574,7 +4603,7 @@ public class MainActivity extends Activity {
         TextView title = text(s(firstRun ? R.string.build_routine : R.string.your_habits), 24, TEXT);
         title.setTypeface(Typeface.DEFAULT_BOLD);
         sheet.addView(title);
-        TextView sub = text(s(R.string.editor_sub), 14, MUTED);
+        TextView sub = text(editingTomorrow ? s(R.string.editor_sub) + "\n\n" + s(R.string.edits_waiting) : s(R.string.editor_sub), 14, MUTED);
         sub.setPadding(0, dp(4), 0, dp(14));
         sheet.addView(sub);
 
@@ -4662,33 +4691,28 @@ public class MainActivity extends Activity {
             for (HabitDraft h : drafts) {
                 if (h.original != null && !h.original.equals(h.name)) renames.put(h.original, h.name);
             }
-            Map<String, String> since = Routine.startDates(this);
-            for (Map.Entry<String, String> r : renames.entrySet()) {
-                String from = since.remove(r.getKey());
-                if (from != null) since.put(r.getValue(), from);
-            }
-            since.keySet().retainAll(dayMasks.keySet());
-            Routine.renameToday(this, renames);
-            Routine.setTimers(this, timers);
-            Routine.setDays(this, dayMasks);
-            HabitMeta.save(this, cues, identities);
-            Routine.setStartDates(this, since);
-            Routine.setItems(this, sb.toString());
-            // A finished day stays finished: anything these edits made due today starts tomorrow instead.
-            if (wasDone && !Routine.isDoneToday(this)) {
+            // Would these edits make today's unfinished routine easier? Then they start tomorrow,
+            // unless you say they're a real fix for today.
+            boolean easier = false;
+            if (!firstRun && Routine.isConfigured(this) && !wasDone && !Routine.pausedToday(this)) {
                 Set<String> ticked = Routine.checked(this);
-                String tomorrow = Routine.tomorrow();
-                for (String item : Routine.items(this)) if (!ticked.contains(item)) since.put(item, tomorrow);
-                Routine.setStartDates(this, since);
-                History.logToday(this);
-                RoutineWidget.updateAll(this);
-                Toast.makeText(this, s(R.string.starts_tomorrow_toast), Toast.LENGTH_LONG).show();
+                int bit = Routine.dayBit(Routine.dayCalendar());
+                for (String h : Routine.items(this)) {
+                    if (ticked.contains(h)) continue;
+                    HabitDraft nd = null;
+                    for (HabitDraft x : drafts) if (h.equals(x.original)) nd = x;
+                    if (nd == null) for (HabitDraft x : drafts) if (h.equals(x.name)) nd = x;
+                    if (nd == null || (nd.days & bit) == 0 || nd.timer < Routine.timerMinutes(this, h)) easier = true;
+                }
             }
-            Gate.sync(this, false, null);
-            UnlockWatcher.update(this);
-            Prompts.scheduleNext(this);
-            d.dismiss();
-            build();
+            if (easier) {
+                showDisclosure(s(R.string.edits_easier_q), s(R.string.edits_easier_body), s(R.string.edits_apply_today),
+                        s(R.string.edits_start_tomorrow),
+                        () -> saveEdits(d, sb.toString(), timers, dayMasks, cues, identities, renames, false, true),
+                        () -> saveEdits(d, sb.toString(), timers, dayMasks, cues, identities, renames, false, false));
+            } else {
+                saveEdits(d, sb.toString(), timers, dayMasks, cues, identities, renames, wasDone, false);
+            }
         });
         buttons.addView(save, new LinearLayout.LayoutParams(0, dp(52), 1));
         sheet.addView(buttons);
@@ -4706,6 +4730,48 @@ public class MainActivity extends Activity {
                 (int) (getResources().getDisplayMetrics().heightPixels * 0.9f));
     }
 
+    /** Saves the editor's habits: now, or (tomorrow = true) as the routine that starts tomorrow. */
+    private void saveEdits(Dialog d, String items, Map<String, Integer> timers, Map<String, Integer> dayMasks,
+                           Map<String, String> cues, Map<String, String> identities, Map<String, String> renames,
+                           boolean wasDone, boolean tomorrow) {
+        // Start dates of the routine the editor showed (tomorrow's, if one is waiting).
+        Map<String, String> since = new java.util.HashMap<>();
+        Routine.readingPending(this, () -> since.putAll(Routine.startDates(this)));
+        for (Map.Entry<String, String> r : renames.entrySet()) {
+            String from = since.remove(r.getKey());
+            if (from != null) since.put(r.getValue(), from);
+        }
+        since.keySet().retainAll(dayMasks.keySet());
+        Map<String, Object> before = Routine.snapshot(this);
+        if (!tomorrow) Routine.renameToday(this, renames);
+        Routine.setTimers(this, timers);
+        Routine.setDays(this, dayMasks);
+        HabitMeta.save(this, cues, identities);
+        Routine.setStartDates(this, since);
+        Routine.setItems(this, items);
+        if (tomorrow) {
+            Routine.stageForTomorrow(this, before);
+            Toast.makeText(this, s(R.string.edits_saved_tomorrow), Toast.LENGTH_LONG).show();
+        } else {
+            Routine.clearPending(this);
+        }
+        // A finished day stays finished: anything these edits made due today starts tomorrow instead.
+        if (wasDone && !Routine.isDoneToday(this)) {
+            Set<String> ticked = Routine.checked(this);
+            String next = Routine.tomorrow();
+            for (String item : Routine.items(this)) if (!ticked.contains(item)) since.put(item, next);
+            Routine.setStartDates(this, since);
+            History.logToday(this);
+            RoutineWidget.updateAll(this);
+            Toast.makeText(this, s(R.string.starts_tomorrow_toast), Toast.LENGTH_LONG).show();
+        }
+        Gate.sync(this, false, null);
+        UnlockWatcher.update(this);
+        Prompts.scheduleNext(this);
+        d.dismiss();
+        build();
+    }
+
     private static int minutesIn(String habit) {
         java.util.regex.Matcher m = java.util.regex.Pattern.compile("(\\d+)\\s*min").matcher(habit);
         return m.find() ? Math.min(60, Integer.parseInt(m.group(1))) : 0;
@@ -4714,7 +4780,9 @@ public class MainActivity extends Activity {
     /** One line about a habit's details: "20 min · Mon Wed Fri · After coffee · reader". */
     private String habitSummary(HabitDraft h) {
         List<String> parts = new ArrayList<>();
-        String from = h.original == null ? null : Routine.startDates(this).get(h.original);
+        String[] box = new String[1];
+        if (h.original != null) Routine.readingPending(this, () -> box[0] = Routine.startDates(this).get(h.original));
+        String from = box[0];
         if (from != null && from.compareTo(Routine.today()) > 0) parts.add(s(R.string.starts_tomorrow));
         if (h.timer > 0) parts.add(s(R.string.n_min, h.timer));
         parts.add(Routine.describeDays(this, h.days));

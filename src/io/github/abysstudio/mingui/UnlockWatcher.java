@@ -157,7 +157,7 @@ public class UnlockWatcher extends Service {
     }
 
     /**
-     * No-root blocking: once a second, if a blocked app is in front before the routine is done,
+     * No-root blocking: twice a second, if a blocked app is in front before the routine is done,
      * cover it with the checklist. (The rooted build hides those apps instead.)
      */
     private void guardBlockedApps() {
@@ -174,7 +174,8 @@ public class UnlockWatcher extends Service {
                         android.widget.Toast.LENGTH_SHORT).show();
             }
         }
-        handler.postDelayed(guard, 1000);
+        // Twice a second: a blocked app gets covered before there's time to start scrolling.
+        handler.postDelayed(guard, 500);
     }
 
     @Override

@@ -30,9 +30,6 @@
     <string name="allow">Permet</string>
     <string name="not_now">Ara no</string>
     <string name="continue_">Continua</string>
-    <string name="edit_routine_q">Vols editar la rutina ara?</string>
-    <string name="edit_routine_body">Encara no has acabat la rutina d\'avui. Si la canvies ara (traient hàbits, escurçant temporitzadors o canviant dies), s\'aplica de seguida i pot desbloquejar les teves apps abans d\'hora.\n\nSegur que la vols editar?</string>
-    <string name="yes_edit">Sí, edita-la</string>
     <string name="focus_q">Vols activar el mode concentració?</string>
     <string name="focus_body">"Mentre no acabis la rutina d\'avui, si surts de la llista hi tornaràs, i les barres del sistema s\'amaguen en aquesta pantalla.\n\nSempre tens el control:\n  - La configuració, les trucades, les emergències i desinstal·lar no es bloquegen mai\n  - Les apps que permetis per a la feina continuen obertes\n  - %1$d descansos de cinc minuts al dia\n  - \"Pausa per avui\" ho desactiva tot fins demà\n\nPots tornar a desactivar el mode concentració quan acabis la rutina d\'avui."</string>
     <string name="paused_banner">En pausa per avui. El bloqueig i el mode concentració estan desactivats fins demà.</string>
@@ -60,7 +57,6 @@
     <string name="showed_up_as">Avui has estat %1$s</string>
     <string name="apps_unlocked_today">Les teves apps estan desbloquejades per avui</string>
     <string name="day_streak">Ratxa de %1$d dies</string>
-    <string name="best_suffix">"  ·  rècord"</string>
     <string name="start_streak">Comença una ratxa</string>
     <string name="lv">Nv. %1$d</string>
     <plurals name="breaks_left">
@@ -545,7 +541,7 @@
     <string-array name="say_progress">
         <item>En queden %1$d!</item>
         <item>Anem llançats</item>
-        <item>Ja hem passat la meitat</item>
+        <item>Cada pas compta</item>
     </string-array>
     <string name="widget_rest">Dia de descans</string>
     <string name="widget_done">Tot fet!</string>
@@ -592,6 +588,12 @@
     <string name="accessory_none">Cap</string>
     <string name="starts_tomorrow_toast">La rutina d\'avui continua completada. Els hàbits nous comencen demà.</string>
     <string name="starts_tomorrow">Comença demà</string>
+    <string name="edits_waiting">Tens canvis pendents: comencen demà. La rutina d\'avui continua igual.</string>
+    <string name="edits_easier_q">Començar aquests canvis demà?</string>
+    <string name="edits_easier_body">Fan més fàcil la rutina d\'avui, que encara no has acabat, i desbloquejarien les apps abans d\'hora. Desar-los per a demà manté el dia d\'avui honest. Si un hàbit està malament avui, encara els pots aplicar ara.</string>
+    <string name="edits_apply_today">Aplica avui</string>
+    <string name="edits_start_tomorrow">Comença demà</string>
+    <string name="edits_saved_tomorrow">Desat per a demà. La rutina d\'avui continua igual.</string>
     <string name="loosen_q">Afluixar el bloqueig d\'avui?</string>
     <string name="loosen_body">Encara no has acabat la rutina i aquest canvi et fa el dia més fàcil. S\'aplica a l\'instant.\n\nNo t\'ho tornarem a preguntar durant els propers 5 minuts.</string>
     <string name="yes_change">Sí, canvia-ho</string>

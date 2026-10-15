@@ -2,7 +2,10 @@
 
 A daily habit checklist with a little buddy, that keeps your distracting apps locked until today's routine is done.
 
+<p align="center"><img src="docs/demo.gif" width="270" alt="Mingui: tick off your habits, then your apps unlock"></p>
+
 - **Checklist** with timers, weekday schedules, rest days, streak freezes and partial credit.
+- **Honest edits:** changes that would make today's unfinished routine easier start tomorrow (unless you choose to apply them today).
 - **App blocking:** pick apps (YouTube, Instagram…) that stay locked until you've ticked everything off.
 - **Focus lock** (optional): pulls you back to the checklist if you wander off, with 3 five-minute breaks a day and a "Pause for today" emergency exit.
 - **A buddy** that walks around your screen, cheers you on and collects accessories as your streak grows.

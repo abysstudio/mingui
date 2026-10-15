@@ -30,9 +30,6 @@
     <string name="allow">Permitir</string>
     <string name="not_now">Ahora no</string>
     <string name="continue_">Continuar</string>
-    <string name="edit_routine_q">¿Editar tu rutina ahora?</string>
-    <string name="edit_routine_body">Aún no has terminado la rutina de hoy. Si la cambias ahora (quitando hábitos, acortando temporizadores o cambiando días), se aplica al momento y puede desbloquear tus apps antes de tiempo.\n\n¿Seguro que quieres editarla?</string>
-    <string name="yes_edit">Sí, editar</string>
     <string name="focus_q">¿Activar el modo concentración?</string>
     <string name="focus_body">"Mientras no termines la rutina de hoy, si sales de la lista volverás a ella, y las barras del sistema se ocultan en esta pantalla.\n\nSiempre tienes el control:\n  - Los ajustes, las llamadas, las emergencias y desinstalar nunca se bloquean\n  - Las apps que permitas para trabajar siguen abiertas\n  - %1$d descansos de cinco minutos al día\n  - \"Pausa por hoy\" lo desactiva todo hasta mañana\n\nPuedes volver a desactivar el modo concentración cuando termines la rutina de hoy."</string>
     <string name="paused_banner">En pausa por hoy. El bloqueo y el modo concentración están desactivados hasta mañana.</string>
@@ -60,7 +57,6 @@
     <string name="showed_up_as">Hoy has sido %1$s</string>
     <string name="apps_unlocked_today">Tus apps están desbloqueadas por hoy</string>
     <string name="day_streak">Racha de %1$d días</string>
-    <string name="best_suffix">"  ·  récord"</string>
     <string name="start_streak">Empieza una racha</string>
     <string name="lv">Nv. %1$d</string>
     <plurals name="breaks_left">
@@ -545,7 +541,7 @@
     <string-array name="say_progress">
         <item>¡Quedan %1$d!</item>
         <item>Vamos lanzados</item>
-        <item>Ya vamos por la mitad</item>
+        <item>Cada paso cuenta</item>
     </string-array>
     <string name="widget_rest">Día de descanso</string>
     <string name="widget_done">¡Todo hecho!</string>
@@ -592,6 +588,12 @@
     <string name="accessory_none">Ninguno</string>
     <string name="starts_tomorrow_toast">La rutina de hoy sigue completada. Los hábitos nuevos empiezan mañana.</string>
     <string name="starts_tomorrow">Empieza mañana</string>
+    <string name="edits_waiting">Tienes cambios pendientes: empiezan mañana. La rutina de hoy sigue igual.</string>
+    <string name="edits_easier_q">¿Empezar estos cambios mañana?</string>
+    <string name="edits_easier_body">Hacen más fácil la rutina de hoy, que aún no has terminado, así que desbloquearían tus apps antes de tiempo. Guardarlos para mañana mantiene el día de hoy honesto. Si un hábito está mal hoy, aún puedes aplicarlos ahora.</string>
+    <string name="edits_apply_today">Aplicar hoy</string>
+    <string name="edits_start_tomorrow">Empezar mañana</string>
+    <string name="edits_saved_tomorrow">Guardado para mañana. La rutina de hoy sigue igual.</string>
     <string name="loosen_q">¿Aflojar el bloqueo de hoy?</string>
     <string name="loosen_body">Aún no has terminado la rutina y este cambio te pone el día más fácil. Se aplica al momento.\n\nNo te lo volveremos a preguntar durante los próximos 5 minutos.</string>
     <string name="yes_change">Sí, cambiarlo</string>
