@@ -2,7 +2,8 @@
 # Builds without Gradle.
 #   SDK=... ./build.sh                 -> mingui.apk       Mingui, no root (Google Play; this APK for testing)
 #   SDK=... TOOLS=... ./build.sh play aab -> mingui.aab    Google Play bundle, signed with the upload key
-#   SDK=... ./build.sh root            -> mingui-root.apk  Mingui Root (GitHub releases)
+#   SDK=... ./build.sh root            -> mingui-root.apk  Mingui Root (GitHub releases; signed with
+#                                         signing/root-release.jks when present, else the debug key)
 # TOOLS must contain bundletool.jar and aapt2/aapt2 from Google Maven (the build-tools aapt2 can't make bundles).
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -101,5 +102,12 @@ cp $OUT/linked.apk $OUT/unsigned.apk
 $BT/zipalign -f 4 $OUT/unsigned.apk $OUT/aligned.apk
 [ -f debug.keystore ] || keytool -genkeypair -keystore debug.keystore -storepass android \
     -keypass android -alias key -keyalg RSA -keysize 2048 -validity 10000 -dname CN=Mingui >/dev/null 2>&1
-$BT/apksigner sign --ks debug.keystore --ks-pass pass:android --out $NAME.apk $OUT/aligned.apk
+if [ "$VARIANT" = root ] && [ -f signing/root-release.properties ]; then
+    # Mingui Root releases: the permanent release key (every update must use it).
+    source signing/root-release.properties
+    $BT/apksigner sign --ks signing/root-release.jks --ks-key-alias "$ROOT_KEY_ALIAS" \
+        --ks-pass "pass:$ROOT_STORE_PASS" --key-pass "pass:$ROOT_STORE_PASS" --out $NAME.apk $OUT/aligned.apk
+else
+    $BT/apksigner sign --ks debug.keystore --ks-pass pass:android --out $NAME.apk $OUT/aligned.apk
+fi
 echo "Built $(pwd)/$NAME.apk (v$VERSION_NAME, code $VERSION_CODE)"
