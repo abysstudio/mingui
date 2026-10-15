@@ -263,8 +263,6 @@
     <string name="colour_header">COLOUR</string>
     <string name="collection">COLLECTION</string>
     <string name="n_unlocked">%1$d / %2$d unlocked</string>
-    <string name="reset_position">Reset position</string>
-    <string name="reset_position_toast">Back to the bottom of the screen (next time it appears)</string>
     <string name="xp_progress">%1$d / %2$d XP</string>
     <string name="level_n">Level %1$d</string>
     <string name="personalize">Personalize</string>

@@ -2692,14 +2692,7 @@ public class MainActivity extends Activity {
 
         body.addView(levelSection());
 
-        TextView reset = text(s(R.string.reset_position), 15, ACCENT);
-        reset.setTypeface(MEDIUM);
-        reset.setPadding(dp(4), dp(20), dp(4), dp(8));
-        reset.setOnClickListener(v -> {
-            Routine.prefs(this).edit().remove("buddy_y").apply();
-            Toast.makeText(this, s(R.string.reset_position_toast), Toast.LENGTH_SHORT).show();
-        });
-        body.addView(reset, new LinearLayout.LayoutParams(-2, -2));
+
 
         TextView close = text(s(R.string.done), 16, Color.WHITE);
         close.setTypeface(MEDIUM);
@@ -2795,9 +2788,10 @@ public class MainActivity extends Activity {
             mini.setClickable(false);
             step.addView(mini, new LinearLayout.LayoutParams(dp(52), dp(48)));
             TextView name = text(open ? evo[i] : s(R.string.level_n, at), 11, open ? TEXT : STREAK_ORANGE);
-            name.setSingleLine(true);
-            step.addView(name);
-            track.addView(step);
+            fitCentered(name, 8, 11);
+            step.addView(name, new LinearLayout.LayoutParams(-1, dp(14)));
+            // Fixed width so the label sits exactly under its buddy, whatever its length.
+            track.addView(step, new LinearLayout.LayoutParams(dp(64), -2));
         }
         box.addView(track, new LinearLayout.LayoutParams(-1, -2));
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
