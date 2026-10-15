@@ -142,19 +142,16 @@ Codi obert (GPL-3.0): github.com/abysstudio/mingui
 • Edits that would make today's unfinished routine easier now start tomorrow (or apply today if you choose)
 • The streak pill always fits on one line; a gold star marks your best streak
 • Blocked apps are covered faster
-• New app icon
 </en-US>
 <es-ES>
 • Los cambios que harían más fácil la rutina de hoy sin terminar ahora empiezan mañana (o hoy, si lo eliges)
 • La racha siempre cabe en una línea; una estrella dorada marca tu mejor racha
 • Las apps bloqueadas se tapan más rápido
-• Nuevo icono
 </es-ES>
 <ca>
 • Els canvis que farien més fàcil la rutina d'avui sense acabar ara comencen demà (o avui, si ho tries)
 • La ratxa sempre cap en una línia; una estrella daurada marca la teva millor ratxa
 • Les apps bloquejades es tapen més ràpid
-• Nova icona
 </ca>
 ```
 

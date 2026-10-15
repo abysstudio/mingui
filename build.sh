@@ -104,9 +104,14 @@ $BT/zipalign -f 4 $OUT/unsigned.apk $OUT/aligned.apk
     -keypass android -alias key -keyalg RSA -keysize 2048 -validity 10000 -dname CN=Mingui >/dev/null 2>&1
 if [ "$VARIANT" = root ] && [ -f signing/root-release.properties ]; then
     # Mingui Root releases: the permanent release key (every update must use it).
+    # Early builds were signed with debug.keystore, so the release key carries a rotation
+    # lineage from it (signing/root-lineage): those installs update in place on Android 9+.
+    # Keep debug.keystore and the lineage file backed up with the release key.
     source signing/root-release.properties
-    $BT/apksigner sign --ks signing/root-release.jks --ks-key-alias "$ROOT_KEY_ALIAS" \
-        --ks-pass "pass:$ROOT_STORE_PASS" --key-pass "pass:$ROOT_STORE_PASS" --out $NAME.apk $OUT/aligned.apk
+    $BT/apksigner sign --ks debug.keystore --ks-pass pass:android \
+        --next-signer --ks signing/root-release.jks --ks-key-alias "$ROOT_KEY_ALIAS" \
+        --ks-pass "pass:$ROOT_STORE_PASS" --key-pass "pass:$ROOT_STORE_PASS" \
+        --lineage signing/root-lineage --rotation-min-sdk-version 28 --out $NAME.apk $OUT/aligned.apk
 else
     $BT/apksigner sign --ks debug.keystore --ks-pass pass:android --out $NAME.apk $OUT/aligned.apk
 fi

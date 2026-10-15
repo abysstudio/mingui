@@ -1,23 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Adaptive icon foreground: the buddy's face, inside the 66dp safe zone. Background colour: @color/icon_bg. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
-    <!-- soft shadow under the body -->
-    <path android:fillColor="#33000000" android:pathData="M34,78a20,4 0 1,0 40,0a20,4 0 1,0 -40,0z" />
-    <!-- body -->
-    <path android:fillColor="#F4F1FF" android:pathData="M28,56a26,23.5 0 1,0 52,0a26,23.5 0 1,0 -52,0z" />
-    <!-- shine -->
-    <path android:fillColor="#FFFFFF" android:fillAlpha="0.7" android:pathData="M38,44a7,4 0 1,0 14,0a7,4 0 1,0 -14,0z" />
-    <!-- eyes -->
-    <path android:fillColor="#1B1440" android:pathData="M40.5,54a4.6,4.6 0 1,0 9.2,0a4.6,4.6 0 1,0 -9.2,0z" />
-    <path android:fillColor="#1B1440" android:pathData="M58.3,54a4.6,4.6 0 1,0 9.2,0a4.6,4.6 0 1,0 -9.2,0z" />
-    <path android:fillColor="#FFFFFF" android:pathData="M42.2,52.4a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0z" />
-    <path android:fillColor="#FFFFFF" android:pathData="M60,52.4a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0z" />
-    <!-- cheeks -->
-    <path android:fillColor="#FF8FC0" android:fillAlpha="0.6" android:pathData="M33.5,62a3.6,2.2 0 1,0 7.2,0a3.6,2.2 0 1,0 -7.2,0z" />
-    <path android:fillColor="#FF8FC0" android:fillAlpha="0.6" android:pathData="M67.3,62a3.6,2.2 0 1,0 7.2,0a3.6,2.2 0 1,0 -7.2,0z" />
-    <!-- smile -->
-    <path android:strokeColor="#1B1440" android:strokeWidth="2.8" android:strokeLineCap="round" android:fillColor="#00000000"
-        android:pathData="M47.5,63Q54,69.5 60.5,63" />
+    <path android:strokeColor="#FFFFFF" android:strokeWidth="4" android:fillColor="#00000000"
+        android:pathData="M54,30 a24,24 0 1,1 -0.01,0" android:strokeAlpha="0.35" />
+    <path android:strokeColor="#FFFFFF" android:strokeWidth="6" android:fillColor="#00000000"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M42,55 L50,63 L67,45" />
 </vector>
