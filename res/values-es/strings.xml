@@ -608,12 +608,11 @@
         <item>Portal</item>
         <item>Pop</item>
         <item>Caminando</item>
-        <item>Fundido</item>
-        <item>Ninguna</item>
         <item>Carrera</item>
     </string-array>
     <string name="opt_size">TAMAÑO</string>
     <string name="opt_speed">VELOCIDAD</string>
     <string name="opt_entrance">ENTRADA</string>
     <string name="opt_chat">CHARLA</string>
+    <string name="rename_buddy">Cambiar el nombre de tu mascota</string>
 </resources>

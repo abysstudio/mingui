@@ -608,12 +608,11 @@
         <item>Portal</item>
         <item>Pop</item>
         <item>Walk in</item>
-        <item>Fade</item>
-        <item>None</item>
         <item>Sprint</item>
     </string-array>
     <string name="opt_size">SIZE</string>
     <string name="opt_speed">SPEED</string>
     <string name="opt_entrance">ENTRANCE</string>
     <string name="opt_chat">CHAT</string>
+    <string name="rename_buddy">Rename your buddy</string>
 </resources>

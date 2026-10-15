@@ -2490,13 +2490,39 @@ public class MainActivity extends Activity {
         preview.done = true;
         applyPreviewStyle(preview);
         actor.addView(preview, new LinearLayout.LayoutParams(dp(200), dp(176)));
-        final TextView tag = text(BuddyStyle.name(this), 13, TEXT);
-        tag.setTypeface(MEDIUM);
-        tag.setPadding(dp(12), dp(3), dp(12), dp(3));
-        tag.setBackground(rounded(0x99000000, 12, 0));
+        // The name tag under the buddy is where you rename it: tap it, type, Done. A small pencil says so.
+        final EditText name = new EditText(this);
+        name.setText(BuddyStyle.name(this));
+        name.setTextColor(TEXT);
+        name.setHintTextColor(MUTED);
+        name.setHint("Pip");
+        name.setTextSize(14);
+        name.setTypeface(MEDIUM);
+        name.setGravity(Gravity.CENTER);
+        name.setSingleLine(true);
+        name.setImeOptions(android.view.inputmethod.EditorInfo.IME_ACTION_DONE);
+        name.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(16)});
+        name.setPadding(dp(14), dp(4), dp(10), dp(4));
+        name.setCompoundDrawablesRelative(null, null, tinted(R.drawable.ic_edit, MUTED, 13), null);
+        name.setCompoundDrawablePadding(dp(6));
+        name.setBackground(rounded(0x99000000, 14, withAlpha(Color.WHITE, 0x26)));
+        name.setContentDescription(s(R.string.rename_buddy));
+        name.setOnFocusChangeListener((v, focused) -> {
+            name.setBackground(rounded(0x99000000, 14, focused ? ACCENT : withAlpha(Color.WHITE, 0x26)));
+            if (focused) name.selectAll();
+        });
+        name.setOnEditorActionListener((v, action, e) -> {
+            name.clearFocus();
+            ((android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
+                    .hideSoftInputFromWindow(name.getWindowToken(), 0);
+            BuddyStyle.setName(this, name.getText().toString());
+            preview.jump();
+            preview.startIdle(Buddy.BuddyView.WAVE);
+            return true;
+        });
         LinearLayout.LayoutParams tagLp = new LinearLayout.LayoutParams(-2, -2);
         tagLp.topMargin = -dp(6);
-        actor.addView(tag, tagLp);
+        actor.addView(name, tagLp);
         FrameLayout.LayoutParams actorLp = new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
         actorLp.bottomMargin = dp(10);
         stage.addView(actor, actorLp);
@@ -2586,28 +2612,6 @@ public class MainActivity extends Activity {
         LinearLayout.LayoutParams olp = new LinearLayout.LayoutParams(-1, -2);
         olp.topMargin = dp(10);
         body.addView(optionsRow(stage, actor, preview, minis), olp);
-
-        // ---- Name (the stage tag updates as you type).
-        body.addView(sectionLabel(s(R.string.name_header)));
-        final EditText name = new EditText(this);
-        name.setText(BuddyStyle.name(this));
-        name.setTextColor(TEXT);
-        name.setHintTextColor(MUTED);
-        name.setHint("Pip");
-        name.setTextSize(16);
-        name.setSingleLine(true);
-        name.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(16)});
-        name.setPadding(dp(14), dp(12), dp(14), dp(12));
-        name.setBackground(rounded(CARD, 14, BORDER));
-        name.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence x, int a, int b, int c) {}
-            @Override public void onTextChanged(CharSequence x, int a, int b, int c) {}
-            @Override public void afterTextChanged(Editable e) {
-                String n = e.toString().trim();
-                tag.setText(n.isEmpty() ? "Pip" : n);
-            }
-        });
-        body.addView(name, new LinearLayout.LayoutParams(-1, -2));
 
         // ---- Colours.
         body.addView(sectionLabel(s(R.string.colour_header)));
@@ -2843,9 +2847,6 @@ public class MainActivity extends Activity {
             case BuddyStyle.ENTRANCE_SPRINT:
                 dashOut(stage, actor, preview, then);
                 break;
-            case BuddyStyle.ENTRANCE_FADE:
-                preview.animate().alpha(0f).setDuration(260).withEndAction(then).start();
-                break;
             default:
                 preview.setAlpha(0f);
                 preview.postDelayed(then, 250);
@@ -2903,11 +2904,6 @@ public class MainActivity extends Activity {
                             preview.walking = false;
                             settle.run();
                         }).start();
-                break;
-            case BuddyStyle.ENTRANCE_FADE:
-                actor.setTranslationX(0);
-                preview.setAlpha(0f);
-                preview.animate().alpha(1f).setDuration(420).withEndAction(settle).start();
                 break;
             default:
                 actor.setTranslationX(0);
@@ -3231,8 +3227,11 @@ public class MainActivity extends Activity {
             cell.addView(dotBox, dlp);
             TextView l = text(BuddyStyle.colorNames(this)[i], 11, on ? TEXT : MUTED);
             if (on) l.setTypeface(MEDIUM);
-            l.setPadding(0, dp(5), 0, 0);
-            cell.addView(l);
+            l.setPadding(dp(2), dp(5), dp(2), 0);
+            l.setGravity(Gravity.CENTER_HORIZONTAL);
+            l.setMaxLines(2);
+            l.setEllipsize(TextUtils.TruncateAt.END);
+            cell.addView(l, new LinearLayout.LayoutParams(-1, -2));
             cell.setOnClickListener(v -> {
                 if (idx == BuddyStyle.colorIndex(this)) return;
                 BuddyStyle.set(this, "buddy_color", idx);
@@ -3397,18 +3396,18 @@ public class MainActivity extends Activity {
             final FrameLayout art = new FrameLayout(this);
             art.addView(optionArt(opt, cur[opt], minis), new FrameLayout.LayoutParams(-1, -1));
             tile.addView(art, new LinearLayout.LayoutParams(-1, dp(52)));
+            // Full-width, centred, fixed-height labels that shrink to fit instead of being cut off.
+            // (No letter spacing: it adds a gap after the last letter, which pushes the text off-centre.)
             TextView h = text(heads[k], 10, MUTED);
-            h.setLetterSpacing(0.1f);
             h.setTypeface(MEDIUM);
-            h.setSingleLine(true);
-            h.setPadding(0, dp(4), 0, 0);
-            tile.addView(h);
+            fitCentered(h, 8, 10);
+            LinearLayout.LayoutParams hlp = new LinearLayout.LayoutParams(-1, dp(14));
+            hlp.topMargin = dp(4);
+            tile.addView(h, hlp);
             final TextView value = text(names[k][cur[k]], 13, TEXT);
             value.setTypeface(MEDIUM);
-            value.setSingleLine(true);
-            value.setEllipsize(TextUtils.TruncateAt.END);
-            value.setGravity(Gravity.CENTER);
-            tile.addView(value, new LinearLayout.LayoutParams(-1, -2));
+            fitCentered(value, 9, 13);
+            tile.addView(value, new LinearLayout.LayoutParams(-1, dp(18)));
             tile.setContentDescription(heads[k] + ": " + names[k][cur[k]]);
             tile.setOnClickListener(v -> {
                 cur[opt] = (cur[opt] + 1) % names[opt].length;
@@ -3432,6 +3431,14 @@ public class MainActivity extends Activity {
             row.addView(tile, lp);
         }
         return row;
+    }
+
+    /** One centred line that auto-shrinks between {@code minSp} and {@code maxSp} to fit its box. */
+    private void fitCentered(TextView t, int minSp, int maxSp) {
+        t.setGravity(Gravity.CENTER);
+        t.setMaxLines(1);
+        t.setIncludeFontPadding(false);
+        t.setAutoSizeTextTypeUniformWithConfiguration(minSp, maxSp, 1, android.util.TypedValue.COMPLEX_UNIT_SP);
     }
 
     private View optionArt(int opt, int value, List<Buddy.BuddyView> minis) {
@@ -3460,7 +3467,6 @@ public class MainActivity extends Activity {
         }
         final Buddy.BuddyView m = mini(minis, 0.42f);
         art.addView(m, new FrameLayout.LayoutParams(-1, -1));
-        if (style == BuddyStyle.ENTRANCE_NONE) return art;
         final ValueAnimator loop = ValueAnimator.ofFloat(0f, 1f);
         loop.setDuration(2200);
         loop.setRepeatCount(ValueAnimator.INFINITE);

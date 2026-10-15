@@ -105,8 +105,8 @@ final class BuddyStyle {
     }
 
     /** How the buddy appears and leaves (e.g. when you open or close the checklist). */
-    static final int ENTRANCE_PORTAL = 0, ENTRANCE_POP = 1, ENTRANCE_WALK = 2, ENTRANCE_FADE = 3,
-            ENTRANCE_NONE = 4, ENTRANCE_SPRINT = 5, ENTRANCES = 6;
+    static final int ENTRANCE_PORTAL = 0, ENTRANCE_POP = 1, ENTRANCE_WALK = 2, ENTRANCE_SPRINT = 3,
+            ENTRANCES = 4;
 
     static int entranceIndex(Context c) {
         return clamp(prefs(c).getInt("buddy_entrance", ENTRANCE_PORTAL), ENTRANCES);

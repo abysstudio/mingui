@@ -608,12 +608,11 @@
         <item>Portal</item>
         <item>Pop</item>
         <item>Caminant</item>
-        <item>Fos</item>
-        <item>Cap</item>
         <item>Cursa</item>
     </string-array>
     <string name="opt_size">MIDA</string>
     <string name="opt_speed">VELOCITAT</string>
     <string name="opt_entrance">ENTRADA</string>
     <string name="opt_chat">XERRADA</string>
+    <string name="rename_buddy">Canvia el nom de la teva mascota</string>
 </resources>

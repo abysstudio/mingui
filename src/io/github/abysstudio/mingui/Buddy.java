@@ -382,10 +382,6 @@ final class Buddy {
                 restPose();
                 break;
             }
-            case BuddyStyle.ENTRANCE_FADE:
-                body.setAlpha(0f);
-                runAnim(420, a -> body.setAlpha((float) a.getAnimatedValue() / 420f), this::restPose);
-                break;
             case BuddyStyle.ENTRANCE_SPRINT: {
                 // Sprint in from the nearest edge leaning forward, then brake: lean back and skid to a stop.
                 final int[] size = screen();
@@ -477,9 +473,6 @@ final class Buddy {
                 });
                 break;
             }
-            case BuddyStyle.ENTRANCE_FADE:
-                runAnim(260, a -> body.setAlpha(1 - (float) a.getAnimatedValue() / 260f), gone);
-                break;
             case BuddyStyle.ENTRANCE_SPRINT: {
                 // Crouch, then dash off the nearest edge leaning forward.
                 final int[] size = screen();
