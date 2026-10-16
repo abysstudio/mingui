@@ -165,36 +165,30 @@ Instal·la Mingui, afegeix tres hàbits per a demà al matí i recupera els teus
 
 **Category:** Productivity · **Tags:** Habit tracker, Productivity, Self-improvement · **Contact email:** required, use the studio address · **Website:** https://abysstudio.github.io/mingui/
 
-## Release notes: 1.7.9 (code 24)
+## Release notes: 1.8.0 (code 25)
+
+First Play release, so these describe the app rather than the changes.
 
 ```
 <en-US>
-• Edits that would make today's unfinished routine easier now start tomorrow (or apply today if you choose)
-• The streak pill always fits on one line; a gold star marks your best streak
-• Blocked apps are covered faster
+• A daily habit checklist with timers, cues, schedules and streaks
+• Pick the apps that distract you: they stay covered until today's routine is done
+• Your buddy cheers you on, naps once you're done and checks in if you keep scrolling
+• 100% offline: no accounts, no ads, no trackers
 </en-US>
 <es-ES>
-• Los cambios que harían más fácil la rutina de hoy sin terminar ahora empiezan mañana (o hoy, si lo eliges)
-• La racha siempre cabe en una línea; una estrella dorada marca tu mejor racha
-• Las apps bloqueadas se tapan más rápido
+• Una lista diaria de hábitos con temporizadores, recordatorios, horarios y rachas
+• Elige las apps que te distraen: quedan tapadas hasta que termines la rutina de hoy
+• Tu compañero te anima, se echa la siesta al terminar y te avisa si sigues haciendo scroll
+• 100% sin conexión: sin cuentas, sin anuncios, sin rastreadores
 </es-ES>
 <ca>
-• Els canvis que farien més fàcil la rutina d'avui sense acabar ara comencen demà (o avui, si ho tries)
-• La ratxa sempre cap en una línia; una estrella daurada marca la teva millor ratxa
-• Les apps bloquejades es tapen més ràpid
+• Una llista diària d'hàbits amb temporitzadors, recordatoris, horaris i ratxes
+• Tria les apps que et distreuen: queden tapades fins que acabis la rutina d'avui
+• El teu company t'anima, fa la migdiada quan acabes i t'avisa si continues fent scroll
+• 100% sense connexió: sense comptes, sense anuncis, sense rastrejadors
 </ca>
 ```
-
-## Search optimisation (ASO)
-
-Google Play indexes the title, short description, full description and release notes, then ranks by quality signals (installs, retention, ratings, Android vitals).
-
-- **Target terms:** habit tracker, app blocker, daily habits, daily routine, morning routine, screen time, focus. ES: hábitos diarios, registro de hábitos, bloqueador de apps, rutina, tiempo de pantalla. CA: hàbits diaris, bloquejador d'apps, rutina, temps de pantalla.
-- **Title** = brand + the two main terms. **Short description** opens with them. **Full description** puts them in the first two sentences and repeats each 3–5 times naturally, ending with a call to action.
-- **Screenshots:** captions carry the terms (Habit tracker / App blocker / Habit streaks). No third-party apps or logos.
-- **Video:** the promo is 25 s and shows the app from the first second. Its first frame replaces screenshot 1 in the listing, so check the YouTube thumbnail before linking it.
-- **After launch:** run a Store listing experiment on the icon first, then screenshot 1. Reply to every review (reviewers are notified and often update their rating). Keep crash rate < 1 % and ANR < 0.5 % in Android vitals. Change one field at a time, every 4–6 weeks.
-- **Web:** the website (abysstudio.github.io/mingui) and the GitHub README link to the Play listing once it's live; links from the web count toward ranking.
 
 ## App content (Policy → App content)
 
