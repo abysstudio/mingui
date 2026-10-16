@@ -19,8 +19,8 @@
     <string name="setup_required_body">Needed for the features you turned on. Each one only works on this phone.</string>
     <string name="setup_optional_body">Optional: they make your buddy and reminders more reliable.</string>
     <string name="usage_access">Usage access</string>
-    <string name="usage_access_sub">Notices when you open a blocked app</string>
-    <string name="usage_access_disclosure">Android\'s warning is the same for every app. Mingui only checks which app is open, to cover the ones you blocked, and has no internet: nothing leaves your phone.</string>
+    <string name="usage_access_sub">Checks whether you open a blocked app</string>
+    <string name="usage_access_disclosure">Used only to check whether you open a blocked app, so Mingui can cover it. Nothing leaves your phone.</string>
     <string name="overlay">Display over other apps</string>
     <string name="overlay_sub">Shows your checklist over apps</string>
     <string name="notifications">Notifications</string>

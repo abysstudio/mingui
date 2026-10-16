@@ -675,27 +675,18 @@ public class MainActivity extends Activity {
             box.addView(permRow(R.drawable.ic_layers, s(R.string.overlay),
                     s(Perms.needsOverlay(this) ? R.string.overlay_sub : R.string.overlay_sub_buddy),
                     Perms.overlay(this), null, () -> {
-                        // Android 11+ shows the list of all apps here (the per-app screen is system-only);
-                        // older versions and some phones open Mingui's switch directly.
-                        startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                android.net.Uri.parse("package:" + getPackageName())));
+                        // Android 11+ shows the list of all apps here (the per-app screen is system-only).
+                        // Xiaomi phones have their own per-app permission page, with "Display pop-up windows".
+                        if (!openXiaomiPermissions()) {
+                            startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                    android.net.Uri.parse("package:" + getPackageName())));
+                        }
                         returnWhenGranted(() -> Perms.overlay(this));
                     }));
         }
         if (usageNeeded) {
             boolean granted = Perms.usageAccess(this);
-            box.addView(permRow(R.drawable.ic_eye, s(R.string.usage_access), s(R.string.usage_access_sub),
-                    granted, s(R.string.usage_access), s(R.string.usage_access_disclosure), () -> {
-                        // Straight to this app's switch where the phone supports it, else the list.
-                        try {
-                            startActivity(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS,
-                                    android.net.Uri.parse("package:" + getPackageName())));
-                        } catch (RuntimeException e) {
-                            startActivity(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                        }
-                        returnWhenGranted(() -> Perms.usageAccess(this));
-                    }));
-            // Installed outside Play on Android 13+: Android may grey out that switch ("Restricted
+            // Installed outside Play on Android 13+: Android may grey out the Usage access switch ("Restricted
             // setting") until it's allowed in App info. The app can't read whether it has been, so
             // the row counts as done once you've been there, and stays tappable.
             if (!granted && Perms.maybeRestricted(this)) {
@@ -714,6 +705,17 @@ public class MainActivity extends Activity {
                 }
                 box.addView(r);
             }
+            box.addView(permRow(R.drawable.ic_eye, s(R.string.usage_access), s(R.string.usage_access_sub),
+                    granted, s(R.string.usage_access), s(R.string.usage_access_disclosure), () -> {
+                        // Straight to this app's switch where the phone supports it, else the list.
+                        try {
+                            startActivity(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS,
+                                    android.net.Uri.parse("package:" + getPackageName())));
+                        } catch (RuntimeException e) {
+                            startActivity(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                        }
+                        returnWhenGranted(() -> Perms.usageAccess(this));
+                    }));
         }
         if (Build.VERSION.SDK_INT >= 33) {
             box.addView(permRow(R.drawable.ic_bell, s(R.string.notifications), s(R.string.notifications_sub),
@@ -731,6 +733,24 @@ public class MainActivity extends Activity {
         lp.topMargin = dp(16);
         box.setLayoutParams(lp);
         return box;
+    }
+
+    /** MIUI / HyperOS: opens Mingui's page in the Security app's permission manager. False if it isn't there. */
+    private boolean openXiaomiPermissions() {
+        if (!"xiaomi".equalsIgnoreCase(Build.MANUFACTURER)) return false;
+        String[][] targets = {
+                {"com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity"},
+                {"com.miui.securitycenter", "com.miui.permcenter.permissions.AppPermissionsEditorActivity"},
+        };
+        for (String[] t : targets) {
+            try {
+                startActivity(new Intent("miui.intent.action.APP_PERM_EDITOR")
+                        .setClassName(t[0], t[1]).putExtra("extra_pkgname", getPackageName()));
+                return true;
+            } catch (RuntimeException ignored) {
+            }
+        }
+        return false;
     }
 
     /** "100% offline" pill: tapping it explains why that makes the permissions safe. */

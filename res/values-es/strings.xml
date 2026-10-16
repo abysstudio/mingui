@@ -19,8 +19,8 @@
     <string name="setup_required_body">Necesarios para las funciones que activaste. Todo funciona solo en este teléfono.</string>
     <string name="setup_optional_body">Opcionales: hacen que tu mascota y los recordatorios funcionen mejor.</string>
     <string name="usage_access">Acceso a datos de uso</string>
-    <string name="usage_access_sub">Detecta cuándo abres una app bloqueada</string>
-    <string name="usage_access_disclosure">El aviso de Android es el mismo para todas las apps. Mingui solo mira qué app está abierta, para tapar las que bloqueaste, y no tiene internet: nada sale de tu móvil.</string>
+    <string name="usage_access_sub">Detecta si abres una app bloqueada</string>
+    <string name="usage_access_disclosure">Solo se usa para saber si abres una app bloqueada y poder taparla. Nada sale de tu móvil.</string>
     <string name="overlay">Mostrar sobre otras apps</string>
     <string name="overlay_sub">Muestra tu lista sobre las apps</string>
     <string name="notifications">Notificaciones</string>

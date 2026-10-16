@@ -19,8 +19,8 @@
     <string name="setup_required_body">Necessaris per a les funcions que has activat. Tot funciona només en aquest telèfon.</string>
     <string name="setup_optional_body">Opcionals: fan que la teva mascota i els recordatoris funcionin millor.</string>
     <string name="usage_access">Accés a dades d\'ús</string>
-    <string name="usage_access_sub">Detecta quan obres una app bloquejada</string>
-    <string name="usage_access_disclosure">L\'avís d\'Android és el mateix per a totes les apps. Mingui només mira quina app està oberta, per tapar les que has bloquejat, i no té internet: res no surt del mòbil.</string>
+    <string name="usage_access_sub">Detecta si obres una app bloquejada</string>
+    <string name="usage_access_disclosure">Només s\'usa per saber si obres una app bloquejada i poder-la tapar. Res no surt del mòbil.</string>
     <string name="overlay">Mostra sobre altres apps</string>
     <string name="overlay_sub">Mostra la llista sobre les apps</string>
     <string name="notifications">Notificacions</string>
