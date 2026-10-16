@@ -15,3 +15,8 @@ store/**/*.gif
 
 # Internal notes and TODOs, kept local.
 internal/
+
+# Play app signing key export (never commit)
+pepk.jar
+*.pem
+*-key.zip
