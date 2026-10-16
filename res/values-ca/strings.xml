@@ -24,7 +24,7 @@
     <string name="overlay">Mostra sobre altres apps</string>
     <string name="overlay_sub">Mostra la llista sobre les apps</string>
     <string name="notifications">Notificacions</string>
-    <string name="notifications_sub">Un botó de Pausa i els teus recordatoris</string>
+    <string name="notifications_sub">Botó de Pausa i recordatoris</string>
     <string name="battery">Bateria: sense restriccions</string>
     <string name="battery_sub">Evita que Android tanqui Mingui</string>
     <string name="allow">Permet</string>
@@ -67,7 +67,7 @@
         <item quantity="one">Falta %1$d hàbit per desbloquejar</item>
         <item quantity="other">Falten %1$d hàbits per desbloquejar</item>
     </plurals>
-    <string name="restricted">Permet la configuració restringida</string>
+    <string name="restricted">Configuració restringida</string>
     <string name="open_app">Obre %1$s</string>
     <string name="all_apps_unlocked">Totes les apps desbloquejades</string>
     <string name="couldnt_open">No s\'ha pogut obrir %1$s</string>

@@ -872,7 +872,9 @@ public class MainActivity extends Activity {
                          final String disclosure, final Runnable ask) {
         LinearLayout row = new LinearLayout(this);
         row.setGravity(Gravity.CENTER_VERTICAL);
-        row.setPadding(0, dp(8), 0, dp(8));
+        row.setPadding(0, dp(6), 0, dp(6));
+        // Same height whether it shows a button or a check, and whatever the text length.
+        row.setMinimumHeight(dp(74));
         FrameLayout ib = new FrameLayout(this);
         ib.setBackground(rounded(withAlpha(granted ? GOOD : ACCENT, 0x22), 12, 0));
         ib.addView(iconView(icon, granted ? GOOD : ACCENT), new FrameLayout.LayoutParams(dp(20), dp(20), Gravity.CENTER));
@@ -883,15 +885,26 @@ public class MainActivity extends Activity {
         col.setOrientation(LinearLayout.VERTICAL);
         TextView tt = text(title, 15, TEXT);
         tt.setTypeface(MEDIUM);
+        tt.setSingleLine(true);
+        tt.setEllipsize(TextUtils.TruncateAt.END);
         col.addView(tt);
-        col.addView(text(sub, 12, MUTED));
-        row.addView(col, new LinearLayout.LayoutParams(0, -2, 1));
+        TextView st = text(sub, 12, MUTED);
+        st.setMaxLines(2);
+        st.setEllipsize(TextUtils.TruncateAt.END);
+        col.addView(st);
+        LinearLayout.LayoutParams clp = new LinearLayout.LayoutParams(0, -2, 1);
+        clp.rightMargin = dp(8);
+        row.addView(col, clp);
+        // Fixed slot on the right, so the button and the check line up row to row.
+        FrameLayout slot = new FrameLayout(this);
+        row.addView(slot, new LinearLayout.LayoutParams(dp(84), dp(40)));
         if (granted) {
-            row.addView(iconView(R.drawable.ic_check, GOOD), new LinearLayout.LayoutParams(dp(24), dp(24)));
+            slot.addView(iconView(R.drawable.ic_check, GOOD), new FrameLayout.LayoutParams(dp(24), dp(24), Gravity.CENTER));
         } else {
             TextView btn = text(s(R.string.allow), 14, Color.WHITE);
             btn.setTypeface(MEDIUM);
-            btn.setPadding(dp(16), dp(8), dp(16), dp(8));
+            btn.setGravity(Gravity.CENTER);
+            btn.setSingleLine(true);
             btn.setBackground(gradientPill(18));
             btn.setForeground(ripple(18));
             final Runnable safeAsk = () -> {
@@ -905,7 +918,7 @@ public class MainActivity extends Activity {
                 if (disclosureTitle == null) safeAsk.run();
                 else showDisclosure(disclosureTitle, disclosure, safeAsk);
             });
-            row.addView(btn);
+            slot.addView(btn, new FrameLayout.LayoutParams(-1, -1));
         }
         return row;
     }

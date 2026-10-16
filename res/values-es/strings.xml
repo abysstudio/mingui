@@ -24,7 +24,7 @@
     <string name="overlay">Mostrar sobre otras apps</string>
     <string name="overlay_sub">Muestra tu lista sobre las apps</string>
     <string name="notifications">Notificaciones</string>
-    <string name="notifications_sub">Un botón de Pausa y tus recordatorios</string>
+    <string name="notifications_sub">Botón de Pausa y recordatorios</string>
     <string name="battery">Batería: sin restricciones</string>
     <string name="battery_sub">Evita que Android cierre Mingui</string>
     <string name="allow">Permitir</string>
@@ -67,7 +67,7 @@
         <item quantity="one">Falta %1$d hábito para desbloquear</item>
         <item quantity="other">Faltan %1$d hábitos para desbloquear</item>
     </plurals>
-    <string name="restricted">Permitir ajustes restringidos</string>
+    <string name="restricted">Ajustes restringidos</string>
     <string name="open_app">Abrir %1$s</string>
     <string name="all_apps_unlocked">Todas las apps desbloqueadas</string>
     <string name="couldnt_open">No se ha podido abrir %1$s</string>
@@ -657,5 +657,5 @@
     <string name="offline_inline">100% sin conexión · nada sale de tu móvil</string>
     <string name="add_own_hint">Añade el tuyo…</string>
     <string name="timer_chip">Temporizador</string>
-    <string name="restricted_row_sub">Si el acceso a datos de uso sale en gris</string>
+    <string name="restricted_row_sub">Si el acceso de uso sale en gris</string>
 </resources>
