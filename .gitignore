@@ -20,3 +20,4 @@ internal/
 pepk.jar
 *.pem
 *-key.zip
+store/*.mp4
