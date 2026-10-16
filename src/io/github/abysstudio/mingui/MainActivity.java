@@ -300,6 +300,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        UnlockWatcher.checklistShown();
         ticker.removeCallbacks(tick);
         ticker.postDelayed(tick, 1000);
         Gate.scheduleMidnight(this);

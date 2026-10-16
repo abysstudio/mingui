@@ -34,6 +34,10 @@ public class UnlockWatcher extends Service {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Runnable pull = this::pullBack;
     private final Runnable guard = this::guardBlockedApps;
+    /** Instant opaque cover drawn the moment a blocked app is seen, until the checklist is on screen. */
+    private android.view.View shield;
+    private final Runnable dropShield = this::hideShield;
+    private long lastCover;
 
     private final BroadcastReceiver unlock = new BroadcastReceiver() {
         @Override
@@ -157,7 +161,7 @@ public class UnlockWatcher extends Service {
     }
 
     /**
-     * No-root blocking: twice a second, if a blocked app is in front before the routine is done,
+     * No-root blocking: several times a second, if a blocked app is in front before the routine is done,
      * cover it with the checklist. (The rooted build hides those apps instead.)
      */
     private void guardBlockedApps() {
@@ -169,13 +173,63 @@ public class UnlockWatcher extends Service {
         if (!Routine.isDoneToday(this) && !Routine.pausedToday(this) && !MainActivity.visible) {
             String fg = Apps.foreground(this);
             if (fg != null && Routine.blockedApps(this).contains(fg) && !Apps.essentials(this).contains(fg)) {
-                MainActivity.launch(this);
-                android.widget.Toast.makeText(this, getString(R.string.locked_until_done_toast),
-                        android.widget.Toast.LENGTH_SHORT).show();
+                // Opening an activity takes a few hundred ms; an overlay window shows on the next frame.
+                showShield();
+                long now = System.currentTimeMillis();
+                if (now - lastCover > 1500) { // the checklist is still opening from the last check
+                    lastCover = now;
+                    MainActivity.launch(this);
+                    android.widget.Toast.makeText(this, getString(R.string.locked_until_done_toast),
+                            android.widget.Toast.LENGTH_SHORT).show();
+                }
             }
         }
-        // Twice a second: a blocked app gets covered before there's time to start scrolling.
-        handler.postDelayed(guard, 500);
+        // Every 250 ms: a blocked app is covered before its feed has drawn. Reading the usage events
+        // since the last check is a small binder call, and this stops while the screen is off.
+        handler.postDelayed(guard, 250);
+    }
+
+    private void showShield() {
+        handler.removeCallbacks(dropShield);
+        handler.postDelayed(dropShield, 2500); // never left up if the checklist doesn't come
+        if (shield != null || !android.provider.Settings.canDrawOverlays(this)) return;
+        android.widget.FrameLayout f = new android.widget.FrameLayout(this);
+        f.setBackgroundColor(MainActivity.BG);
+        android.widget.ImageView logo = new android.widget.ImageView(this);
+        logo.setImageResource(R.drawable.ic_launcher_fg);
+        int size = (int) (160 * getResources().getDisplayMetrics().density);
+        f.addView(logo, new android.widget.FrameLayout.LayoutParams(size, size, android.view.Gravity.CENTER));
+        android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams(-1, -1,
+                android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                        | android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                android.graphics.PixelFormat.OPAQUE);
+        lp.windowAnimations = 0;
+        try {
+            getSystemService(android.view.WindowManager.class).addView(f, lp);
+            shield = f;
+            android.util.Log.i("MinguiShield", "on");
+        } catch (RuntimeException ignored) {
+        }
+    }
+
+    private void hideShield() {
+        handler.removeCallbacks(dropShield);
+        if (shield == null) return;
+        try {
+            getSystemService(android.view.WindowManager.class).removeView(shield);
+        } catch (RuntimeException ignored) {
+        }
+        shield = null;
+    }
+
+    /** The checklist is up: drop the cover once it has drawn its first frames. */
+    static void checklistShown() {
+        if (instance != null && instance.shield != null) {
+            instance.handler.removeCallbacks(instance.dropShield);
+            instance.handler.postDelayed(instance.dropShield, 250);
+        }
     }
 
     @Override
@@ -227,6 +281,7 @@ public class UnlockWatcher extends Service {
         instance = null;
         handler.removeCallbacks(pull);
         handler.removeCallbacks(guard);
+        hideShield();
         if (buddy != null) buddy.hide();
         unregisterReceiver(unlock);
         super.onDestroy();
