@@ -568,6 +568,15 @@ public class MainActivity extends Activity {
             if (now && minutes > 0) {
                 long left = Routine.timerLeft(this, item);
                 if (left < 0) {
+                    // One timer at a time, so timed habits can't be "done" in parallel.
+                    String running = Routine.runningTimer(this);
+                    if (running != null) {
+                        v.animate().translationX(dp(6)).setDuration(50).withEndAction(() ->
+                                v.animate().translationX(0).setDuration(250)
+                                        .setInterpolator(new OvershootInterpolator(6f)).start()).start();
+                        Toast.makeText(this, s(R.string.timer_one_at_a_time, running), Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     // First tap starts the timer; the habit can be checked once it runs out.
                     Routine.startTimer(this, item);
                     v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);

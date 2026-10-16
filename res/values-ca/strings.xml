@@ -12,6 +12,7 @@
     <string name="timer_left">"Queden %1$d:%2$02d  ·  mantén premut per reiniciar"</string>
     <string name="times_up">"Temps complert  ·  toca per marcar"</string>
     <string name="timer_reset">Temporitzador reiniciat</string>
+    <string name="timer_one_at_a_time">Acaba abans «%1$s». Un temporitzador alhora (o mantén-lo premut per reiniciar-lo).</string>
     <string name="up_next_badge">SEGÜENT</string>
     <string name="finish_setup">Acaba la configuració</string>
     <string name="recommended">Recomanat</string>

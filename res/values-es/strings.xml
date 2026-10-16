@@ -12,6 +12,7 @@
     <string name="timer_left">"Quedan %1$d:%2$02d  ·  mantén pulsado para reiniciar"</string>
     <string name="times_up">"Tiempo cumplido  ·  toca para marcar"</string>
     <string name="timer_reset">Temporizador reiniciado</string>
+    <string name="timer_one_at_a_time">Termina antes «%1$s». Un temporizador a la vez (o mantenlo pulsado para reiniciarlo).</string>
     <string name="up_next_badge">SIGUIENTE</string>
     <string name="finish_setup">Termina la configuración</string>
     <string name="recommended">Recomendado</string>

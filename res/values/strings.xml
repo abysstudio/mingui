@@ -12,6 +12,7 @@
     <string name="timer_left">"%1$d:%2$02d left  ·  hold to reset"</string>
     <string name="times_up">"Time\'s up  ·  tap to check"</string>
     <string name="timer_reset">Timer reset</string>
+    <string name="timer_one_at_a_time">Finish “%1$s” first. One timer at a time (or hold it to reset).</string>
     <string name="up_next_badge">UP NEXT</string>
     <string name="finish_setup">Finish setup</string>
     <string name="recommended">Recommended</string>

@@ -145,6 +145,15 @@ final class Routine {
         e.putLong(timerKey(item), System.currentTimeMillis()).commit();
     }
 
+    /** The habit whose timer is running right now, or null. Only one timer runs at a time. */
+    static String runningTimer(Context c) {
+        Set<String> done = checked(c);
+        for (String item : items(c)) {
+            if (!done.contains(item) && timerMinutes(c, item) > 0 && timerLeft(c, item) > 0) return item;
+        }
+        return null;
+    }
+
     static void resetTimer(Context c, String item) {
         prefs(c).edit().remove(timerKey(item)).commit();
     }
