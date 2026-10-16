@@ -634,6 +634,11 @@ public class MainActivity extends Activity {
      * one says what it powers. Opens with the offline promise, since that's what makes them safe.
      */
     private View setupCard() {
+        return setupCard(false);
+    }
+
+    /** {@code onboarding}: the page already has a title and intro, so the card drops its own. */
+    private View setupCard(boolean onboarding) {
         LinearLayout box = new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
         box.setPadding(dp(16), dp(16), dp(16), dp(10));
@@ -654,19 +659,17 @@ public class MainActivity extends Activity {
             });
             head.addView(x, new LinearLayout.LayoutParams(dp(28), dp(28)));
         }
-        box.addView(head);
-        TextView s = text(s(required ? R.string.setup_required_body : R.string.setup_optional_body), 14, MUTED);
-        s.setPadding(0, dp(4), 0, dp(10));
-        box.addView(s);
+        if (onboarding) {
+            box.setPadding(dp(16), dp(10), dp(16), dp(6));
+        } else {
+            box.addView(head);
+            TextView s = text(s(required ? R.string.setup_required_body : R.string.setup_optional_body), 14, MUTED);
+            s.setPadding(0, dp(4), 0, dp(8));
+            box.addView(s);
+        }
         box.addView(offlineBadge());
 
         boolean usageNeeded = Perms.needsUsage(this);
-        if (usageNeeded && !Perms.usageAccess(this) && !Perms.restrictedSettingsAllowed(this)) {
-            box.addView(permRow(R.drawable.ic_lock, s(R.string.restricted), s(R.string.restricted_sub), false,
-                    s(R.string.restricted), s(R.string.restricted_disclosure),
-                    () -> startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                            android.net.Uri.parse("package:" + getPackageName())))));
-        }
         // Overlay first: once it's on, the app may bring itself back from Settings after the next grant.
         if (Perms.wantsOverlay(this)) {
             box.addView(permRow(R.drawable.ic_layers, s(R.string.overlay),
@@ -678,17 +681,36 @@ public class MainActivity extends Activity {
                     }));
         }
         if (usageNeeded) {
-            box.addView(permRow(R.drawable.ic_eye, s(R.string.usage_access), s(R.string.usage_access_sub),
-                    Perms.usageAccess(this), s(R.string.usage_access), s(R.string.usage_access_disclosure), () -> {
-                        // Straight to this app's switch where the phone supports it, else the list.
-                        try {
-                            startActivity(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS,
+            // Installed outside Play on Android 13+: Android may refuse the switch with "Restricted setting"
+            // until it's allowed in App info. The app can't read that state, so after one try that didn't
+            // stick, the row offers the App info step (and then goes back to Usage access).
+            final SharedPreferences up = Routine.prefs(this);
+            boolean granted = Perms.usageAccess(this);
+            final boolean restrictedStep = !granted && Perms.maybeRestricted(this)
+                    && up.getBoolean("usage_tried", false) && !up.getBoolean("restricted_visited", false);
+            final Runnable openUsage = () -> {
+                up.edit().putBoolean("usage_tried", true).putBoolean("restricted_visited", false).apply();
+                // Straight to this app's switch where the phone supports it, else the list.
+                try {
+                    startActivity(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS,
+                            android.net.Uri.parse("package:" + getPackageName())));
+                } catch (RuntimeException e) {
+                    startActivity(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                }
+                returnWhenGranted(() -> Perms.usageAccess(this));
+            };
+            if (restrictedStep) {
+                box.addView(permRow(R.drawable.ic_eye, s(R.string.usage_access), s(R.string.usage_restricted_sub),
+                        false, s(R.string.restricted), s(R.string.restricted_disclosure), () -> {
+                            up.edit().putBoolean("restricted_visited", true).apply();
+                            startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                                     android.net.Uri.parse("package:" + getPackageName())));
-                        } catch (RuntimeException e) {
-                            startActivity(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                        }
-                        returnWhenGranted(() -> Perms.usageAccess(this));
-                    }));
+                        }));
+            } else {
+                box.addView(permRow(R.drawable.ic_eye, s(R.string.usage_access), s(R.string.usage_access_sub),
+                        granted, s(R.string.usage_access), s(Perms.maybeRestricted(this)
+                                ? R.string.usage_access_disclosure_sideload : R.string.usage_access_disclosure), openUsage));
+            }
         }
         if (Build.VERSION.SDK_INT >= 33) {
             box.addView(permRow(R.drawable.ic_bell, s(R.string.notifications), s(R.string.notifications_sub),
@@ -712,19 +734,16 @@ public class MainActivity extends Activity {
     private View offlineBadge() {
         LinearLayout pill = new LinearLayout(this);
         pill.setGravity(Gravity.CENTER_VERTICAL);
-        pill.setPadding(dp(12), dp(10), dp(12), dp(10));
-        pill.setBackground(rounded(withAlpha(GOOD, 0x1F), 14, withAlpha(GOOD, 0x55)));
-        pill.setForeground(ripple(14));
-        pill.addView(iconView(R.drawable.ic_cloud_off, GOOD), new LinearLayout.LayoutParams(dp(22), dp(22)));
-        LinearLayout col = new LinearLayout(this);
-        col.setOrientation(LinearLayout.VERTICAL);
-        col.setPadding(dp(10), 0, dp(6), 0);
-        TextView a = text(s(R.string.offline_title), 14, TEXT);
-        a.setTypeface(MEDIUM);
-        col.addView(a);
-        col.addView(text(s(R.string.offline_short), 12, MUTED));
-        pill.addView(col, new LinearLayout.LayoutParams(0, -2, 1));
-        pill.addView(iconView(R.drawable.ic_chevron, MUTED), new LinearLayout.LayoutParams(dp(20), dp(20)));
+        pill.setPadding(dp(10), dp(6), dp(8), dp(6));
+        pill.setBackground(rounded(withAlpha(GOOD, 0x1A), 12, 0));
+        pill.setForeground(ripple(12));
+        pill.addView(iconView(R.drawable.ic_cloud_off, GOOD), new LinearLayout.LayoutParams(dp(16), dp(16)));
+        TextView a = text(s(R.string.offline_inline), 13, GOOD);
+        a.setPadding(dp(8), 0, dp(4), 0);
+        a.setSingleLine(true);
+        a.setEllipsize(TextUtils.TruncateAt.END);
+        pill.addView(a, new LinearLayout.LayoutParams(0, -2, 1));
+        pill.addView(iconView(R.drawable.ic_chevron, MUTED), new LinearLayout.LayoutParams(dp(16), dp(16)));
         pill.setOnClickListener(v -> openPrivacy());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
         lp.bottomMargin = dp(6);
@@ -4086,7 +4105,8 @@ public class MainActivity extends Activity {
     private View onboardSetup() {
         if (!BuildFlags.ROOT) {
             LinearLayout v = (LinearLayout) onboardPage(s(R.string.quick_setup), s(R.string.quick_setup_sub));
-            View card = setupCard();
+            View card = setupCard(true);
+            ((LinearLayout.LayoutParams) card.getLayoutParams()).topMargin = 0;
             v.addView(card);
             if (Perms.requiredGranted(this)) {
                 TextView ok = text(s(R.string.all_set), 16, GOOD);
@@ -4094,7 +4114,12 @@ public class MainActivity extends Activity {
                 ok.setPadding(dp(4), dp(16), 0, 0);
                 v.addView(ok);
             }
-            return v;
+            // Big fonts or small screens: the rows must never end up behind the Next button.
+            ScrollView sc = new ScrollView(this);
+            sc.setVerticalScrollBarEnabled(false);
+            sc.setFillViewport(true);
+            sc.addView(v);
+            return sc;
         }
         LinearLayout v = (LinearLayout) onboardPage(s(R.string.quick_setup),
                 s(R.string.quick_setup_root, s(R.string.app_name)));
@@ -4119,37 +4144,112 @@ public class MainActivity extends Activity {
 
     private View onboardHabits(final Set<String> picked) {
         LinearLayout v = (LinearLayout) onboardPage(s(R.string.first_habits), s(R.string.first_habits_sub));
-        ScrollView sc = new ScrollView(this);
-        LinearLayout list = new LinearLayout(this);
+        final ScrollView sc = new ScrollView(this);
+        sc.setVerticalScrollBarEnabled(false);
+        sc.setVerticalFadingEdgeEnabled(true);
+        sc.setFadingEdgeLength(dp(32));
+        sc.setClipToPadding(false);
+        sc.setPadding(0, 0, 0, dp(12));
+        final LinearLayout list = new LinearLayout(this);
         list.setOrientation(LinearLayout.VERTICAL);
         sc.addView(list);
-        for (final String h : getResources().getStringArray(R.array.starter_habits)) {
-            LinearLayout row = new LinearLayout(this);
-            row.setGravity(Gravity.CENTER_VERTICAL);
-            row.setPadding(dp(16), dp(14), dp(16), dp(14));
-            final CheckMark mark = new CheckMark(this);
-            mark.setChecked(picked.contains(h), false);
-            row.addView(mark, new LinearLayout.LayoutParams(dp(26), dp(26)));
-            final TextView t = text(h, 16, TEXT);
-            t.setPadding(dp(14), 0, 0, 0);
-            row.addView(t, new LinearLayout.LayoutParams(0, -2, 1));
-            final Runnable style = () -> row.setBackground(picked.contains(h)
-                    ? rounded(withAlpha(ACCENT, 0x1F), 16, withAlpha(ACCENT, 0x80)) : rounded(CARD, 16, BORDER));
-            style.run();
-            row.setForeground(ripple(16));
-            row.setOnClickListener(x -> {
-                boolean on = !picked.contains(h);
-                if (on) picked.add(h); else picked.remove(h);
-                mark.setChecked(on, true);
-                style.run();
-                x.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-            });
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
-            lp.bottomMargin = dp(8);
-            list.addView(row, lp);
-        }
+
+        // Your own habit first: typing one is the fastest way to make the list yours.
+        LinearLayout add = new LinearLayout(this);
+        add.setGravity(Gravity.CENTER_VERTICAL);
+        add.setPadding(dp(16), dp(4), dp(8), dp(4));
+        add.setBackground(rounded(CARD, 16, withAlpha(ACCENT, 0x80)));
+        add.addView(iconView(R.drawable.ic_add, ACCENT), new LinearLayout.LayoutParams(dp(24), dp(24)));
+        final EditText et = new EditText(this);
+        et.setHint(s(R.string.add_own_hint));
+        et.setHintTextColor(MUTED);
+        et.setTextColor(TEXT);
+        et.setTextSize(16);
+        et.setSingleLine(true);
+        et.setBackground(null);
+        et.setPadding(dp(14), dp(14), dp(8), dp(14));
+        et.setImeOptions(android.view.inputmethod.EditorInfo.IME_ACTION_DONE);
+        et.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(40)});
+        add.addView(et, new LinearLayout.LayoutParams(0, -2, 1));
+        final TextView addBtn = text(s(R.string.add), 14, Color.WHITE);
+        addBtn.setTypeface(MEDIUM);
+        addBtn.setPadding(dp(16), dp(8), dp(16), dp(8));
+        addBtn.setBackground(gradientPill(18));
+        addBtn.setVisibility(View.GONE);
+        add.addView(addBtn);
+        LinearLayout.LayoutParams alp = new LinearLayout.LayoutParams(-1, -2);
+        alp.bottomMargin = dp(12);
+        list.addView(add, alp);
+
+        final java.util.List<String> all = new java.util.ArrayList<>();
+        for (String h : picked) if (!java.util.Arrays.asList(getResources().getStringArray(R.array.starter_habits)).contains(h)) all.add(h);
+        all.addAll(java.util.Arrays.asList(getResources().getStringArray(R.array.starter_habits)));
+        final Runnable[] fill = new Runnable[1];
+        fill[0] = () -> {
+            while (list.getChildCount() > 1) list.removeViewAt(1);
+            for (final String h : all) list.addView(habitPick(h, picked), habitPickParams());
+        };
+        fill[0].run();
+        final Runnable commit = () -> {
+            String h = et.getText().toString().trim().replaceAll("\\s+", " ");
+            if (h.isEmpty()) return;
+            if (!all.contains(h)) all.add(0, h);
+            picked.add(h);
+            et.setText("");
+            fill[0].run();
+            et.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        };
+        et.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence x, int a, int bb, int c) {}
+            @Override public void onTextChanged(CharSequence x, int a, int bb, int c) {}
+            @Override public void afterTextChanged(Editable e) {
+                addBtn.setVisibility(e.toString().trim().isEmpty() ? View.GONE : View.VISIBLE);
+            }
+        });
+        et.setOnEditorActionListener((x, action, ev) -> {
+            commit.run();
+            return true;
+        });
+        addBtn.setOnClickListener(x -> commit.run());
         v.addView(sc, new LinearLayout.LayoutParams(-1, 0, 1));
         return v;
+    }
+
+    private LinearLayout.LayoutParams habitPickParams() {
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+        lp.bottomMargin = dp(8);
+        return lp;
+    }
+
+    /** One habit on the onboarding list: tap to pick; timed ones ("Walk 15 min") show their timer. */
+    private View habitPick(final String h, final Set<String> picked) {
+        final LinearLayout row = new LinearLayout(this);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(dp(16), dp(14), dp(16), dp(14));
+        final CheckMark mark = new CheckMark(this);
+        mark.setChecked(picked.contains(h), false);
+        row.addView(mark, new LinearLayout.LayoutParams(dp(26), dp(26)));
+        final TextView t = text(h, 16, TEXT);
+        t.setPadding(dp(14), 0, dp(8), 0);
+        row.addView(t, new LinearLayout.LayoutParams(0, -2, 1));
+        java.util.regex.Matcher m = java.util.regex.Pattern.compile("(\\d+)\\s*min").matcher(h);
+        if (m.find()) {
+            ImageView chip = iconView(R.drawable.ic_timer, MUTED);
+            chip.setContentDescription(s(R.string.timer_chip));
+            row.addView(chip, new LinearLayout.LayoutParams(dp(18), dp(18)));
+        }
+        final Runnable style = () -> row.setBackground(picked.contains(h)
+                ? rounded(withAlpha(ACCENT, 0x1F), 16, withAlpha(ACCENT, 0x80)) : rounded(CARD, 16, BORDER));
+        style.run();
+        row.setForeground(ripple(16));
+        row.setOnClickListener(x -> {
+            boolean on = !picked.contains(h);
+            if (on) picked.add(h); else picked.remove(h);
+            mark.setChecked(on, true);
+            style.run();
+            x.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        });
+        return row;
     }
 
     // ---------------------------------------------------------------- backup

@@ -19,15 +19,15 @@
     <string name="setup_required_body">Necesarios para las funciones que activaste. Todo funciona solo en este teléfono.</string>
     <string name="setup_optional_body">Opcionales: hacen que tu mascota y los recordatorios funcionen mejor.</string>
     <string name="usage_access">Acceso a datos de uso</string>
-    <string name="usage_access_sub">Detecta cuando abres una app que elegiste bloquear</string>
-    <string name="usage_access_disclosure">Para bloquear las apps que elijas, la app necesita saber qué app está abierta en este momento. Solo lo compara con tus propias listas de apps bloqueadas y permitidas, y nunca lo guarda ni lo comparte.\n\nLa app no tiene acceso a internet, así que esto no puede salir de tu teléfono.\n\nEn la siguiente pantalla, activa el acceso de uso para esta app. Volverás aquí automáticamente.</string>
+    <string name="usage_access_sub">Detecta cuándo abres una app bloqueada</string>
+    <string name="usage_access_disclosure">Mingui lo necesita para saber cuándo abres una app que has elegido bloquear.\n\nAndroid mostrará un aviso estándar que dice que la app podría ver qué apps usas, con qué frecuencia y datos como tu operador y tu idioma. Todas las apps que lo piden muestran el mismo texto.\n\nMingui solo mira qué app está abierta en este momento y la compara con tu lista. No guarda nada y no tiene acceso a internet, así que nada puede salir de tu móvil.\n\nActiva el interruptor de Mingui y vuelve.</string>
     <string name="overlay">Mostrar sobre otras apps</string>
-    <string name="overlay_sub">Muestra tu lista sobre las apps bloqueadas, y a tu mascota</string>
+    <string name="overlay_sub">Muestra tu lista y tu compañero sobre las apps</string>
     <string name="overlay_disclosure">"Esto permite a la app:\n\n  - mostrar tu lista encima de una app que hayas decidido bloquear,\n  - volver a mostrar la lista cuando el modo concentración está activado (solo si lo activas),\n  - mostrar a tu mascota paseando por la pantalla (puedes desactivarlo cuando quieras).\n\nNunca se muestra sobre apps que no hayas elegido y nunca imita pantallas del sistema."</string>
     <string name="notifications">Notificaciones</string>
-    <string name="notifications_sub">Estado con un botón de Pausa, y los avisos que programes</string>
+    <string name="notifications_sub">Un botón de Pausa y tus recordatorios</string>
     <string name="battery">Batería: sin restricciones</string>
-    <string name="battery_sub">Evita que Android cierre la app en segundo plano</string>
+    <string name="battery_sub">Evita que Android cierre Mingui</string>
     <string name="allow">Permitir</string>
     <string name="not_now">Ahora no</string>
     <string name="continue_">Continuar</string>
@@ -69,8 +69,7 @@
         <item quantity="other">Faltan %1$d hábitos para desbloquear</item>
     </plurals>
     <string name="restricted">Permitir ajustes restringidos</string>
-    <string name="restricted_sub">Necesario primero en Android 13+ si no se instaló desde Play</string>
-    <string name="restricted_disclosure">Android bloquea algunos permisos de las apps instaladas fuera de Play Store hasta que los permites.\n\n1. En la siguiente pantalla (Información de la app), toca ⋮ arriba a la derecha.\n2. Toca \"Permitir ajustes restringidos\" y confirma.\n3. Vuelve aquí y toca Permitir en Acceso a datos de uso.\n\n¿No ves ⋮ ni la opción? Toca primero una vez Permitir en Acceso a datos de uso (Android mostrará un mensaje de \"Ajuste restringido\") y luego repite este paso.</string>
+    <string name="restricted_disclosure">Android bloquea este interruptor en las apps instaladas fuera de Google Play hasta que lo permitas:\n\n1. En la siguiente pantalla (Información de la app), toca ⋮ arriba a la derecha.\n2. Toca \"Permitir ajustes restringidos\" y confirma.\n3. Vuelve y toca Permitir en Acceso a datos de uso otra vez.</string>
     <string name="open_app">Abrir %1$s</string>
     <string name="all_apps_unlocked">Todas las apps desbloqueadas</string>
     <string name="couldnt_open">No se ha podido abrir %1$s</string>
@@ -311,7 +310,7 @@
     <string name="how_4">%1$s sube de nivel contigo</string>
     <string name="how_4_sub">Cada hábito da XP, incluso en los días parciales. A %1$s le sale un brote, luego un brillo y después alas.</string>
     <string name="quick_setup">Configuración rápida</string>
-    <string name="quick_setup_sub">Android necesita tu permiso para un par de cosas. Toca Permitir, activa el interruptor y vuelve.</string>
+    <string name="quick_setup_sub">Toca Permitir en cada uno y vuelve.</string>
     <string name="all_set">¡Todo listo!</string>
     <string name="quick_setup_root">Esta versión usa root para ocultar por completo las apps bloqueadas. Toca abajo y aprueba %1$s en tu gestor de root (Magisk, KernelSU, WildKSU...).</string>
     <string name="grant_root">Conceder acceso root</string>
@@ -319,7 +318,7 @@
     <string name="root_granted">Acceso root concedido. ¡Todo listo!</string>
     <string name="no_root_yet">Aún no hay root. En gestores basados en KernelSU, activa %1$s en Superusuario y vuelve a tocar.</string>
     <string name="first_habits">Tus primeros hábitos</string>
-    <string name="first_habits_sub">Empieza poco a poco: con dos o tres basta. Luego puedes cambiarles el nombre, añadir temporizadores y elegir días.</string>
+    <string name="first_habits_sub">Elige dos o tres, o añade los tuyos. Puedes cambiarlos cuando quieras.</string>
     <string name="your_data">TUS DATOS</string>
     <string name="language">Idioma</string>
     <string name="language_sub">English, Español o Català</string>
@@ -657,4 +656,9 @@
     </string-array>
     <string name="buddy_naps">Siesta al terminar</string>
     <string name="buddy_naps_sub">Tras tu rutina %1$s duerme, se asoma si abres una app bloqueada y sale si haces scroll 10 minutos.</string>
+    <string name="offline_inline">100% sin conexión · nada sale de tu móvil</string>
+    <string name="add_own_hint">Añade el tuyo…</string>
+    <string name="timer_chip">Temporizador</string>
+    <string name="usage_restricted_sub">¿Android lo bloquea? Un paso más</string>
+    <string name="usage_access_disclosure_sideload">Mingui lo necesita para saber cuándo abres una app que has elegido bloquear.\n\nAndroid mostrará un aviso estándar que dice que la app podría ver qué apps usas, con qué frecuencia y datos como tu operador y tu idioma. Todas las apps que lo piden muestran el mismo texto.\n\nMingui solo mira qué app está abierta en este momento y la compara con tu lista. No guarda nada y no tiene acceso a internet, así que nada puede salir de tu móvil.\n\nSi Android dice \"Ajuste restringido\", es normal en apps instaladas fuera de Google Play: toca Aceptar y vuelve, y Mingui te enseñará el paso que falta.</string>
 </resources>

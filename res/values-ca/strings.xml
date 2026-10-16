@@ -19,15 +19,15 @@
     <string name="setup_required_body">Necessaris per a les funcions que has activat. Tot funciona només en aquest telèfon.</string>
     <string name="setup_optional_body">Opcionals: fan que la teva mascota i els recordatoris funcionin millor.</string>
     <string name="usage_access">Accés a dades d\'ús</string>
-    <string name="usage_access_sub">Detecta quan obres una app que has triat bloquejar</string>
-    <string name="usage_access_disclosure">Per bloquejar les apps que triïs, l\'app necessita saber quina app està oberta en aquest moment. Només ho compara amb les teves llistes d\'apps bloquejades i permeses, i mai no ho desa ni ho comparteix.\n\nL\'app no té accés a internet, així que això no pot sortir del teu telèfon.\n\nA la pantalla següent, activa l\'accés d\'ús per a aquesta app. Tornaràs aquí automàticament.</string>
+    <string name="usage_access_sub">Detecta quan obres una app bloquejada</string>
+    <string name="usage_access_disclosure">Mingui ho necessita per saber quan obres una app que has triat bloquejar.\n\nAndroid mostrarà un avís estàndard que diu que l\'app podria veure quines apps fas servir, amb quina freqüència i dades com l\'operador i l\'idioma. Totes les apps que ho demanen mostren el mateix text.\n\nMingui només mira quina app està oberta en aquest moment i la compara amb la teva llista. No desa res i no té accés a internet, així que res no pot sortir del mòbil.\n\nActiva l\'interruptor de Mingui i torna.</string>
     <string name="overlay">Mostra sobre altres apps</string>
-    <string name="overlay_sub">Mostra la llista sobre les apps bloquejades, i la teva mascota</string>
+    <string name="overlay_sub">Mostra la llista i el company sobre les apps</string>
     <string name="overlay_disclosure">"Això permet a l\'app:\n\n  - mostrar la teva llista damunt d\'una app que hagis decidit bloquejar,\n  - tornar a mostrar la llista quan el mode concentració està activat (només si l\'actives),\n  - mostrar la teva mascota passejant per la pantalla (la pots desactivar quan vulguis).\n\nNo es mostra mai sobre apps que no hagis triat i no imita mai pantalles del sistema."</string>
     <string name="notifications">Notificacions</string>
-    <string name="notifications_sub">Estat amb un botó de Pausa, i els avisos que programis</string>
+    <string name="notifications_sub">Un botó de Pausa i els teus recordatoris</string>
     <string name="battery">Bateria: sense restriccions</string>
-    <string name="battery_sub">Evita que Android tanqui l\'app en segon pla</string>
+    <string name="battery_sub">Evita que Android tanqui Mingui</string>
     <string name="allow">Permet</string>
     <string name="not_now">Ara no</string>
     <string name="continue_">Continua</string>
@@ -69,8 +69,7 @@
         <item quantity="other">Falten %1$d hàbits per desbloquejar</item>
     </plurals>
     <string name="restricted">Permet la configuració restringida</string>
-    <string name="restricted_sub">Cal primer a Android 13+ si no s\'ha instal·lat des de Play</string>
-    <string name="restricted_disclosure">Android bloqueja alguns permisos de les apps instal·lades fora de Play Store fins que els permets.\n\n1. A la pantalla següent (Informació de l\'app), toca ⋮ a dalt a la dreta.\n2. Toca \"Permet la configuració restringida\" i confirma.\n3. Torna aquí i toca Permet a Accés a dades d\'ús.\n\nNo veus ⋮ ni l\'opció? Toca primer un cop Permet a Accés a dades d\'ús (Android mostrarà un missatge de \"Configuració restringida\") i després repeteix aquest pas.</string>
+    <string name="restricted_disclosure">Android bloqueja aquest interruptor a les apps instal·lades fora de Google Play fins que ho permets:\n\n1. A la pantalla següent (Informació de l\'app), toca ⋮ a dalt a la dreta.\n2. Toca \"Permet la configuració restringida\" i confirma.\n3. Torna i toca Permet a Accés a dades d\'ús un altre cop.</string>
     <string name="open_app">Obre %1$s</string>
     <string name="all_apps_unlocked">Totes les apps desbloquejades</string>
     <string name="couldnt_open">No s\'ha pogut obrir %1$s</string>
@@ -311,7 +310,7 @@
     <string name="how_4">%1$s puja de nivell amb tu</string>
     <string name="how_4_sub">Cada hàbit dona XP, fins i tot els dies parcials. A %1$s li surt un brot, després una brillantor i després ales.</string>
     <string name="quick_setup">Configuració ràpida</string>
-    <string name="quick_setup_sub">Android necessita el teu permís per a un parell de coses. Toca Permet, activa l\'interruptor i torna.</string>
+    <string name="quick_setup_sub">Toca Permet a cadascun i torna.</string>
     <string name="all_set">Tot a punt!</string>
     <string name="quick_setup_root">Aquesta versió fa servir root per amagar del tot les apps bloquejades. Toca a sota i aprova %1$s al teu gestor de root (Magisk, KernelSU, WildKSU...).</string>
     <string name="grant_root">Concedeix accés root</string>
@@ -319,7 +318,7 @@
     <string name="root_granted">Accés root concedit. Tot a punt!</string>
     <string name="no_root_yet">Encara no hi ha root. Als gestors basats en KernelSU, activa %1$s a Superusuari i torna a tocar.</string>
     <string name="first_habits">Els teus primers hàbits</string>
-    <string name="first_habits_sub">Comença de mica en mica: amb dos o tres n\'hi ha prou. Després pots canviar-los el nom, afegir temporitzadors i triar dies.</string>
+    <string name="first_habits_sub">Tria\'n dos o tres, o afegeix els teus. Els pots canviar quan vulguis.</string>
     <string name="your_data">LES TEVES DADES</string>
     <string name="language">Idioma</string>
     <string name="language_sub">English, Español o Català</string>
@@ -657,4 +656,9 @@
     </string-array>
     <string name="buddy_naps">Migdiada en acabar</string>
     <string name="buddy_naps_sub">Després de la rutina %1$s dorm, treu el cap si obres una app bloquejada i surt si fas scroll 10 minuts.</string>
+    <string name="offline_inline">100% sense connexió · res no surt del mòbil</string>
+    <string name="add_own_hint">Afegeix el teu…</string>
+    <string name="timer_chip">Temporitzador</string>
+    <string name="usage_restricted_sub">Android ho bloqueja? Un pas més</string>
+    <string name="usage_access_disclosure_sideload">Mingui ho necessita per saber quan obres una app que has triat bloquejar.\n\nAndroid mostrarà un avís estàndard que diu que l\'app podria veure quines apps fas servir, amb quina freqüència i dades com l\'operador i l\'idioma. Totes les apps que ho demanen mostren el mateix text.\n\nMingui només mira quina app està oberta en aquest moment i la compara amb la teva llista. No desa res i no té accés a internet, així que res no pot sortir del mòbil.\n\nSi Android diu \"Configuració restringida\", és normal en apps instal·lades fora de Google Play: toca D\'acord i torna, i Mingui t\'ensenyarà el pas que falta.</string>
 </resources>

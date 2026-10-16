@@ -38,18 +38,16 @@ final class Perms {
     }
 
     /**
-     * Android 13+ blocks Usage access (and on some phones overlays) for sideloaded apps until
-     * "Allow restricted settings" is turned on in App info. True when that's not in the way.
+     * True when Android may block Usage access as a "Restricted setting": Android 13+ and not installed
+     * by Google Play. (Whether it's actually been allowed can't be read reliably on Android 15+.)
      */
-    static boolean restrictedSettingsAllowed(Context c) {
-        if (Build.VERSION.SDK_INT < 33) return true;
+    static boolean maybeRestricted(Context c) {
+        if (Build.VERSION.SDK_INT < 33) return false;
         try {
-            int mode = c.getSystemService(AppOpsManager.class).unsafeCheckOpNoThrow(
-                    "android:access_restricted_settings", Process.myUid(), c.getPackageName());
-            return mode == AppOpsManager.MODE_ALLOWED || mode == AppOpsManager.MODE_DEFAULT;
-        } catch (RuntimeException e) {
-            // Unknown op on this phone: assume it may be restricted until the permissions are in.
-            return usageAccess(c) && overlay(c);
+            String installer = c.getPackageManager().getInstallSourceInfo(c.getPackageName()).getInstallingPackageName();
+            return !"com.android.vending".equals(installer);
+        } catch (Exception e) {
+            return true;
         }
     }
 
