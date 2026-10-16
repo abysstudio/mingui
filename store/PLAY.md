@@ -163,7 +163,7 @@ Giny per a la pantalla d'inici, còpies de seguretat en un fitxer teu, i en cata
 Instal·la Mingui, afegeix tres hàbits per a demà al matí i recupera els teus matins.
 ```
 
-**Category:** Productivity · **Tags:** Habit tracker, Productivity, Self-improvement · **Contact email:** required, use the studio address · **Website:** https://abysstudio.github.io/mingui/
+**Category:** Productivity · **Tags:** Habit tracker, Productivity, Self-improvement · **Contact email:** abyssstudio.dev@gmail.com · **Website:** https://abysstudio.github.io/mingui/
 
 ## Release notes: 1.8.0 (code 25)
 
@@ -241,7 +241,7 @@ No account or login. To see app blocking:
 
 1. **Closed testing first.** New personal developer accounts must run a closed test with at least 12 testers opted in for 14 days in a row before applying for production.
 2. Upload the promo and the foreground-service demo videos to YouTube and paste the links.
-3. Add the contact email in the store listing.
+3. Contact email for the store listing: `abyssstudio.dev@gmail.com` (shown publicly).
 4. Upload `mingui.aab` to the closed-testing track, paste the release notes, and roll out.
 
 ## Review risks to keep an eye on
