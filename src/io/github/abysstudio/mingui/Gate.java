@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 final class Gate {
     static final String ACTION_MIDNIGHT = "io.github.abysstudio.mingui.MIDNIGHT";
     /** Bump when the su command changes so existing installs re-run it once. */
-    private static final int OPS_VERSION = 3;
+    private static final int OPS_VERSION = 4;
     private static final ExecutorService IO = Executors.newSingleThreadExecutor();
 
     private Gate() {}

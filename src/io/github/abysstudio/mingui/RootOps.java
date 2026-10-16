@@ -24,6 +24,11 @@ final class RootOps {
                 + "appops set " + me + " ACCESS_RESTRICTED_SETTINGS allow >/dev/null 2>&1; "
                 // Battery: exempt from Doze so the watcher isn't stopped (what the Lite setup asks for).
                 + "dumpsys deviceidle whitelist +" + me + " >/dev/null 2>&1; ");
+        // What we hid is also recorded outside our data (/data/adb survives an uninstall), so a
+        // reinstall still unhides apps an earlier install hid.
+        String list = String.join(" ", hide);
+        cmd.append("F=/data/adb/mingui-hidden; for p in $(cat $F 2>/dev/null); do case \" ").append(list)
+                .append(" \" in *\" $p \"*) ;; *) pm unhide $p >/dev/null 2>&1; pm enable $p >/dev/null 2>&1;; esac; done; ");
         for (String pkg : hide) {
             cmd.append("pm hide ").append(pkg).append(" >/dev/null 2>&1 || pm disable-user --user 0 ")
                     .append(pkg).append(" >/dev/null 2>&1; ");
@@ -32,7 +37,7 @@ final class RootOps {
             cmd.append("pm unhide ").append(pkg).append(" >/dev/null 2>&1; pm enable ")
                     .append(pkg).append(" >/dev/null 2>&1; ");
         }
-        cmd.append("true");
+        cmd.append("echo '").append(list).append("' > $F; true");
         return su(cmd.toString());
     }
 
