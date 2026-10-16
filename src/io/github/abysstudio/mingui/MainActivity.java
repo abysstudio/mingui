@@ -675,12 +675,10 @@ public class MainActivity extends Activity {
             box.addView(permRow(R.drawable.ic_layers, s(R.string.overlay),
                     s(Perms.needsOverlay(this) ? R.string.overlay_sub : R.string.overlay_sub_buddy),
                     Perms.overlay(this), null, () -> {
-                        // Android 11+ shows the list of all apps here (the per-app screen is system-only).
-                        // Xiaomi phones have their own per-app permission page, with "Display pop-up windows".
-                        if (!openXiaomiPermissions()) {
-                            startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                    android.net.Uri.parse("package:" + getPackageName())));
-                        }
+                        // Android 11+ shows the list of all apps here: the per-app screen is system-only,
+                        // and Xiaomi's own permission page was harder to use than this list.
+                        startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                android.net.Uri.parse("package:" + getPackageName())));
                         returnWhenGranted(() -> Perms.overlay(this));
                     }));
         }
@@ -733,24 +731,6 @@ public class MainActivity extends Activity {
         lp.topMargin = dp(16);
         box.setLayoutParams(lp);
         return box;
-    }
-
-    /** MIUI / HyperOS: opens Mingui's page in the Security app's permission manager. False if it isn't there. */
-    private boolean openXiaomiPermissions() {
-        if (!"xiaomi".equalsIgnoreCase(Build.MANUFACTURER)) return false;
-        String[][] targets = {
-                {"com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity"},
-                {"com.miui.securitycenter", "com.miui.permcenter.permissions.AppPermissionsEditorActivity"},
-        };
-        for (String[] t : targets) {
-            try {
-                startActivity(new Intent("miui.intent.action.APP_PERM_EDITOR")
-                        .setClassName(t[0], t[1]).putExtra("extra_pkgname", getPackageName()));
-                return true;
-            } catch (RuntimeException ignored) {
-            }
-        }
-        return false;
     }
 
     /** "100% offline" pill: tapping it explains why that makes the permissions safe. */
