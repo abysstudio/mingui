@@ -20,10 +20,9 @@
     <string name="setup_optional_body">Optional: they make your buddy and reminders more reliable.</string>
     <string name="usage_access">Usage access</string>
     <string name="usage_access_sub">Notices when you open a blocked app</string>
-    <string name="usage_access_disclosure">Mingui needs this to notice when you open an app you chose to block.\n\nAndroid will show a standard warning saying the app could see which apps you use, how often, and details like your carrier and language. Every app that asks for this gets the same text.\n\nMingui only checks which app is open right now and compares it with your list. It keeps nothing, and it has no internet access, so nothing can leave your phone.\n\nTurn the switch on for Mingui, then come back.</string>
+    <string name="usage_access_disclosure">Android\'s warning is the same for every app. Mingui only checks which app is open, to cover the ones you blocked, and has no internet: nothing leaves your phone.</string>
     <string name="overlay">Display over other apps</string>
-    <string name="overlay_sub">Shows your checklist and buddy over apps</string>
-    <string name="overlay_disclosure">"This lets the app:\n\n  - show your checklist on top of an app you chose to block,\n  - bring the checklist back when Focus lock is on (only if you turn it on),\n  - show your buddy walking on screen (you can turn it off any time).\n\nIt never draws over apps you didn\'t pick, and never imitates system screens."</string>
+    <string name="overlay_sub">Shows your checklist over apps</string>
     <string name="notifications">Notifications</string>
     <string name="notifications_sub">A Pause button and your reminders</string>
     <string name="battery">Battery: Unrestricted</string>
@@ -69,7 +68,6 @@
         <item quantity="other">%1$d habits left to unlock</item>
     </plurals>
     <string name="restricted">Allow restricted settings</string>
-    <string name="restricted_disclosure">Android blocks this switch for apps installed outside Google Play until you allow it:\n\n1. On the next screen (App info), tap ⋮ at the top right.\n2. Tap \"Allow restricted settings\" and confirm.\n3. Come back and tap Allow on Usage access again.</string>
     <string name="open_app">Open %1$s</string>
     <string name="all_apps_unlocked">All apps unlocked</string>
     <string name="couldnt_open">Couldn\'t open %1$s</string>
@@ -659,6 +657,5 @@
     <string name="offline_inline">100% offline · nothing leaves your phone</string>
     <string name="add_own_hint">Add your own…</string>
     <string name="timer_chip">Timer</string>
-    <string name="usage_restricted_sub">Blocked by Android? One extra step</string>
-    <string name="usage_access_disclosure_sideload">Mingui needs this to notice when you open an app you chose to block.\n\nAndroid will show a standard warning saying the app could see which apps you use, how often, and details like your carrier and language. Every app that asks for this gets the same text.\n\nMingui only checks which app is open right now and compares it with your list. It keeps nothing, and it has no internet access, so nothing can leave your phone.\n\nIf Android says \"Restricted setting\", that\'s normal for apps installed outside Google Play: tap OK and come back, and Mingui will show you the one extra step.</string>
+    <string name="restricted_row_sub">If Usage access is greyed out</string>
 </resources>

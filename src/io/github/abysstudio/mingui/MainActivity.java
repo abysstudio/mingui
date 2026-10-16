@@ -674,42 +674,45 @@ public class MainActivity extends Activity {
         if (Perms.wantsOverlay(this)) {
             box.addView(permRow(R.drawable.ic_layers, s(R.string.overlay),
                     s(Perms.needsOverlay(this) ? R.string.overlay_sub : R.string.overlay_sub_buddy),
-                    Perms.overlay(this), s(R.string.overlay), s(R.string.overlay_disclosure), () -> {
+                    Perms.overlay(this), null, () -> {
+                        // Android 11+ shows the list of all apps here (the per-app screen is system-only);
+                        // older versions and some phones open Mingui's switch directly.
                         startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                                 android.net.Uri.parse("package:" + getPackageName())));
                         returnWhenGranted(() -> Perms.overlay(this));
                     }));
         }
         if (usageNeeded) {
-            // Installed outside Play on Android 13+: Android may refuse the switch with "Restricted setting"
-            // until it's allowed in App info. The app can't read that state, so after one try that didn't
-            // stick, the row offers the App info step (and then goes back to Usage access).
-            final SharedPreferences up = Routine.prefs(this);
             boolean granted = Perms.usageAccess(this);
-            final boolean restrictedStep = !granted && Perms.maybeRestricted(this)
-                    && up.getBoolean("usage_tried", false) && !up.getBoolean("restricted_visited", false);
-            final Runnable openUsage = () -> {
-                up.edit().putBoolean("usage_tried", true).putBoolean("restricted_visited", false).apply();
-                // Straight to this app's switch where the phone supports it, else the list.
-                try {
-                    startActivity(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS,
-                            android.net.Uri.parse("package:" + getPackageName())));
-                } catch (RuntimeException e) {
-                    startActivity(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                }
-                returnWhenGranted(() -> Perms.usageAccess(this));
-            };
-            if (restrictedStep) {
-                box.addView(permRow(R.drawable.ic_eye, s(R.string.usage_access), s(R.string.usage_restricted_sub),
-                        false, s(R.string.restricted), s(R.string.restricted_disclosure), () -> {
-                            up.edit().putBoolean("restricted_visited", true).apply();
-                            startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            box.addView(permRow(R.drawable.ic_eye, s(R.string.usage_access), s(R.string.usage_access_sub),
+                    granted, s(R.string.usage_access), s(R.string.usage_access_disclosure), () -> {
+                        // Straight to this app's switch where the phone supports it, else the list.
+                        try {
+                            startActivity(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS,
                                     android.net.Uri.parse("package:" + getPackageName())));
-                        }));
-            } else {
-                box.addView(permRow(R.drawable.ic_eye, s(R.string.usage_access), s(R.string.usage_access_sub),
-                        granted, s(R.string.usage_access), s(Perms.maybeRestricted(this)
-                                ? R.string.usage_access_disclosure_sideload : R.string.usage_access_disclosure), openUsage));
+                        } catch (RuntimeException e) {
+                            startActivity(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                        }
+                        returnWhenGranted(() -> Perms.usageAccess(this));
+                    }));
+            // Installed outside Play on Android 13+: Android may grey out that switch ("Restricted
+            // setting") until it's allowed in App info. The app can't read whether it has been, so
+            // the row counts as done once you've been there, and stays tappable.
+            if (!granted && Perms.maybeRestricted(this)) {
+                final SharedPreferences up = Routine.prefs(this);
+                final Runnable openInfo = () -> {
+                    up.edit().putBoolean("restricted_visited", true).apply();
+                    startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            android.net.Uri.parse("package:" + getPackageName())));
+                };
+                boolean visited = up.getBoolean("restricted_visited", false);
+                View r = permRow(R.drawable.ic_lock, s(R.string.restricted), s(R.string.restricted_row_sub),
+                        visited, null, null, openInfo);
+                if (visited) {
+                    r.setForeground(ripple(12));
+                    r.setOnClickListener(v -> openInfo.run());
+                }
+                box.addView(r);
             }
         }
         if (Build.VERSION.SDK_INT >= 33) {
